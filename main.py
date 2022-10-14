@@ -53,7 +53,6 @@ def predict():
     ex = StandardScaler().fit_transform(example_df1)
     kmeans = KMeans(n_clusters=4)
     kmeans.fit(ex)
-    KMeans(n_clusters=4)
     y_predict = kmeans.fit_predict(example_df1)
     example_df1['cluster'] = y_predict
     example_df1 = example_df1[['NDB_No','cluster']]
