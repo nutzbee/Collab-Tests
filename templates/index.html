@@ -62,7 +62,7 @@
               <input type="text" name="nutrient5" placeholder="Fifth Nutrient" required="required" />
               <input type="text" name="nutrient6" placeholder="Sixth Nutrient" required="required" />
               <button type="submit" class="btn btn-primary btn-block btn-large">Cluster</button>
-              <button type="{{ url_for('home')}}" class="btn btn-primary btn-block btn-large">Enter</button>
+              <button id="button" class="btn btn-primary btn-block btn-medium">Cluster</button>
             </form>
          
           <br>
@@ -71,4 +71,9 @@
        </div>
 
 </body>
+<script type="text/javascript">
+  document.getElementById("button").onclick = function () {
+      location.href = "{{ url_for('home')}}";
+  };
+</script>
 </html>
