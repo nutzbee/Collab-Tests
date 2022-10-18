@@ -10,17 +10,17 @@
   <!-- Nav Bar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="{{ url_for('home') }}">KMeans</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}" >Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Result</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,24 +50,36 @@
 <body>
 
     <div class="login">
-        <h2>Price Prediction</h2>
-          <p>Introduce the number of rooms and distance:</p>
+        <h2>Food Clustering</h2>
+          <p>Choose a cluster of my food: <b> {{ food_name }} </b></p>
            <!-- Inputs for our ML model -->
             <form action="{{ url_for('predict')}}"method="post">
-              <input type="text" name="foodName" placeholder="Food name" required="required" />
-              <input type="text" name="nutrient1" placeholder="First Nutrient" required="required" />
-              <input type="text" name="nutrient2" placeholder="Second Nutrient" required="required"/>
-              <input type="text" name="nutrient3" placeholder="Third Nutrient" required="required" />
-              <input type="text" name="nutrient4" placeholder="Fourth Nutrient" required="required"/>
-              <input type="text" name="nutrient5" placeholder="Fifth Nutrient" required="required" />
-              <input type="text" name="nutrient6" placeholder="Sixth Nutrient" required="required" />
+              <input type="text" name="foodName" placeholder="Food Name" required="required" />
+              <input type="text" name="nutrient1" placeholder="Water (g)" required="required" />
+              <input type="text" name="nutrient2" placeholder="Energy Kcal" required="required"/>
+              <input type="text" name="nutrient3" placeholder="Protein (g)" required="required" />
+              <input type="text" name="nutrient4" placeholder="Total Lipids (g)" required="required"/>
+              <input type="text" name="nutrient5" placeholder="Ash (g)" required="required" />
+              <input type="text" name="nutrient6" placeholder="Carbohydrates (g)" required="required" />
+              <br>
+              <label for="food">Look for </label>
+                <select id="food" name="food" required="required">
+                  <option value="">Select</option>
+                  <option value="bread">Bread</option>
+                  <option value="yogurt">Yogurt</option>
+                  <option value="milk">Milk</option>
+                  <option value="butter">Butter</option>
+                </select>
+                <br><br>
+                {{ reco_text }}
+              <br><br>
               <button type="submit" class="btn btn-primary btn-block btn-large">Cluster</button>
-              <button id="button" class="btn btn-primary btn-block btn-medium">Cluster</button>
+              <button id="button" class="btn btn-primary btn-block btn-medium">Home</button>
             </form>
          
           <br>
           <br>
-          <b> {{ prediction_text }} </b>
+          <b> {{ cluster_text }} </b>
        </div>
 
 </body>
