@@ -71,10 +71,5 @@ def predict():
     cluster_text=f'Your food belongs to cluster {cluster} with a name of {final_food_name} and food database number of {final_foodId}',
     food_name=f'{final_food_name}', reco_text=f'{reco}')
 
-'''@app.route('/reco',methods=['POST'])
-def reco():
-    data7 = request.form["food"]
-    reco = predict.example_df1[predict.example_df1['Shrt_Desc'].str.contains(data7, case=False)]
-    return render_template('idex.html', reco_text=f'{reco}')'''
 if __name__ == "__main__":
     app.run()
