@@ -49,21 +49,28 @@
   
 <body>
 
+  <center>
+
     <div class="login">
-        <h2>Clustering</h2>
-          <p>Put 0 if you don't know your records</p>
+      <br><br>
+        <h2>Clustering Model</h2>
+          <p>All fields are *REQUIRED Put 0 if you don't know your records</p>
            <!-- Inputs for our ML model -->
             <form action="{{ url_for('predict')}}"method="post">
               <input type="text" name="gender" placeholder="Gender" required="required" />
               <input type="text" name="pregnancy" placeholder="Pregnancy count" required="required" />
+              <br>
               <input type="text" name="glucose" placeholder="Glucose" required="required" />
               <input type="text" name="bloodpressure" placeholder="Blood Pressure" required="required" />
+              <br>
               <input type="text" name="skinthickness" placeholder="Skin Thickness" required="required" />
               <input type="text" name="insulin" placeholder="Insulin" required="required" />
+              <br>
               <input type="text" name="bmi" placeholder="BMI" required="required" />
               <input type="text" name="dpf" placeholder="Diabetes Pedigree Function" required="required" />
               <input type="text" name="age" placeholder="Age" required="required" />
-              <br>
+              <br><br>
+              <p> Log your food preference </p>
               <label for="food">Food Category </label>
                 <select id="food" name="food" required="required">
                   <option value="">Select</option>
@@ -92,12 +99,14 @@
          
           <br>
           <br>
+          <p> Your cluster: </p>
           <b> {{ cluster_text }} </b>
           <br>
           <br>
+          <p> Your desserts: </p>
           {{ reco_text }}
        </div>
-
+      </center>
 </body>
 <script type="text/javascript">
   document.getElementById("button").onclick = function () {
