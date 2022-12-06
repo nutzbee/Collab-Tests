@@ -50,11 +50,18 @@
 <body>
 
     <div class="login">
-        <h2>Food Clustering</h2>
-          <p>Choose a cluster of my food: <b> {{ food_name }} </b></p>
+        <h2>Clustering</h2>
+          <p>Put 0 if you don't know your records</p>
            <!-- Inputs for our ML model -->
             <form action="{{ url_for('predict')}}"method="post">
               <input type="text" name="gender" placeholder="Gender" required="required" />
+              <input type="text" name="pregnancy" placeholder="Pregnancy count" required="required" />
+              <input type="text" name="glucose" placeholder="Glucose" required="required" />
+              <input type="text" name="bloodpressure" placeholder="Blood Pressure" required="required" />
+              <input type="text" name="skinthickness" placeholder="Skin Thickness" required="required" />
+              <input type="text" name="insulin" placeholder="Insulin" required="required" />
+              <input type="text" name="bmi" placeholder="BMI" required="required" />
+              <input type="text" name="dpf" placeholder="Diabetes Pedigree Function" required="required" />
               <input type="text" name="age" placeholder="Age" required="required" />
               <br>
               <label for="food">Food Category </label>
@@ -77,7 +84,7 @@
                   <option value="maybe">Maybe</option>
                 </select>
                 <br><br>
-                {{ reco_text }}
+                
               <br><br>
               <button type="submit" class="btn btn-primary btn-block btn-large">Cluster</button>
               <button id="button" class="btn btn-primary btn-block btn-medium">Home</button>
@@ -86,6 +93,9 @@
           <br>
           <br>
           <b> {{ cluster_text }} </b>
+          <br>
+          <br>
+          {{ reco_text }}
        </div>
 
 </body>
