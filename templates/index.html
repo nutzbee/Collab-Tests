@@ -54,21 +54,27 @@
           <p>Choose a cluster of my food: <b> {{ food_name }} </b></p>
            <!-- Inputs for our ML model -->
             <form action="{{ url_for('predict')}}"method="post">
-              <input type="text" name="foodName" placeholder="Food Name" required="required" />
-              <input type="text" name="nutrient1" placeholder="Water (g)" required="required" />
-              <input type="text" name="nutrient2" placeholder="Energy Kcal" required="required"/>
-              <input type="text" name="nutrient3" placeholder="Protein (g)" required="required" />
-              <input type="text" name="nutrient4" placeholder="Total Lipids (g)" required="required"/>
-              <input type="text" name="nutrient5" placeholder="Ash (g)" required="required" />
-              <input type="text" name="nutrient6" placeholder="Carbohydrates (g)" required="required" />
+              <input type="text" name="gender" placeholder="Gender" required="required" />
+              <input type="text" name="age" placeholder="Age" required="required" />
               <br>
-              <label for="food">Look for </label>
+              <label for="food">Food Category </label>
                 <select id="food" name="food" required="required">
                   <option value="">Select</option>
-                  <option value="bread">Bread</option>
-                  <option value="yogurt">Yogurt</option>
-                  <option value="milk">Milk</option>
-                  <option value="butter">Butter</option>
+                  <option value="traditional">Traditional food</option>
+                  <option value="western">Western food</option>
+                </select>
+              <label for="juice">Juice </label>
+                <select id="juice" name="juice" required="required">
+                  <option value="">Select</option>
+                  <option value="carbonated">Carbonated drinks</option>
+                  <option value="fresh">Fresh Juice</option>
+                </select>
+              <label for="dessert">Do you want dessert? </label>
+                <select id="dessert" name="dessert" required="required">
+                  <option value="">Select</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="maybe">Maybe</option>
                 </select>
                 <br><br>
                 {{ reco_text }}

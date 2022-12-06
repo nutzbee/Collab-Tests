@@ -20,10 +20,8 @@ from itertools import cycle, islice
 from pandas.plotting import parallel_coordinates
 from sklearn.preprocessing import LabelEncoder
 
-dataframe = pickle.load(open('example.pkl', 'rb'))
-example_df = dataframe[['NDB_No','Water_(g)','Energ_Kcal',
-'Protein_(g)','Lipid_Tot_(g)','Ash_(g)','Carbohydrt_(g)']]
-max = int(dataframe.iloc[-1]['NDB_No'])
+dataframe = pd.read_csv('Food_Preference.csv')
+example_df = dataframe[['Gender','Age','Food','Juice','Dessert']]
 
 app = Flask(__name__)
 
@@ -34,42 +32,29 @@ def home():
 @app.route('/predict',methods=['POST'])
 def predict():
     '''User's input from the form'''
-    foodId = max+1
-    food_name = request.form["foodName"]
-    data1 = int(request.form["nutrient1"])
-    data2 = int(request.form["nutrient2"])
-    data3 = int(request.form["nutrient3"])
-    data4 = int(request.form["nutrient4"])
-    data5 = int(request.form["nutrient5"])
-    data6 = int(request.form["nutrient6"])
-    data7 = request.form["food"]
+    gender = request.form["gender"]
+    age = int(request.form["age"])
+    food = request.form["food"]
+    juice = request.form["juice"]
+    dessert = request.form["dessert"]
     '''Compiling'''
-    users_inputdf1 = [foodId,food_name,data1,data2,data3,data4,data5,data6]
-    users_inputex = [foodId,data1,data2,data3,data4,data5,data6]
-    example_df1 = example_df.append(pd.Series(
-        users_inputex, index = example_df.columns[:len(users_inputex)]), ignore_index=True)
-    dataframe1 = dataframe.append(pd.Series(
-        users_inputdf1, index=dataframe.columns[:len(users_inputdf1)]), ignore_index=True)
+    users_inputex = [gender,age,food,juice,dessert]
+    example_df1 = example_df.append(pd.Series(users_inputex, index=example_df.columns[:len(users_inputex)]), ignore_index=True)
     '''Preprocessing'''
+    le = LabelEncoder()
+    example_df1['Gender'] = le.fit_transform(example_df1['Gender'])
+    example_df1['Food'] = le.fit_transform(example_df1['Food'])
+    example_df1['Juice'] = le.fit_transform(example_df1['Juice'])
+    example_df1['Dessert'] = le.fit_transform(example_df1['Dessert'])
     example_df1 = example_df1.fillna(0)
-    ex = StandardScaler().fit_transform(example_df1)
-    kmeans = KMeans(n_clusters=4)
-    kmeans.fit(ex)
-    y_predict = kmeans.fit_predict(example_df1)
+    kmeans = KMeans(n_clusters=3)
+    ex = example_df1
+    y_predict = kmeans.fit_predict(ex)
     example_df1['cluster'] = y_predict
-    example_df1 = example_df1[['NDB_No','cluster']]
-    example_df1 = pd.merge(dataframe1, example_df1)
     '''Getting user's output'''
-    source = example_df1[example_df1['NDB_No'] == foodId]
-    final_food_name = source.iloc[-1]['Shrt_Desc']
-    cluster = source.iloc[-1]['cluster']
-    final_foodId = source.iloc[-1]['NDB_No']
-    rer = example_df1[example_df1['cluster'] == cluster]
-    reco = rer[rer['Shrt_Desc'].str.contains(data7, case=False)]
+    cluster = example_df1.iloc[-1]['cluster']
     
-    return render_template('index.html',
-    cluster_text=f'Your food belongs to cluster {cluster} with a name of {final_food_name} and food database number of {final_foodId}',
-    food_name=f'{final_food_name}', reco_text=f'{reco}')
+    return render_template('index.html', cluster_text=f'You belong to cluster {cluster}')
 
 if __name__ == "__main__":
     app.run()
