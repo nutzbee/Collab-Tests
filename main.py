@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import pickle
 
 import pandas as pd
@@ -60,7 +60,7 @@ def predict():
         data2 = data[data['cluster'] == cluster]
         my_dessert = data2[data2['NDB_No'] >= 43000]
         my_dessert = my_dessert[my_dessert['NDB_No'] < 43599]
-        my_dessert = my_dessert.Shrt_Desc.to_string(index=False)
+        my_dessert = my_dessert.Shrt_Desc.to_list()
     else :
         my_dessert = "You don't want any dessert"
     
