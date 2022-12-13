@@ -2,22 +2,7 @@ from flask import Flask, request, render_template
 import pickle
 
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import numpy as np
-import seaborn as sns
-from sklearn import metrics, datasets, cluster
-from pandas import DataFrame
-from sklearn.model_selection import train_test_split
-from sklearn import model_selection
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_samples, silhouette_score
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
-from itertools import cycle, islice
-from pandas.plotting import parallel_coordinates
 from sklearn.preprocessing import LabelEncoder
 
 dataframe = pd.read_csv('mergedDf.csv')
@@ -57,6 +42,7 @@ def predict():
     
     '''Preprocessing'''
     le = LabelEncoder()
+
     example_df1['Gender'] = le.fit_transform(example_df1['Gender'])
     example_df1['Food'] = le.fit_transform(example_df1['Food'])
     example_df1['Juice'] = le.fit_transform(example_df1['Juice'])
@@ -78,8 +64,9 @@ def predict():
     else :
         my_dessert = "You don't want any dessert"
     
-    return render_template('index.html', cluster_text=f'You belong to cluster {cluster+1}',
+    return render_template('predict.html',
+    cluster_text=f'You belong to cluster {cluster+1}',
     reco_text=f'{my_dessert}')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
