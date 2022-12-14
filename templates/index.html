@@ -36,7 +36,7 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href=#hero>Red</a></h1>
+      <h1 class="logo me-auto"><a href="{{ url_for('home') }}">Red</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
@@ -702,46 +702,42 @@
             <form action="{{ url_for('predict')}}" method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="name">Age</label>
-                  <input type="text" name="age" class="form-control" id="age" required>
+                  <label for="age">Age</label>
+                  <input type="number" name="age" class="form-control" id="age" min="1" max="100" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Gender</label>
+                  <label for="gender">Gender</label>
                   <input type="text" class="form-control" name="gender" id="gender" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Blood Pressure</label>
-                  <input type="text" name="bloodpressure" class="form-control" id="bloodpressure" required>
+                  <label for="bloodpressure"><a href="https://drive.google.com/file/d/1o9YozKsU3lg5JNFTcq_YKs9KWwvUnmjf/view?usp=share_link">Diastolic Blood Pressure</a></label>
+                  <input type="number" name="bloodpressure" class="form-control" id="bloodpressure" min="60" max="150" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Insulin</label>
-                  <input type="text" class="form-control" name="insulin" id="insulin" required>
+                  <label for="insulin"><a href="https://www.google.com/search?q=insulin+level&ei=4HiZY8QD4pPV7w_Vvb2gAg&oq=insulin+&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAxgAMgUIABCRAjIKCAAQsQMQgwEQQzIKCAAQsQMQgwEQQzIFCAAQkQIyBwgAELEDEEMyBQgAEJECMgQIABBDMgQIABBDMgQIABBDMggILhCABBCxAzoKCAAQRxDWBBCwAzoLCAAQgAQQsQMQgwE6BQgAEIAEOggIABCxAxCDAToICAAQgAQQsQNKBAhBGABKBAhGGABQ67UEWPXABGCS1QRoA3ABeACAAa8KiAGXIpIBDzAuMy4xLjEuMC4xLjAuMpgBAKABAcgBCMABAQ&sclient=gws-wiz-serp">Insulin level</a></label>
+                  <input type="number" class="form-control" name="insulin" id="insulin" min="0" max="2000" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Pregnancy count</label>
-                  <input type="text" name="pregnancy" class="form-control" id="pregnancy" placeholder="If male, put 0" required>
+                  <label for="pregnancy">Pregnancy count</label>
+                  <input type="number" name="pregnancy" class="form-control" id="pregnancy" placeholder="If male, put 0" max="50" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Glucose</label>
-                  <input type="text" class="form-control" name="glucose" id="glucose" required>
+                  <label for="glucose"><a href="https://www.google.com/search?q=glucose+level&ei=M3mZY57kJ8_i-Abx74L4Ag&ved=0ahUKEwjeyZGNyfj7AhVPMd4KHfG3AC8Q4dUDCA8&uact=5&oq=glucose+level&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAzIECAAQQzIFCAAQkQIyBQgAEJECMgQIABBDMgQIABBDMgQIABBDMgQIABBDMgYIABAHEB4yBQgAEIAEMgUIABCABDoKCAAQRxDWBBCwAzoLCAAQsQMQgwEQkQJKBAhBGABKBAhGGABQ7NkDWPHfA2Dy4QNoAXABeACAAaYBiAGVB5IBAzEuNpgBAKABAcgBCMABAQ&sclient=gws-wiz-serp">Glucose level</a></label>
+                  <input type="number" class="form-control" name="glucose" id="glucose" min="0" max="200" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Skin Thickness</label>
-                  <input type="text" class="form-control" name="skinthickness" id="skinthickness" required>
+                  <label for="skinthickness"><a href="https://nazirinskinclinic.com/blog/know-your-skin#:~:text=How%20to%20tell%3A%20Using%20your,than%201.5%20cm%20of%20skin.">Skin Thickness</a></label>
+                  <input type="number" class="form-control" name="skinthickness" id="skinthickness" min="0" max="5" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">BMI</label>
-                  <input type="text" class="form-control" name="bmi" id="bmi" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Diabetes Pedigree Function</label>
-                  <input type="text" class="form-control" name="dpf" id="dpf" required>
+                  <label for="bmi"><a href="https://www.wikihow.com/Calculate-Your-Body-Mass-Index-%28BMI%29">BMI</a></label>
+                  <input type="number" class="form-control" name="bmi" id="bmi" min="0" max="110" required>
                 </div>
               </div>
               <div class="row">
                 <center><p>Log your preferences</p></center>
                 <div class="form-group col-md-6">
-                  <label for="name">Food</label><br>
+                  <label for="food">Food type</label><br>
                   <select id="food" name="food" required>
                     <option value="">Select</option>
                     <option value="traditional">Traditional food</option>
@@ -749,7 +745,7 @@
                   </select>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="name">Juice</label><br>
+                  <label for="juice">Drinks</label><br>
                   <select id="juice" name="juice" required>
                     <option value="">Select</option>
                     <option value="carbonated">Carbonated drinks</option>
@@ -758,7 +754,7 @@
                 </div>
                 <center>
                 <div class="form-group col-md-6">
-                  <label for="name">Do you want dessert?</label><br>
+                  <label for="dessert">Do you want dessert?</label><br>
                   <select id="dessert" name="dessert" required>
                     <option value="">Select</option>
                     <option value="yes">Yes</option>
@@ -773,7 +769,14 @@
                 <div class="error-message"></div>
                 <div class="sent-message"></div>
               </div>
-              <div class="text-center"><button type="submit">Submit</button></div>
+              <div class="text-center"><button type="submit">{{ button_text }}</button></div>
+              <div class="my-3">
+                <p><a href="https://data.world/awram/food-nutritional-values/workspace/file?filename=sr28_doc.pdf">Hyperlink</a></p>
+                <br><b>{{ cluster_text }}</b>
+                <br><p> Samples:</p>
+                {{ reco_text_drinks }}
+                <br><br> {{ reco_text_dessert }}
+              </div>
             </form>
           </div>
         </center>
