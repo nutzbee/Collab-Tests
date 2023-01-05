@@ -2,10 +2,10 @@
 (function () {
   "use strict";
 
-  let forms = document.querySelectorAll('.php-email-form');
+  let forms = document.querySelectorAll('.php-email-formsss');
 
   forms.forEach( function(e) {
-    e.addEventListener('submit', function(event) {
+    e.addEventListener('submi', function(event) {
       event.preventDefault();
 
       let thisForm = this;
