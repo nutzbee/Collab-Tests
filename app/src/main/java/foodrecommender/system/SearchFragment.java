@@ -91,7 +91,7 @@ public class SearchFragment extends Fragment {
                 JSONArray searchFoodsArray = response.getJSONArray("search_food_result");
                 ArrayList<SearchFood> searchFoods = new ArrayList<>();
 
-                // Iterate through the JSON array and create SampleFood objects
+                // Iterate through the JSON array and create SearchFood objects
                 for (int i = 0; i < searchFoodsArray.length(); i++) {
                     JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
                     String shortDesc = searchFoodObject.getString("Shrt_Desc");
@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
                     searchFoods.add(searchFood);
                 }
 
-                // Pass the sampleFoods ArrayList to your RecyclerView adapter
+                // Pass the searchFoods ArrayList to your RecyclerView adapter
                 SearchFoodAdapter adapter = new SearchFoodAdapter(searchFoods);
                 foodRecyclerView.setAdapter(adapter);
 

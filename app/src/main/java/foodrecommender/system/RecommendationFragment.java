@@ -130,7 +130,7 @@ public class RecommendationFragment extends Fragment {
                 nutrient_req.getText().toString().isEmpty()){
 
         } else {
-            // String url = "http://192.168.0.41:5000/recommend"; // Replace with your server IP address
+            // String url = "http://192.168.0.41:5000/recommend";
             String url = getString(R.string.recommend_url);
             JSONObject data = new JSONObject();
             String calorie_reqt = "30";

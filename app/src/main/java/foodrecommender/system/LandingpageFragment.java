@@ -78,10 +78,9 @@ public class LandingpageFragment extends Fragment {
     }
 
     private void snackBarStrings(){
-        // Replace with your desired message
         //message = "Sample Foods";
         String message = "Sample Foods";
-        int duration = Snackbar.LENGTH_SHORT; // Specify the duration for the Snackbar, either LENGTH_SHORT or LENGTH_LONG
+        int duration = Snackbar.LENGTH_SHORT;
         snackbar = Snackbar.make(view, message, duration);
 
         snackbar.setText(message);
@@ -118,22 +117,18 @@ public class LandingpageFragment extends Fragment {
                 switch (position) {
                     case 0:
                         // Tab 1 is selected
-                        // Do something
                         sampleFoodsFragmentTransaction = getChildFragmentManager().beginTransaction();
                         sampleFoodsFragmentTransaction.replace(R.id.fragment_container_home, new SampleFoodsFragment());
                         sampleFoodsFragmentTransaction.commit();
                         break;
                     case 1:
                         // Tab 2 is selected
-                        // Do something else
                         recommendationFragmentTransaction = getChildFragmentManager().beginTransaction();
                         recommendationFragmentTransaction.replace(R.id.fragment_container_home, new RecommendationFragment());
                         recommendationFragmentTransaction.commit();
                         break;
-                    // Add more cases for additional tabs
                     case 2:
                         // Tab 2 is selected
-                        // Do something else
                         diaCheckFragmentTransaction = getChildFragmentManager().beginTransaction();
                         diaCheckFragmentTransaction.replace(R.id.fragment_container_home, new PredictionFragment());
                         diaCheckFragmentTransaction.commit();

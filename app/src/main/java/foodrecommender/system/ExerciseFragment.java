@@ -62,7 +62,7 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void fetchTheActivites(){
-        String url = getString(R.string.exercise_url_get); // Replace with your server IP address
+        String url = getString(R.string.exercise_url_get);
         //String url = "http://nutzbee.pythonanywhere.com/get_activities";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -86,7 +86,7 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void predictReferences(){
-        String url = getString(R.string.exercise_url); // Replace with your server IP address
+        String url = getString(R.string.exercise_url);
         //String url = "http://nutzbee.pythonanywhere.com/get_calories_burned";
         JSONObject data = new JSONObject();
         double user_weight_lb = 134.482;

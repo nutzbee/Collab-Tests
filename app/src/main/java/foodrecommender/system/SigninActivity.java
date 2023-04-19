@@ -25,7 +25,6 @@ public class SigninActivity extends AppCompatActivity {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add sign-in logic here
                 // Start the next activity
                 Intent intent = new Intent(SigninActivity.this, LadingpageActivity.class);
                 startActivity(intent);

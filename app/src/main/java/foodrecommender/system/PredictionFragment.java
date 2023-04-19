@@ -70,9 +70,8 @@ public class PredictionFragment extends Fragment {
     }
 
     private void snackBarStrings(){
-        // Replace with your desired message
         message = "Diabetes Check";
-        int duration = Snackbar.LENGTH_SHORT; // Specify the duration for the Snackbar, either LENGTH_SHORT or LENGTH_LONG
+        int duration = Snackbar.LENGTH_SHORT;
         snackbar = Snackbar.make(view, message, duration);
 
         snackbar.setText(message);
@@ -92,7 +91,7 @@ public class PredictionFragment extends Fragment {
             resultTextView.setAlpha(1.0f);
             resultTextView.requestFocus();
         } else {
-            // String url = "http://192.168.0.41:5000/predict"; // Replace with your server IP address
+            // String url = "http://192.168.0.41:5000/predict";
             String url = getString(R.string.predict_url);
             JSONObject data = new JSONObject();
             // Get input values from TextInputEditTexts

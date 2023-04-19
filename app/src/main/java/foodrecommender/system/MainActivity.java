@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void recommend(){
-        String url = "http://192.168.0.41:5000/recommend"; // Replace with your server IP address
+        String url = "http://192.168.0.41:5000/recommend";
         JSONObject data = new JSONObject();
         String calorie_reqt = "1000";
         String food_allergyt = "MUNG";
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void detectDiabetes(){
-        String url = "http://192.168.0.41:5000/predict"; // Replace with your server IP address
+        String url = "http://192.168.0.41:5000/predict";
         JSONObject data = new JSONObject();
         String pregnancies = "7";
         String glucose = "103";
