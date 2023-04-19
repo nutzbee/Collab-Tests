@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, request
 import pandas as pd
 import numpy as np
-import difflib 
-from fuzzywuzzy import fuzz
+import difflib
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
@@ -30,7 +29,6 @@ diakmeans.fit(principal_diadf)
 
 # Recommend Method
 # Preprocess the dataset
-# Combine multiple pd.to_numeric() calls into a single call
 #df = df[(df['Sugar_Tot_(g)'] <= 10) & (df['Carbohydrt_(g)'] < 55)]
 
 numeric_cols = ['GmWt_Desc1', 'GmWt_Desc2', 'Refuse_Pct', 'Phosphorus_(mg)', 'Fiber_TD_(g)',
@@ -71,7 +69,7 @@ exercise_kmeans = KMeans(n_clusters=exercise_n_clusters, n_init='auto', random_s
 exercise_kmeans.fit(exercise_X)
 
 
-# Declare the global variables
+# Declaring the global variables
 filtered_data = None
 nutrient_requirement = None
 cluster_labels = None
