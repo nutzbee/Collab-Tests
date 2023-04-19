@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import pandas as pd
 import numpy as np
-import difflib
+import difflib 
 from fuzzywuzzy import fuzz
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -10,8 +10,13 @@ from sklearn.cluster import KMeans
 app = Flask(__name__)
 
 
-# Predict Method goes here
+# Read all dataset
 diadf = pd.read_csv("diabetes.csv")
+df = pd.read_csv("merged_abbrev_excel_csv.csv")
+exercise_df = pd.read_csv('exercise_dataset.csv')
+
+
+# Predict Method goes here
 scalers = StandardScaler()
 diadf_std = scalers.fit_transform(diadf.drop('Outcome', axis=1))
 
@@ -20,43 +25,23 @@ diaprincipal_components = diapca.fit_transform(diadf_std)
 
 principal_diadf = pd.DataFrame(data=diaprincipal_components, columns=['PC1', 'PC2'])
 
-diakmeans = KMeans(n_clusters=2, random_state=42)
+diakmeans = KMeans(n_clusters=2, random_state=42, init='k-means++', n_init='auto')
 diakmeans.fit(principal_diadf)
 
 # Recommend Method
-# Load the dataset
-df = pd.read_csv("merged_abbrev_excel_csv.csv")
-
 # Preprocess the dataset
-# Code for preprocessing goes here
-df['GmWt_Desc1'] = pd.to_numeric(df['GmWt_Desc1'], errors='coerce')
-df['GmWt_Desc2'] = pd.to_numeric(df['GmWt_Desc2'], errors='coerce')
-df['Refuse_Pct'] = pd.to_numeric(df['Refuse_Pct'], errors='coerce')
-df['Phosphorus_(mg)'] = pd.to_numeric(df['Phosphorus_(mg)'], errors='coerce')
+# Combine multiple pd.to_numeric() calls into a single call
+#df = df[(df['Sugar_Tot_(g)'] <= 10) & (df['Carbohydrt_(g)'] < 55)]
 
-df['Fiber_TD_(g)'] = pd.to_numeric(df['Fiber_TD_(g)'], errors='coerce')
-df['FA_Sat_(g)'] = pd.to_numeric(df['FA_Sat_(g)'], errors='coerce')
-df['Cholestrl_(mg)'] = pd.to_numeric(df['Cholestrl_(mg)'], errors='coerce')
-df['Sodium_(mg)'] = pd.to_numeric(df['Sodium_(mg)'], errors='coerce')
-df['Carbohydrt_(g)'] = pd.to_numeric(df['Carbohydrt_(g)'], errors='coerce')
-df['Sugar_Tot_(g)'] = pd.to_numeric(df['Sugar_Tot_(g)'], errors='coerce')
-df['Calcium_(mg)'] = pd.to_numeric(df['Calcium_(mg)'], errors='coerce')
-df['Iron_(mg)'] = pd.to_numeric(df['Iron_(mg)'], errors='coerce')
-df['Potassium_(mg)'] = pd.to_numeric(df['Potassium_(mg)'], errors='coerce')
-df['Vit_A_IU'] = pd.to_numeric(df['Vit_A_IU'], errors='coerce')
-df['Vit_C_(mg)'] = pd.to_numeric(df['Vit_C_(mg)'], errors='coerce')
-df['Vit_E_(mg)'] = pd.to_numeric(df['Vit_E_(mg)'], errors='coerce')
-df['Vit_D_IU'] = pd.to_numeric(df['Vit_D_IU'], errors='coerce')
+numeric_cols = ['GmWt_Desc1', 'GmWt_Desc2', 'Refuse_Pct', 'Phosphorus_(mg)', 'Fiber_TD_(g)',
+                'FA_Sat_(g)', 'Cholestrl_(mg)', 'Sodium_(mg)', 'Carbohydrt_(g)', 'Sugar_Tot_(g)',
+                'Calcium_(mg)', 'Iron_(mg)', 'Potassium_(mg)', 'Vit_A_IU', 'Vit_C_(mg)', 'Vit_E_(mg)',
+                'Vit_D_IU']
+df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors='coerce')
 
 df['Descrip'] = df['Descrip'].fillna('No name')
 df['FoodGroup'] = df['FoodGroup'].fillna('Hnknown Food group')
 df.fillna(0, inplace=True)
-
-# Remove Outliers
-#Q1 = df.quantile(0.25)
-#Q3 = df.quantile(0.75)
-#IQR = Q3 - Q1
-#df = df[~((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).any(axis=1)]
 
 # Apply Standardization
 scaler = StandardScaler()
@@ -70,14 +55,11 @@ principal_components = pca.fit_transform(df_std)
 principal_df = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
 
 # Apply K-Means clustering algorithm
-kmeans = KMeans(n_clusters=3, init='k-means++', random_state=42)
+kmeans = KMeans(n_clusters=3, n_init='auto', init='k-means++', random_state=42)
 kmeans.fit(principal_df)
 
 
 # Exercise Method
-# Load the dataset
-exercise_df = pd.read_csv('exercise_dataset.csv')
-
 # Extract the relevant columns
 exercise_X = exercise_df.iloc[:, 1:-1].values  # Columns 2 to 5 (weights for different lbs)
 exercise_y = exercise_df.iloc[:, -1].values    # Last column (calories per lb)
@@ -85,15 +67,15 @@ activities = exercise_df.iloc[:, 0].values  # First column (activities)
 
 # Perform k-means clustering with optimal number of clusters
 exercise_n_clusters = 10  # You can set the optimal number of clusters here
-exercise_kmeans = KMeans(n_clusters=exercise_n_clusters, random_state=0)
+exercise_kmeans = KMeans(n_clusters=exercise_n_clusters, n_init='auto', random_state=0, init='k-means++')
 exercise_kmeans.fit(exercise_X)
 
 
 # Declare the global variables
-global filtered_data, nutrient_requirement, cluster_labels
 filtered_data = None
 nutrient_requirement = None
 cluster_labels = None
+global_total_calories_burned = None
 
 @app.route('/get_activities', methods=['GET'])
 def get_activities():
@@ -123,6 +105,10 @@ def get_calories_burned():
     selected_activity_calories = exercise_y[selected_activity_index]  # Retrieve the calories per lb for the selected activity
     total_calories_burned = user_calories_per_lb * user_weight_lb * (selected_activity_calories / user_calories_per_lb)
 
+    global global_total_calories_burned
+    global_total_calories_burned = total_calories_burned
+    user_weight_lb = f"Your weight is {user_weight_lb:.2f} lbs"
+    total_calories_burned = f"You have burned a total of {total_calories_burned:.2f} calories with just {selected_activity} activity."
     # Prepare response
     response = {
         'activity': selected_activity,
@@ -191,73 +177,66 @@ def recommend():
     columns = df.columns.tolist()[2:]  # exclude the first two columns
     nearest_column = difflib.get_close_matches(nutrient_req, columns, n=1, cutoff=0.3)
     if not nearest_column:
-        return jsonify({'error': 'No matching nutrient column found.'}), 400
-    closest_column = nearest_column[0]
-    
-    # Filter the dataset based on user input
-    filtered_df = df[
-        (df['Energ_Kcal'] <= float(calorie_req)) & 
-        (~df['Descrip'].str.contains(food_allergy, na=False)) & 
-        (df['Sugar_Tot_(g)'] <= 10) & 
-        (df['Carbohydrt_(g)'] < 55)]
-    filtered_df = filtered_df.sort_values(by=[closest_column], ascending=False)
-
-    # Function to search for words in the food group column and merge the matches
-    def search_and_merge(words):
-        matches = pd.concat([cluster_foods[cluster_foods['FoodGroup'].str.contains(word, case=False)] for word in words])
-        return matches
-
-    # Function to provide suggestions for incomplete or misspelled words
-    def suggest_words(word):
-        suggestions = difflib.get_close_matches(word, filtered_df['FoodGroup'], n=5, cutoff=0.6)
-        return suggestions
-
-    # Apply K-Means clustering algorithm to the filtered data
-    principal_components = pca.transform(filtered_df.drop(['Shrt_Desc', 'Descrip', 'FoodGroup'], axis=1))
-    principal_df_filtered = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
-    y_kmeans = kmeans.predict(principal_df_filtered)
-    kmeans.fit(principal_df_filtered)
-    principal_df_filtered['cluster'] = y_kmeans
-    
-    # Get recommendations for the user
-    recommended_foods = []
-
-    for i in range(10):
-        cluster_df = principal_df_filtered[principal_df_filtered['cluster'] == i]
-        cluster_foods = filtered_df[filtered_df.index.isin(cluster_df.index)]
-        #cluster_foods = search_and_merge(food_groups)
-        if len(cluster_foods) > 0:
-            for j in range(len(cluster_foods)):
-                descrip = cluster_foods.iloc[j]['Descrip']
-                shrt_desc = cluster_foods.iloc[j]['Shrt_Desc']
-                energ_kcal = cluster_foods.iloc[j]['Energ_Kcal']
-                food_group = cluster_foods.iloc[j]['FoodGroup']
-                if descrip == 'No name':
-                    recommended_foods.append({'descrip': shrt_desc, 'energKcal': int(energ_kcal), 'foodGroup': food_group})
-                else:
-                    recommended_foods.append({'descrip': descrip, 'energKcal': int(energ_kcal), 'foodGroup': food_group})
-                if len(recommended_foods) == 10:
-                    break
-            
-        if len(recommended_foods) == 10:
-            break
-
-    # Store the needed data to generate a report
-    global filtered_data, nutrient_requirement, cluster_labels
-    filtered_data = filtered_df
-    nutrient_requirement = closest_column
-    cluster_labels = kmeans.labels_
-    if not recommended_foods:
-        print('Empty variable')
+        recommended_foods = []
         recommended_foods.append({'descrip': 'SERVER ERROR', 
-                                  'energKcal': int(404), 
-                                  'foodGroup': 'Internal malfunctions'})
-    
-    return jsonify({'recommended_foods': recommended_foods})
+                                  'energKcal': int(400), 
+                                  'foodGroup': 'No matching nutrient with the word "' +
+                                  nutrient_req + '"'})
+        return jsonify({'recommended_foods': recommended_foods})
+    else: 
+        closest_column = nearest_column[0]
+        
+        # Filter the dataset based on user input
+        filtered_df = df[
+            (df['Energ_Kcal'] <= float(calorie_req)) & 
+            (~df['Descrip'].str.contains(food_allergy, na=False)) &
+            (df['Sugar_Tot_(g)'] <= 10) & (df['Carbohydrt_(g)'] < 55)]
+        filtered_df = filtered_df.sort_values(by=[closest_column], ascending=False)
+        
+        # Apply K-Means clustering algorithm to the filtered data
+        principal_components = pca.transform(scaler.transform(filtered_df.drop(['Shrt_Desc', 'Descrip', 'FoodGroup'], axis=1)))
+        principal_df_filtered = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
+        y_kmeans = kmeans.predict(principal_df_filtered)
+        principal_df_filtered['cluster'] = y_kmeans
+        
+        # Get recommendations for the user
+        recommended_foods = []
+
+        for i in range(10):
+            cluster_df = principal_df_filtered[principal_df_filtered['cluster'] == i]
+            cluster_foods = filtered_df[filtered_df.index.isin(cluster_df.index)]
+            #cluster_foods = search_and_merge(food_groups)
+            if len(cluster_foods) > 0:
+                for j in range(len(cluster_foods)):
+                    descrip = cluster_foods.iloc[j]['Descrip']
+                    shrt_desc = cluster_foods.iloc[j]['Shrt_Desc']
+                    energ_kcal = cluster_foods.iloc[j]['Energ_Kcal']
+                    food_group = cluster_foods.iloc[j]['FoodGroup']
+                    recommended_foods.append({'descrip': shrt_desc if descrip == 'No name' else descrip,
+                                            'energKcal': int(energ_kcal),
+                                            'foodGroup': food_group})
+                    if len(recommended_foods) == 10:
+                        break
+
+            if len(recommended_foods) == 10:
+                break
+
+        # Store the needed data to generate a report
+        if recommended_foods:
+            global filtered_data, nutrient_requirement, cluster_labels
+            filtered_data = filtered_df
+            nutrient_requirement = closest_column
+            cluster_labels = y_kmeans
+        else:
+            recommended_foods.append({'descrip': 'SERVER ERROR', 
+                                    'energKcal': int(404), 
+                                    'foodGroup': 'No food recommendations based on that information'})
+        
+        return jsonify({'recommended_foods': recommended_foods})
 
 @app.route('/summary', methods=['POST'])
 def summary():
-    global filtered_data, nutrient_requirement, cluster_labels
+    global filtered_data, nutrient_requirement, cluster_labels, global_total_calories_burned
     if filtered_data is not None:
         # Count the number of data points in each cluster
         cluster_counts = pd.Series(cluster_labels).value_counts()
@@ -279,12 +258,26 @@ def summary():
         
         # Generate a summary sentence based on the extracted information
         summary_sentence = f"In the dominant cluster, there are {num_points} food items with an average {nutrient_requirement} value of {mean_value:.2f}. The minimum {nutrient_requirement} value is {min_value:.2f} and the maximum {nutrient_requirement} value is {max_value:.2f}."
-
     else:
 
         summary_sentence = "You didn\'t run your recommendation yet."
 
-    return jsonify({'summary_report': summary_sentence})
+    if global_total_calories_burned is not None:
+        if global_total_calories_burned > 150:
+            health_monitor = "Excellent"
+            recommendations = "Drink more water to regain energy"
+        elif global_total_calories_burned == 0:
+            health_monitor = "You haven't done your exercise today"
+            recommendations = "Exercise now!"
+        else:
+            health_monitor = "Good"
+            recommendations = "Do better exercises tomorrow"
+    else:
+        health_monitor = ""
+        recommendations = "Do your exercise to monitor your health"
+    return jsonify({'summary_report': summary_sentence,
+                    'health_monitor': health_monitor,
+                    'recommendations': recommendations})
 
 @app.route('/destroySummaryData', methods=['POST'])
 def destroy():
