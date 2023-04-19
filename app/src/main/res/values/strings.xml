@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Diabeates</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="logo_description">DiaBEATes</string>
+    <string name="food_image">The contents here are the food images from the dataset</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="summary_sentence_sample">You had a good day today! You met your daily calorie intake and stayed within your macro goals. Keep up the good work!</string>
+    <string name="title">Bottom Title</string>
+    <string name="supporting_text">Supporting Text</string>
+    <string name="action">Action</string>
+
+    <string name="sample_foods_url">http://192.168.0.41:5000/sample</string>
+    <string name="search_url">http://192.168.0.41:5000/search</string>
+    <string name="exercise_url">http://192.168.0.41:5000/get_calories_burned</string>
+    <string name="exercise_url_get">http://192.168.0.41:5000/get_activities</string>
+    <string name="summary_url">http://192.168.0.41:5000/summary</string>
+    <string name="recommend_url">http://192.168.0.41:5000/recommend</string>
+    <string name="predict_url">http://192.168.0.41:5000/predict</string>
+
+    <string name="localHost">http://192.168.0.41:5000</string>
+    <string name="domainServerHost">http://nutzbee.pythonanywhere.com</string>
+
+    <string name="signInLabel">Sign In</string>
+    <string name="signUpLabel">Sign Up</string>
+</resources>

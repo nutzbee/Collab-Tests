@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayoutDiaCheck"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PredictionFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedSVDiaCheck"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/prediction_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/title_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="Are you a type-2 diabetic?"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/result_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_textview"
+                        android:layout_centerHorizontal="true"
+                        android:alpha="0"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:text="Result will display here"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:transitionName="result_transition" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pregnancies_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prediction_cv"
+                android:layout_marginTop="16dp"
+                android:hint="Pregnancy count"
+                app:counterEnabled="true"
+                app:counterMaxLength="2"
+                app:helperText="How many times you got pregnant. Put 0 if no pregnancy history">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pregnancies_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/glucose_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pregnancies_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Glucose count"
+                app:helperText="Your glucose count base on your medical records">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/glucose_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bloodPressure_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/glucose_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Diastolic Blood Pressure"
+                app:counterEnabled="true"
+                app:counterMaxLength="3"
+                app:helperText="Example: 120/80. 80 is your Diastolic BP">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bloodPressure_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/skinthickness_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bloodPressure_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Skin Thickness"
+                app:counterEnabled="true"
+                app:counterMaxLength="3"
+                app:helperText="Skin Thickness in mm based on your medical records">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/skinthickness_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/insulin_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/skinthickness_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Insulin"
+                app:helperText="Insulin level based on your medical records">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/insulin_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bmi_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/insulin_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="BMI"
+                app:helperText="Check on the internet to calculate your current BMI">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bmi_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dpf_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/bmi_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Diabetes Pedigree Function"
+                app:helperText="DPS or Diabetes Pedigree Function based on your medical records">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dpf_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/age_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dpf_inputlayout"
+                android:layout_marginTop="16dp"
+                android:hint="Age"
+                app:counterEnabled="true"
+                app:counterMaxLength="3"
+                app:helperText="Age should not be equal to 0 and greater than 100">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/age_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/predictme_button"
+                style="@style/RoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/age_inputlayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:text="Check"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
