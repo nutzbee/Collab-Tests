@@ -12,15 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorSurfaceInverse">?attr/colorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="materialCardViewStyle">@style/MaterialCardView.Dark</item>
         <item name="cardViewStyle">@style/CardView.Dark</item>
         <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
     </style>
 
-    <style name="TILDropdownStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="android:textColorHint">@color/white</item>
-        <item name="hintTextColor">@color/white</item>
+    <style name="TILDropdownStyle" parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
     </style>
 
     <style name="AutoCompleteTextView" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox">
@@ -28,11 +27,11 @@
     </style>
 
     <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="MaterialCardView.Dark" parent="Widget.Material3.CardView.Outlined">
         <item name="cardBackgroundColor">?attr/colorPrimary</item>
+        <item name="cardPreventCornerOverlap">false</item>
     </style>
 
     <style name="CardView.Dark" parent="Widget.MaterialComponents.CardView">
