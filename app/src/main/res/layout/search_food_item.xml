@@ -9,8 +9,7 @@
     android:layout_marginTop="16dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -55,7 +54,7 @@
 
         <!-- Search Card Icon -->
         <ImageView
-            style="@style/TextViewStyle"
+            style="@style/ImageViewStyle"
             android:id="@+id/search_card_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"

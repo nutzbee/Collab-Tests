@@ -38,18 +38,69 @@
     <color name="landingpage_submit_color2">#2A3677</color>
     <color name="landingpage_decline_color2">#009688</color>
     <color name="landingpage_cvtv_color">#2A3677</color>
-    <color name="on_primary">#FFF</color>
-    <color name="on_primary2">#000</color>
-    <color name="primary">#009688</color>
-    <color name="primary_variant">#009688</color>
-    <color name="primary_variant2">#00000000</color>
-    <color name="on_secondary">#FFF</color>
-    <color name="on_secondary2">#000</color>
-    <color name="secondary">#2A3677</color>
-    <color name="secondary_variant">#2A3677</color>
+
+    <color name="on_primary_components">#FFF</color>
+    <color name="on_primary2_components">#000</color>
+    <color name="primary_components">#009688</color>
+    <color name="primary_variant_components">#009688</color>
+    <color name="primary_variant2_components">#00000000</color>
+    <color name="on_secondary_components">#FFF</color>
+    <color name="on_secondary2_components">#000</color>
+    <color name="secondary_components">#2A3677</color>
+    <color name="secondary_variant_components">#2A3677</color>
+
+    <!-- Light Mode -->
+    <!-- Brand Primary theme colors -->
+    <color name="primary">#B68D40</color>
+    <color name="primary_variant">#8E692C</color>
+    <color name="on_primary">#FFF8DC</color>
+    <color name="primary_container">#122620</color>
+    <color name="on_primary_container">#A4812E</color>
+    <!-- Brand Secondary theme colors -->
+    <color name="secondary">#B6B040</color>
+    <color name="secondary_variant">#8F3E26</color>
+    <color name="on_secondary">#EEEEEE</color>
+    <color name="secondary_container">#B67A40</color>
+    <color name="on_secondary_container">#D8D8D8</color>
+    <!-- Brand Tertiary theme colors -->
+    <color name="tertiary">#609B40</color>
+    <color name="on_tertiary">#F1F1F1</color>
+    <color name="tertiary_container">#8F7A52</color>
+    <color name="on_tertiary_container">#8F8F8F</color>
+    <!-- Dark mode -->
+    <!-- Brand Primary Night theme colors -->
+    <color name="primary_night">#8E692C</color>
+    <color name="primary_variant_night">#B68D40</color>
+    <color name="on_primary_night">#FFF8DC</color>
+    <color name="primary_container_night">#F6F6F6</color>
+    <color name="on_primary_container_night">#A4812E</color>
+    <!-- Brand Secondary Night theme colors -->
+    <color name="secondary_night">#BF6E56</color>
+    <color name="secondary_variant_night">#B6B040</color>
+    <color name="on_secondary_night">#FFFFFF</color>
+    <color name="secondary_container_night">#444444</color>
+    <color name="on_secondary_container_night">#D8D8D8</color>
+    <!-- Brand Tertiary Night theme colors -->
+    <color name="tertiary_night">#9BC460</color>
+    <color name="on_tertiary_night">#F1F1F1</color>
+    <color name="tertiary_container_night">#333333</color>
+    <color name="on_tertiary_container_night">#8F8F8F</color>
+    <!-- Status Bar theme colors -->
+    <color name="status_bar_light">#B3B67D40</color>
+    <color name="status_bar_dark">#556B2F</color>
+    <!-- Icon theme colors -->
+    <color name="icon_light">#EEEEEE</color>
+    <color name="icon_dark">#FFC107</color>
+    <!-- Material CardView theme colors -->
+    <color name="card_background_color">#704D24</color>
+    <color name="card_outline_color">#D2B48C</color>
+    <color name="card_textview_color">#D1C8B6</color>
+    <color name="card_background_color_night">#A08651</color>
+    <color name="card_outline_color_night">#E1CDA6</color>
+    <color name="card_textview_color_night">#F2EECF</color>
+
 
     <color name="container">#009688</color>
-    <color name="primary_container">#009688</color>
     <color name="on_container">#FFF</color>
 
     <color name="cardBackgroundColorDark">#00685E</color>

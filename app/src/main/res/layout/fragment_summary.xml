@@ -21,7 +21,6 @@
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -60,6 +59,7 @@
 
                 <!-- Health Card Icon -->
                 <ImageView
+                    style="@style/ImageViewStyle"
                     android:id="@+id/health_card_icon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
@@ -82,7 +82,6 @@
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/health_card">
@@ -120,6 +119,7 @@
 
                 <!-- Recommendations Card Icon -->
                 <ImageView
+                    style="@style/ImageViewStyle"
                     android:id="@+id/recommendations_card_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -150,7 +150,6 @@
                 android:layout_marginTop="16dp"
                 android:focusable="true"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
                 >
 
             <LinearLayout

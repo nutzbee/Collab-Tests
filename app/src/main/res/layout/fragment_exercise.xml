@@ -24,7 +24,6 @@
                 android:layout_margin="16dp"
                 android:clickable="true"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false"
                 app:contentPadding="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/walking_card"
@@ -33,6 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    style="@style/ImageViewStyle"
                     android:id="@+id/biking_icon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -49,7 +49,6 @@
                 android:layout_margin="16dp"
                 android:clickable="true"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false"
                 app:contentPadding="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/running_card"
@@ -57,6 +56,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    style="@style/ImageViewStyle"
                     android:id="@+id/walking_icon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -73,7 +73,6 @@
                 android:layout_margin="16dp"
                 android:clickable="true"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false"
                 app:contentPadding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,6 +80,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    style="@style/ImageViewStyle"
                     android:id="@+id/running_icon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -99,7 +99,6 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
             app:contentPadding="12dp">
