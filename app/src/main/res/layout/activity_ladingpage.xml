@@ -26,8 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="selected"
         app:menu="@menu/menu_bottom_navigation" />
 
 </RelativeLayout>
