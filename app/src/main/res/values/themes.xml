@@ -20,6 +20,7 @@
         <item name="colorOnTertiaryContainer">@color/on_tertiary_container</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/status_bar_light</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">arial</item>
         <item name="materialCardViewStyle">@style/MaterialCardView.Light</item>
@@ -38,14 +39,11 @@
     </style>
 
     <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/card_textview_color</item>
     </style>
 
     <!-- Style for MaterialCardView in dark theme -->
-    <style name="MaterialCardView.Light" parent="Widget.Material3.CardView.Outlined">
+    <style name="MaterialCardView.Light" parent="Widget.Material3.CardView.Filled">
         <item name="cardPreventCornerOverlap">false</item>
-        <item name="cardBackgroundColor">@color/card_background_color</item>
-        <item name="colorOutline">@color/card_outline_color</item>
     </style>
 
     <style name="CardView.Light" parent="Widget.MaterialComponents.CardView">
@@ -60,10 +58,10 @@
     </style>
 
     <!-- Define the style for RoundedButton -->
-    <style name="RoundedButton" parent="Widget.Material3.Button.TonalButton">
+    <style name="RoundedButton" parent="Widget.Material3.Button.OutlinedButton">
     </style>
 
-    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.TonalButton">
+    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.OutlinedButton">
     </style>
 
 </resources>

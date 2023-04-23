@@ -22,11 +22,11 @@
     <string name="supporting_text">Supporting Text</string>
     <string name="action">Action</string>
 
-    <string name="sample_foods_url">http://192.168.0.41:5000/sample</string>
-    <string name="search_url">http://192.168.0.41:5000/search</string>
+    <string name="sample_foods_url">http://nutzbee.pythonanywhere.com/sample</string>
+    <string name="search_url">http://nutzbee.pythonanywhere.com/search</string>
     <string name="exercise_url">http://192.168.0.41:5000/get_calories_burned</string>
-    <string name="exercise_url_get">http://192.168.0.41:5000/get_activities</string>
-    <string name="summary_url">http://192.168.0.41:5000/summary</string>
+    <string name="exercise_url_get">http://nutzbee.pythonanywhere.com/get_activities</string>
+    <string name="summary_url">http://nutzbee.pythonanywhere.com/summary</string>
     <string name="recommend_url">http://192.168.0.41:5000/recommend</string>
     <string name="predict_url">http://192.168.0.41:5000/predict</string>
 

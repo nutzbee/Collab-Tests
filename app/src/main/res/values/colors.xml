@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Default theme colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,47 +8,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="green">#81C784</color>
-
-    <color name="primary_color">#6200EE</color>
-    <color name="secondary_color">#03DAC5</color>
-    <color name="background_color">#FFFFFF</color>
-    <color name="sample_foods_card_background">#D5D5D5</color>
-    <color name="landingpage_stroke_color">#3F51B5</color>
-    <color name="text_color_primary">#2C2C2C</color>
-    <color name="text_color_secondary">#8E8E8E</color>
-    <color name="themes_text_color_primary">#2C2C2C</color>
-    <color name="themes_text_color_secondary">#8E8E8E</color>
-    <color name="biking_color">#098700</color>
-    <color name="walking_color">#082EB6</color>
-    <color name="running_color">#9C08B6</color>
-    <color name="bottom_nav_item_color">#757575</color>
-    <color name="bottom_nav_item_color_selected">#2196F3</color>
-    <color name="icon_color">#6CC662</color>
-    <color name="submit_button">#6CC662</color>
-    <color name="decline_button">#5D73BF</color>
-    <color name="elevation_overlay_color">#80000000</color>
-    <color name="reco_card_background">#DDDDDD</color>
-    <color name="reco_image_color">#5D73BF</color>
-    <color name="reco_card_part2_bg">#5D73BF</color>
-    <color name="reco_image_part2_tint">#B55757</color>
-    <color name="search_cardview_tint">#D3D3D3</color>
-    <color name="landingpage_cv_color">#D8D8D8</color>
-    <color name="landingpage_submit_color">#009688</color>
-    <color name="landingpage_decline_color">#2A3677</color>
-    <color name="landingpage_submit_color2">#2A3677</color>
-    <color name="landingpage_decline_color2">#009688</color>
-    <color name="landingpage_cvtv_color">#2A3677</color>
-
-    <color name="on_primary_components">#FFF</color>
-    <color name="on_primary2_components">#000</color>
-    <color name="primary_components">#009688</color>
-    <color name="primary_variant_components">#009688</color>
-    <color name="primary_variant2_components">#00000000</color>
-    <color name="on_secondary_components">#FFF</color>
-    <color name="on_secondary2_components">#000</color>
-    <color name="secondary_components">#2A3677</color>
-    <color name="secondary_variant_components">#2A3677</color>
 
     <!-- Light Mode -->
     <!-- Brand Primary theme colors -->
@@ -67,6 +27,7 @@
     <color name="on_tertiary">#F1F1F1</color>
     <color name="tertiary_container">#8F7A52</color>
     <color name="on_tertiary_container">#8F8F8F</color>
+
     <!-- Dark mode -->
     <!-- Brand Primary Night theme colors -->
     <color name="primary_night">#8E692C</color>
@@ -85,28 +46,12 @@
     <color name="on_tertiary_night">#F1F1F1</color>
     <color name="tertiary_container_night">#333333</color>
     <color name="on_tertiary_container_night">#8F8F8F</color>
+
     <!-- Status Bar theme colors -->
-    <color name="status_bar_light">#B3B67D40</color>
-    <color name="status_bar_dark">#556B2F</color>
+    <color name="status_bar_light">#1A8E692C</color>
+    <color name="status_bar_dark">#1AB68D40</color>
+
     <!-- Icon theme colors -->
-    <color name="icon_light">#EEEEEE</color>
-    <color name="icon_dark">#FFC107</color>
-    <!-- Material CardView theme colors -->
-    <color name="card_background_color">#704D24</color>
-    <color name="card_outline_color">#D2B48C</color>
-    <color name="card_textview_color">#D1C8B6</color>
-    <color name="card_background_color_night">#A08651</color>
-    <color name="card_outline_color_night">#E1CDA6</color>
-    <color name="card_textview_color_night">#F2EECF</color>
-
-
-    <color name="container">#009688</color>
-    <color name="on_container">#FFF</color>
-
-    <color name="cardBackgroundColorDark">#00685E</color>
-    <color name="cardBackgroundColorLight">#D1D1D1</color>
-    <color name="cardBackgroundColorDarkBase">#2A3677</color>
-    <color name="cardBackgroundColorLightBase">#FFFFFF</color>
-
-    <color name="text_color_red">#E91E63</color>
+    <color name="icon_light">#77A946</color>
+    <color name="icon_dark">#4CAF50</color>
 </resources>

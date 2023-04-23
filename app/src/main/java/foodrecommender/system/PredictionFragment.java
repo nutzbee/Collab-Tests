@@ -87,7 +87,7 @@ public class PredictionFragment extends Fragment {
             // Display an error message or perform appropriate action
             String message = "Please fill all the blanks";
             resultTextView.setText(message);
-            resultTextView.setTextColor(getResources().getColor(R.color.text_color_red, getContext().getTheme()));
+            resultTextView.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, getContext().getTheme()));
             resultTextView.setAlpha(1.0f);
             resultTextView.requestFocus();
         } else {
