@@ -8,8 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -35,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
         nutrient_req = findViewById(R.id.nutrient_req);
 
         //detectDiabetes();
+        //tryStatic();
         recobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //recommend();
+                //buttonTry();
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class);
                 startActivity(intent);
 
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void recommend(){
         String url = "http://192.168.0.41:5000/recommend";
         JSONObject data = new JSONObject();

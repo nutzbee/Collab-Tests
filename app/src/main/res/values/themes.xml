@@ -33,6 +33,7 @@
     </style>
 
     <style name="TILDropdownStyle" parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/box_color_light</item>
     </style>
 
     <style name="AutoCompleteTextView" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox">
@@ -44,6 +45,7 @@
     <!-- Style for MaterialCardView in dark theme -->
     <style name="MaterialCardView.Light" parent="Widget.Material3.CardView.Filled">
         <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardBackgroundColor">@color/card_background_light</item>
     </style>
 
     <style name="CardView.Light" parent="Widget.MaterialComponents.CardView">

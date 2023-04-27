@@ -6,155 +6,194 @@
     android:layout_height="match_parent"
     tools:context=".ExerciseFragment">
 
-    <RelativeLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <!-- TODO: Update blank fragment layout -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/exercise_constraint_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!-- Biking option -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/biking_card"
-                android:layout_width="0dp"
+                android:id="@+id/profile_picture_card"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="8dp"
                 android:clickable="true"
                 app:cardCornerRadius="16dp"
                 app:cardPreventCornerOverlap="false"
-                app:contentPadding="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/walking_card"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:contentPadding="16dp">
 
                 <ImageView
+                    android:id="@+id/profile_picture"
                     style="@style/ImageViewStyle"
-                    android:id="@+id/biking_icon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/baseline_directions_bike_24" />
+                    android:src="@drawable/baseline_supervised_user_circle_24" />
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Walking option -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/walking_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                app:cardCornerRadius="16dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/running_card"
-                app:layout_constraintStart_toEndOf="@+id/biking_card"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    style="@style/ImageViewStyle"
-                    android:id="@+id/walking_icon"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/baseline_directions_walk_24" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Running option -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/running_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                app:cardCornerRadius="16dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/walking_card"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    style="@style/ImageViewStyle"
-                    android:id="@+id/running_icon"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/baseline_directions_run_24" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/exercise_constraint_layout"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true"
-            app:contentPadding="12dp">
-
-            <RelativeLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_picture_card"
+                android:paddingBottom="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/profile_item" />
 
-                <TextView
-                    android:id="@+id/content_text"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
+            <!-- TODO: Update blank fragment layout -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/exercise_constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_recycler_view">
+
+                <!-- Biking option -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/biking_card"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Biking"
-                    android:textSize="20sp" />
+                    android:layout_margin="16dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="16dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:contentPadding="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/walking_card"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/content_distance"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/biking_icon"
+                        style="@style/ImageViewStyle"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_directions_bike_24" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Walking option -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/walking_card"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/content_text"
-                    android:layout_marginTop="8dp"
-                    android:text="Your weight: 120 lbs"
-                    android:textSize="14sp" />
+                    android:layout_margin="16dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="16dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:contentPadding="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/running_card"
+                    app:layout_constraintStart_toEndOf="@+id/biking_card"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/content_calories"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/walking_icon"
+                        style="@style/ImageViewStyle"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_directions_walk_24" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Running option -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/running_card"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/content_distance"
-                    android:layout_marginTop="4dp"
-                    android:text="Total burned calories: 0 kcal"
-                    android:textSize="14sp" />
+                    android:layout_margin="16dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="16dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:contentPadding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/walking_card"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilActivity"
-                    style="@style/TILDropdownStyle"
+                    <ImageView
+                        android:id="@+id/running_icon"
+                        style="@style/ImageViewStyle"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_directions_run_24" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/exercise_constraint_layout"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="12dp">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/content_calories"
-                    android:layout_marginTop="16dp"
-                    android:hint="Select Activity">
+                    android:layout_height="wrap_content">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/actvActivity"
+                    <TextView
+                        android:id="@+id/content_text"
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Biking"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/content_distance"
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/content_text"
+                        android:layout_marginTop="8dp"
+                        android:text="Your weight: 120 lbs"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/content_calories"
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/content_distance"
+                        android:layout_marginTop="4dp"
+                        android:text="Total burned calories: 0 kcal"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilActivity"
+                        style="@style/TILDropdownStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_below="@id/content_calories"
+                        android:layout_marginTop="16dp"
+                        android:hint="Select Activity">
 
-            </RelativeLayout>
+                        <AutoCompleteTextView
+                            android:id="@+id/actvActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+                </RelativeLayout>
 
-    </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
