@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import requests
 import pandas as pd
 import numpy as np
 import difflib
@@ -8,10 +9,10 @@ from sklearn.cluster import KMeans
 
 app = Flask(__name__)
 
-
 # Read all dataset
 diadf = pd.read_csv("diabetes.csv")
 df = pd.read_csv("merged_abbrev_excel_csv.csv")
+#df = pd.read_csv("https://github.com/nutzbee/Capstone-Source-Codes/blob/Notebook-using-Google-Colab-Branch/Food%20Dataset%20of%20the%20Philippines%20-%20Combined.csv")
 exercise_df = pd.read_csv('exercise_dataset.csv')
 
 
@@ -30,7 +31,6 @@ diakmeans.fit(principal_diadf)
 # Recommend Method
 # Preprocess the dataset
 #df = df[(df['Sugar_Tot_(g)'] <= 10) & (df['Carbohydrt_(g)'] < 55)]
-
 numeric_cols = ['GmWt_Desc1', 'GmWt_Desc2', 'Refuse_Pct', 'Phosphorus_(mg)', 'Fiber_TD_(g)',
                 'FA_Sat_(g)', 'Cholestrl_(mg)', 'Sodium_(mg)', 'Carbohydrt_(g)', 'Sugar_Tot_(g)',
                 'Calcium_(mg)', 'Iron_(mg)', 'Potassium_(mg)', 'Vit_A_IU', 'Vit_C_(mg)', 'Vit_E_(mg)',
@@ -81,8 +81,11 @@ def get_activities():
     response = {'activities': activities.tolist()}
     return jsonify(response)
 
-@app.route('/get_calories_burned', methods=['POST'])
+@app.route('/get_calories_burned', methods=['POST', 'GET'])
 def get_calories_burned():
+    # Import the global variable
+    global global_total_calories_burned
+
     # Get input data from Android Studio
     data = request.json
     user_weight_lb = data['user_weight_lb']
@@ -103,8 +106,9 @@ def get_calories_burned():
     selected_activity_calories = exercise_y[selected_activity_index]  # Retrieve the calories per lb for the selected activity
     total_calories_burned = user_calories_per_lb * user_weight_lb * (selected_activity_calories / user_calories_per_lb)
 
-    global global_total_calories_burned
+    # Setting a value to global variables
     global_total_calories_burned = total_calories_burned
+
     user_weight_lb = f"Your weight is {user_weight_lb:.2f} lbs"
     total_calories_burned = f"You have burned a total of {total_calories_burned:.2f} calories with just {selected_activity} activity."
     # Prepare response
@@ -116,7 +120,7 @@ def get_calories_burned():
 
     return jsonify(response)
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['POST', 'GET'])
 def search():
     data = request.json
     food_search_input = data['food_search_input']
@@ -135,7 +139,7 @@ def search():
         if not food_search_input:  # Check if food_search_input is empty
             searched_foods.append({
                 'Shrt_Desc': row['Descrip'],
-                'Energ_Kcal': int(row['Energ_Kcal']),
+                'Energ_Kcal': str(row['Energ_Kcal']) + " KCal",
                 'FoodGroup': row['FoodGroup']
             })
             num_results += 1
@@ -143,14 +147,14 @@ def search():
             if food_search_input.lower() in row['Descrip'].lower():  # Check if input word is in the word from 'Descrip' column
                 searched_foods.append({
                     'Shrt_Desc': row['Descrip'],
-                    'Energ_Kcal': int(row['Energ_Kcal']),
+                    'Energ_Kcal': str(row['Energ_Kcal']) + " KCal",
                     'FoodGroup': row['FoodGroup']
                 })
                 num_results += 1
 
     return jsonify({'search_food_result': searched_foods})
 
-@app.route('/sample', methods=['POST'])
+@app.route('/sample', methods=['POST', 'GET'])
 def sample():
     def replace_no_name(row):
         if row['Descrip'] == 'No name':
@@ -160,10 +164,11 @@ def sample():
 
     sample_df = df[['Descrip', 'Shrt_Desc', 'Energ_Kcal', 'FoodGroup']].sample(10)
     sample_df['Descrip'] = sample_df.apply(replace_no_name, axis=1)
+    sample_df['Energ_Kcal'] = sample_df['Energ_Kcal'].apply(lambda x: str(x) + ' KCal')
     sample_foods = sample_df.to_dict(orient='records')
     return jsonify({'sample_foods': sample_foods})
 
-@app.route('/recommend', methods=['POST'])
+@app.route('/recommend', methods=['POST', 'GET'])
 def recommend():
     data = request.json
     calorie_req = data['calorie_req']
@@ -177,7 +182,7 @@ def recommend():
     if not nearest_column:
         recommended_foods = []
         recommended_foods.append({'descrip': 'SERVER ERROR', 
-                                  'energKcal': int(400), 
+                                  'energKcal': '400', 
                                   'foodGroup': 'No matching nutrient with the word "' +
                                   nutrient_req + '"'})
         return jsonify({'recommended_foods': recommended_foods})
@@ -211,7 +216,7 @@ def recommend():
                     energ_kcal = cluster_foods.iloc[j]['Energ_Kcal']
                     food_group = cluster_foods.iloc[j]['FoodGroup']
                     recommended_foods.append({'descrip': shrt_desc if descrip == 'No name' else descrip,
-                                            'energKcal': int(energ_kcal),
+                                            'energKcal': str(energ_kcal) + ' Kcal',
                                             'foodGroup': food_group})
                     if len(recommended_foods) == 10:
                         break
@@ -227,12 +232,12 @@ def recommend():
             cluster_labels = y_kmeans
         else:
             recommended_foods.append({'descrip': 'SERVER ERROR', 
-                                    'energKcal': int(404), 
+                                    'energKcal': '404', 
                                     'foodGroup': 'No food recommendations based on that information'})
         
         return jsonify({'recommended_foods': recommended_foods})
 
-@app.route('/summary', methods=['POST'])
+@app.route('/summary', methods=['POST', 'GET'])
 def summary():
     global filtered_data, nutrient_requirement, cluster_labels, global_total_calories_burned
     if filtered_data is not None:
@@ -271,13 +276,13 @@ def summary():
             health_monitor = "Good"
             recommendations = "Do better exercises tomorrow"
     else:
-        health_monitor = ""
+        health_monitor = "Unidentified"
         recommendations = "Do your exercise to monitor your health"
     return jsonify({'summary_report': summary_sentence,
                     'health_monitor': health_monitor,
                     'recommendations': recommendations})
 
-@app.route('/destroySummaryData', methods=['POST'])
+@app.route('/destroySummaryData', methods=['POST', 'GET'])
 def destroy():
     # Remove report if logout is called in android app
     global filtered_data, nutrient_requirement, cluster_labels
@@ -291,7 +296,7 @@ def destroy():
 
     return jsonify({'destroy_msg': destroy_msg})
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST', 'GET'])
 def predict():
     # Get user data from Android Studio app
     diadata = request.json
@@ -314,16 +319,11 @@ def predict():
     user_pc = diapca.transform(diadf_std)
     user_label = diakmeans.predict(user_pc)[0]
     
-    delete_my_data = 1
-    if delete_my_data == 1:
-        # Remove the user data
-        diadf_user = diadf_user.iloc[:-1,:]
-    
     # Predict cluster
     if user_label == 0:
-        diabetes_result = "The user is not a type-2 diabetic patient"
+        diabetes_result = "You are not not diagnosed with this disease"
     else:
-        diabetes_result = "The user is a type-2 diabetic patient"
+        diabetes_result = "You are diagnosed with this disease"
     
     # Return result to Android Studio app
     return jsonify({'diabetes_result': diabetes_result})
