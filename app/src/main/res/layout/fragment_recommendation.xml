@@ -23,13 +23,14 @@
                 android:hint="Calorie Requirement"
                 app:counterEnabled="true"
                 app:counterMaxLength="5"
-                app:helperText="Enter your daily calorie requirement">
+                app:helperText="Required calorie amount per day. example: 1250">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/calorie_requirement_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,12 +41,16 @@
                 android:layout_below="@id/calorie_requirement_text_input"
                 android:layout_margin="16dp"
                 android:hint="Food Allergies"
-                app:helperText="Enter any food allergies you have">
+                android:visibility="gone"
+                app:helperText="Food allergies. example: Dairy"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/food_allergies_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,26 +61,41 @@
                 android:layout_below="@id/food_allergies_text_input"
                 android:layout_margin="16dp"
                 android:hint="Required Nutrient"
-                app:helperText="Enter the nutrient you require">
+                android:visibility="gone"
+                app:helperText="Nutrient needed. example: Protein"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/required_nutrient_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/submitReco"
+                style="@style/RoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/required_nutrient_text_input"
+                android:layout_alignParentEnd="true"
+                android:text="Submit" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/food_recommendations_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/required_nutrient_text_input"
+                android:layout_below="@id/submitReco"
                 android:clipToPadding="false"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
                 tools:listitem="@layout/recommended_food_item" />
+
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

@@ -12,6 +12,12 @@ import java.util.ArrayList;
 
 public class SampleFoodAdapter extends RecyclerView.Adapter<SampleFoodAdapter.SampleFoodViewHolder> {
     private ArrayList<SampleFood> sampleFoods;
+    private int maxItemsToShow = 3;
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public SampleFoodAdapter(ArrayList<SampleFood> sampleFoods) {
         this.sampleFoods = sampleFoods;
@@ -28,13 +34,35 @@ public class SampleFoodAdapter extends RecyclerView.Adapter<SampleFoodAdapter.Sa
     public void onBindViewHolder(@NonNull SampleFoodViewHolder holder, int position) {
         SampleFood sampleFood = sampleFoods.get(position);
         holder.shortDescTextView.setText(sampleFood.getShortDesc());
-        holder.kcalTextView.setText(String.valueOf(sampleFood.getKcal()));
+        holder.kcalTextView.setText(sampleFood.getKcal());
         holder.foodGroupTextView.setText(sampleFood.getFoodGroup());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemClick(holder.getAdapterPosition());
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return sampleFoods.size();
+        return Math.min(maxItemsToShow, sampleFoods.size());
+    }
+
+    public void setMaxItemsToShow(int maxItemsToShow) {
+        this.maxItemsToShow = maxItemsToShow;
+        notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public SampleFood getSampleFood(int position) {
+        return sampleFoods.get(position);
     }
 
     static class SampleFoodViewHolder extends RecyclerView.ViewHolder {

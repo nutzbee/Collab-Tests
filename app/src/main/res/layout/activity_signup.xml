@@ -5,21 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:padding="16dp"
-    android:gravity="center"
     tools:context=".SignupActivity">
 
-    <FrameLayout
-        android:id="@+id/signup_fragment_container"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:indeterminate="true"
+        app:indicatorDirectionLinear="startToEnd" />
 
-        <fragment
-            android:name="foodrecommender.system.BaseSignupFragment"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:gravity="center">
+
+        <FrameLayout
+            android:id="@+id/signup_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_base_signup" />
-    </FrameLayout>
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true">
+
+            <fragment
+                android:name="foodrecommender.system.BaseSignupFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/fragment_base_signup" />
+        </FrameLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

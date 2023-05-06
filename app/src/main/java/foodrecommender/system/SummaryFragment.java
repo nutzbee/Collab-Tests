@@ -63,7 +63,7 @@ public class SummaryFragment extends Fragment {
                     healthReport.setText(health_report);
                     recommendations.setText(recommendation);
                     if (health_report.equals("Excellent") || health_report.equals("Good")){
-                        healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_primary, getContext().getTheme()));
+                        healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.primary_text_default_material_light, getContext().getTheme()));
                     } else {
                         healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, getContext().getTheme()));
                     }

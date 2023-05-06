@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment {
                 for (int i = 0; i < searchFoodsArray.length(); i++) {
                     JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
                     String shortDesc = searchFoodObject.getString("Shrt_Desc");
-                    int kcal = searchFoodObject.getInt("Energ_Kcal");
+                    String kcal = searchFoodObject.getString("Energ_Kcal");
                     String foodGroup = searchFoodObject.getString("FoodGroup");
                     SearchFood searchFood = new SearchFood(shortDesc, foodGroup, kcal);
                     searchFoods.add(searchFood);

@@ -48,7 +48,8 @@ public class LandingpageFragment extends Fragment {
     private TabLayout.Tab sampleFoodsTab, recommendationTab, diabeticCheckTab;
     private Snackbar snackbar;
     private FragmentTransaction sampleFoodsFragmentTransaction,
-            recommendationFragmentTransaction, diaCheckFragmentTransaction;
+            recommendationFragmentTransaction, diaCheckFragmentTransaction, settingsFragmentTransaction;
+    private String message;
 
     public LandingpageFragment() {
         // Required empty public constructor
@@ -67,19 +68,18 @@ public class LandingpageFragment extends Fragment {
 
         welcomeText = view.findViewById(R.id.welcome_text);
         welcomeCardView = view.findViewById(R.id.material_landing_cv3);
-        tabLayout = view.findViewById(R.id.tabLayout);
         frameLayout = view.findViewById(R.id.fragment_container_home);
-
-        setTabLayoutItems();
-        setTabItemsListener();
-        snackBarStrings();
+        loadFrags();
 
         return view;
     }
 
+    private void loadFrags(){
+
+    }
+
     private void snackBarStrings(){
         //message = "Sample Foods";
-        String message = "Sample Foods";
         int duration = Snackbar.LENGTH_SHORT;
         snackbar = Snackbar.make(view, message, duration);
 
@@ -89,23 +89,11 @@ public class LandingpageFragment extends Fragment {
 
     private void setTabLayoutItems(){
         sampleFoodsTab = tabLayout.newTab();
-        recommendationTab = tabLayout.newTab();
-        diabeticCheckTab = tabLayout.newTab();
 
         sampleFoodsTab = tabLayout.newTab();
         sampleFoodsTab.setContentDescription("Sample Foods");
         sampleFoodsTab.setIcon(R.drawable.baseline_home_24);
         tabLayout.addTab(sampleFoodsTab);
-
-        recommendationTab = tabLayout.newTab();
-        recommendationTab.setContentDescription("Recommendations");
-        recommendationTab.setIcon(R.drawable.baseline_recommend_24);
-        tabLayout.addTab(recommendationTab);
-
-        diabeticCheckTab = tabLayout.newTab();
-        diabeticCheckTab.setContentDescription("Type-2 Check");
-        diabeticCheckTab.setIcon(R.drawable.baseline_safety_check_24);
-        tabLayout.addTab(diabeticCheckTab);
     }
 
     private void setTabItemsListener(){
@@ -120,18 +108,6 @@ public class LandingpageFragment extends Fragment {
                         sampleFoodsFragmentTransaction = getChildFragmentManager().beginTransaction();
                         sampleFoodsFragmentTransaction.replace(R.id.fragment_container_home, new SampleFoodsFragment());
                         sampleFoodsFragmentTransaction.commit();
-                        break;
-                    case 1:
-                        // Tab 2 is selected
-                        recommendationFragmentTransaction = getChildFragmentManager().beginTransaction();
-                        recommendationFragmentTransaction.replace(R.id.fragment_container_home, new RecommendationFragment());
-                        recommendationFragmentTransaction.commit();
-                        break;
-                    case 2:
-                        // Tab 2 is selected
-                        diaCheckFragmentTransaction = getChildFragmentManager().beginTransaction();
-                        diaCheckFragmentTransaction.replace(R.id.fragment_container_home, new PredictionFragment());
-                        diaCheckFragmentTransaction.commit();
                         break;
                 }
             }

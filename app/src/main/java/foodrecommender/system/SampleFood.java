@@ -1,10 +1,9 @@
 package foodrecommender.system;
 
 public class SampleFood {
-    private String shortDesc, foodGroup;
-    private int kcal;
+    private String shortDesc, foodGroup, kcal;
 
-    public SampleFood(String shortDesc, String foodGroup, int kcal) {
+    public SampleFood(String shortDesc, String foodGroup, String kcal) {
         this.shortDesc = shortDesc;
         this.foodGroup = foodGroup;
         this.kcal = kcal;
@@ -18,7 +17,7 @@ public class SampleFood {
         return foodGroup;
     }
 
-    public int getKcal() {
+    public String getKcal() {
         return kcal;
     }
 }

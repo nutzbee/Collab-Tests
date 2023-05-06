@@ -18,60 +18,15 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/prediction_cv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="4dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/title_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center"
-                        android:text="Are you a type-2 diabetic?"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/result_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/title_textview"
-                        android:layout_centerHorizontal="true"
-                        android:alpha="0"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:text="Result will display here"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:transitionName="result_transition" />
-
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pregnancies_inputlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/prediction_cv"
                 android:layout_marginTop="16dp"
                 android:hint="Pregnancy count"
                 app:counterEnabled="true"
                 app:counterMaxLength="2"
-                app:helperText="How many times you got pregnant. Put 0 if no pregnancy history">
+                app:helperText="Put 0 if no pregnancy history">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/pregnancies_edittext"
@@ -89,7 +44,9 @@
                 android:layout_below="@id/pregnancies_inputlayout"
                 android:layout_marginTop="16dp"
                 android:hint="Glucose count"
-                app:helperText="Your glucose count base on your medical records">
+                android:visibility="gone"
+                app:helperText="Glucose count based on the recent medical records"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/glucose_edittext"
@@ -106,10 +63,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/glucose_inputlayout"
                 android:layout_marginTop="16dp"
-                android:hint="Diastolic Blood Pressure"
+                android:hint="Blood Pressure"
+                android:visibility="gone"
                 app:counterEnabled="true"
                 app:counterMaxLength="3"
-                app:helperText="Example: 120/80. 80 is your Diastolic BP">
+                app:helperText="Diastolic Bood Pressure based on the recent BP test"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/bloodPressure_edittext"
@@ -127,9 +86,11 @@
                 android:layout_below="@id/bloodPressure_inputlayout"
                 android:layout_marginTop="16dp"
                 android:hint="Skin Thickness"
+                android:visibility="gone"
                 app:counterEnabled="true"
                 app:counterMaxLength="3"
-                app:helperText="Skin Thickness in mm based on your medical records">
+                app:helperText="Skin Thickness in mm based on the recent medical records"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/skinthickness_edittext"
@@ -147,7 +108,9 @@
                 android:layout_below="@id/skinthickness_inputlayout"
                 android:layout_marginTop="16dp"
                 android:hint="Insulin"
-                app:helperText="Insulin level based on your medical records">
+                android:visibility="gone"
+                app:helperText="Insulin shot level based on the recent medical records"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/insulin_edittext"
@@ -164,8 +127,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/insulin_inputlayout"
                 android:layout_marginTop="16dp"
-                android:hint="BMI"
-                app:helperText="Check on the internet to calculate your current BMI">
+                android:hint="Body Mass Index"
+                android:visibility="gone"
+                app:helperText="Click for calculator"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/bmi_edittext"
@@ -183,7 +148,9 @@
                 android:layout_below="@id/bmi_inputlayout"
                 android:layout_marginTop="16dp"
                 android:hint="Diabetes Pedigree Function"
-                app:helperText="DPS or Diabetes Pedigree Function based on your medical records">
+                android:visibility="gone"
+                app:helperText="DPS based on the recent medical records"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dpf_edittext"
@@ -201,9 +168,11 @@
                 android:layout_below="@id/dpf_inputlayout"
                 android:layout_marginTop="16dp"
                 android:hint="Age"
+                android:visibility="gone"
                 app:counterEnabled="true"
                 app:counterMaxLength="3"
-                app:helperText="Age should not be equal to 0 and greater than 100">
+                app:helperText="Age should not be equal to 0, negative, or greater than 100"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/age_edittext"
@@ -220,9 +189,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/age_inputlayout"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="32dp"
-                android:text="Check" />
+                android:text="Next" />
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

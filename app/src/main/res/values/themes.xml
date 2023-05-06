@@ -53,17 +53,15 @@
 
     <!-- Define the style for RoundedTextInputLayout -->
     <style name="RoundedTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxCornerRadiusTopStart">@dimen/corner_radius</item>
-        <item name="boxCornerRadiusBottomEnd">@dimen/corner_radius</item>
         <item name="endIconTint">@color/icon_light</item>
         <item name="startIconTint">@color/icon_light</item>
     </style>
 
     <!-- Define the style for RoundedButton -->
-    <style name="RoundedButton" parent="Widget.Material3.Button.OutlinedButton">
+    <style name="RoundedButton" parent="Widget.Material3.Button.ElevatedButton">
     </style>
 
-    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.OutlinedButton">
+    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.ElevatedButton">
     </style>
 
 </resources>

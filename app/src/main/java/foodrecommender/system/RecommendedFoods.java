@@ -1,13 +1,11 @@
 package foodrecommender.system;
 
 public class RecommendedFoods {
-    private String shortDesc, foodGroup;
+    private String shortDesc, foodGroup, energKcal;
 
     private boolean isPart2, isChecked;
 
-    private int energKcal;
-
-    public RecommendedFoods(String shortDesc, String foodGroup, int energKcal, boolean isPart2) {
+    public RecommendedFoods(String shortDesc, String foodGroup, String energKcal, boolean isPart2) {
         this.shortDesc = shortDesc;
         this.foodGroup = foodGroup;
         this.energKcal = energKcal;
@@ -22,7 +20,7 @@ public class RecommendedFoods {
         return foodGroup;
     }
 
-    public int getEnergKcal(){
+    public String getEnergKcal(){
         return energKcal;
     }
 

@@ -1,8 +1,12 @@
 package foodrecommender.system;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +33,11 @@ public class ExerciseFragment extends Fragment {
     private TextView burnedCaloriesTextView, userWeight, userActivity;
     private AutoCompleteTextView actvActivity;
     private MaterialCardView card;
+    private UserDAO userDAO;
+    private String message;
+    private Snackbar snackbar;
+    private RecyclerView recyclerView;
+    private UserAdapter userAdapter;
 
     public ExerciseFragment() {
         // Required empty public constructor
@@ -43,6 +53,41 @@ public class ExerciseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_exercise, container, false);
+        recyclerView = view.findViewById(R.id.profile_recycler_view);
+        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+
+        userDAO = new UserDAO(getActivity());
+        if (!sp.getString("username", "").equals("")){
+            String inputUsername = sp.getString("username", "");
+
+            // Retrieve values from the database
+            ArrayList<User> userList = userDAO.getUsers(inputUsername);
+
+            // Retrieve lists of usernames and passwords from the database
+            ArrayList<String> usernameList = userDAO.getUsernames(inputUsername);
+            ArrayList<String> passwordList = userDAO.getPasswords(inputUsername);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            // Create an instance of the UserAdapter and set it to the RecyclerView
+            userAdapter = new UserAdapter(usernameList, passwordList);
+            recyclerView.setAdapter(userAdapter);
+
+            // Process the retrieved values as needed
+            for (User user : userList) {
+                String username = user.getUsername();
+                String password = user.getPassword();
+                int pregnancyCount = user.getPregnancyCount();
+                // Retrieve other columns as needed
+
+                // Process the retrieved values here
+                message = "Username: " + username + ", Password: " + password + ", Pregnancy count: " + pregnancyCount;
+                snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+                snackbar.show();
+                // Process other columns as needed
+            }
+        }
+
         burnedCaloriesTextView = view.findViewById(R.id.content_calories);
         userWeight = view.findViewById(R.id.content_distance);
         userActivity = view.findViewById(R.id.content_text);

@@ -28,7 +28,7 @@ public class SearchFoodAdapter extends RecyclerView.Adapter<SearchFoodAdapter.Se
     public void onBindViewHolder(@NonNull SearchFoodViewHolder holder, int position) {
         SearchFood searchFood = searchFoods.get(position);
         holder.searchCardName.setText(searchFood.getSShortDesc());
-        holder.searchCardCalories.setText(String.valueOf(searchFood.getSKcal()));
+        holder.searchCardCalories.setText(searchFood.getSKcal());
         holder.foodGroupTextView.setText(searchFood.getFoodGroup());
     }
 

@@ -38,7 +38,7 @@ public class RecommendedFoodsAdapater extends RecyclerView.Adapter<foodrecommend
         RecommendedFoods recommendedFood = recommendedFoods.get(position);
         holder.shortDescTextView.setText(recommendedFood.getShortDesc());
         holder.foodGroupTextView.setText(recommendedFood.getFoodGroup());
-        holder.energyKcalTextView.setText(String.valueOf(recommendedFood.getEnergKcal()));
+        holder.energyKcalTextView.setText(recommendedFood.getEnergKcal());
 
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package foodrecommender.system;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,7 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
@@ -37,9 +41,10 @@ public class SampleFoodsFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout linearLayout;
     private ImageView headerImage;
-    private TextView welcomeText, suggestionsText;
+    private TextView welcomeText, suggestionsText, moreTextView;
     private int prevScrollPosition = 0;
     private MaterialCardView welcomeCardView;
+    private BottomSheetDialog bottomSheetDialog;
 
     public SampleFoodsFragment() {
         // Required empty public constructor
@@ -55,9 +60,8 @@ public class SampleFoodsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sample_foods, container, false);
-
         recyclerView = view.findViewById(R.id.suggestion_list);
-        suggestionsText = view.findViewById(R.id.suggestions_text);
+        moreTextView = view.findViewById(R.id.more_ticker_textview);
 
         sample_foods();
 
@@ -68,7 +72,7 @@ public class SampleFoodsFragment extends Fragment {
         // Make a POST request to the API endpoint
         // String url = "http://192.168.0.41:5000/sample";
         String url = getString(R.string.sample_foods_url);
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(requireActivity().getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -81,7 +85,7 @@ public class SampleFoodsFragment extends Fragment {
                     for (int i = 0; i < sampleFoodsArray.length(); i++) {
                         JSONObject sampleFoodObject = sampleFoodsArray.getJSONObject(i);
                         String shortDesc = sampleFoodObject.getString("Descrip");
-                        int kcal = sampleFoodObject.getInt("Energ_Kcal");
+                        String kcal = sampleFoodObject.getString("Energ_Kcal");
                         String foodGroup = sampleFoodObject.getString("FoodGroup");
                         SampleFood sampleFood = new SampleFood(shortDesc, foodGroup, kcal);
                         sampleFoods.add(sampleFood);
@@ -89,8 +93,35 @@ public class SampleFoodsFragment extends Fragment {
 
                     // Pass the sampleFoods ArrayList to your RecyclerView adapter
                     SampleFoodAdapter adapter = new SampleFoodAdapter(sampleFoods);
+                    adapter.setMaxItemsToShow(3);
                     recyclerView.setAdapter(adapter);
 
+                    moreTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
+                            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
+                            bottomSheetDialog.setContentView(bottomSheetView);
+                            /// Create a new instance of the adapter with max items to show set to 10
+                            SampleFoodAdapter bottomSheetAdapter = new SampleFoodAdapter(sampleFoods);
+                            bottomSheetAdapter.setMaxItemsToShow(10);
+
+                            RecyclerView sheetList = bottomSheetView.findViewById(R.id.sheet_list);
+                            sheetList.setAdapter(bottomSheetAdapter);
+
+                            // Call setMaxItemsToShow and notifyDataSetChanged on the adapter to update the data
+                            bottomSheetAdapter.setOnItemClickListener(new SampleFoodAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+                                    Snackbar.make(bottomSheetView, "You clicked on the "+ position,
+                                            Snackbar.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            bottomSheetDialog.show();
+                            //moreTextView.setVisibility(View.GONE);
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

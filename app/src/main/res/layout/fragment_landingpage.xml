@@ -7,50 +7,72 @@
     tools:context=".LandingpageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
-        android:id="@+id/landingRelativeLayout"
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/material_landing_cv3"
+        <RelativeLayout
+            android:id="@+id/landingRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:cardCornerRadius="8dp"
-            app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true"
-            app:contentPadding="4dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/welcome_text"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/material_landing_cv3"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="8dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="4dp">
+
+                <TextView
+                    android:id="@+id/welcome_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Welcome"
+                    android:textSize="24sp" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sample_cv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Welcome"
-                android:textSize="24sp" />
-        </androidx.cardview.widget.CardView>
+                android:layout_below="@id/material_landing_cv3"
+                android:layout_centerHorizontal="true"
+                app:cardPreventCornerOverlap="false">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/material_landing_cv3"
-            app:tabMode="fixed" />
+                <FrameLayout
+                    android:id="@+id/fragment_container_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fragment_container_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/tabLayout">
+                    <fragment
+                        android:name="foodrecommender.system.SampleFoodsFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:layout="@layout/fragment_sample_foods" />
 
-            <fragment
-                android:name="foodrecommender.system.SampleFoodsFragment"
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:id="@+id/fragment_container_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layout="@layout/fragment_sample_foods" />
-        </FrameLayout>
+                android:layout_below="@id/sample_cv">
 
-    </RelativeLayout>
+                <fragment
+                    android:name="foodrecommender.system.SummaryFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/fragment_summary" />
+            </FrameLayout>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>

@@ -53,7 +53,7 @@
 
     <!-- Icon theme colors -->
     <color name="icon_light">#B68D40</color>
-    <color name="icon_dark">#DD9000</color>
+    <color name="icon_dark">#FFF8DC</color>
 
     <!-- Card background colors -->
     <color name="card_background_light">#27B68D40</color>
