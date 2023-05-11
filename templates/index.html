@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Red Homepage</title>
+  <title>Diabeates Homepage</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -36,7 +36,7 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href="{{ url_for('home') }}">Red</a></h1>
+      <h1 class="logo me-auto"><a href="{{ url_for('home') }}">Diabeates</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
@@ -52,7 +52,7 @@
           <li class="dropdown"><a href="#"><span>Recommendation</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#recommend">Recommend me</a></li>
-              <!-- 
+              <!--
               <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
                 <ul>
                   <li><a href="#">Deep Drop Down 1</a></li>
@@ -146,7 +146,7 @@
         <div class="row content">
           <div class="col-lg-6">
             <p>
-              The k-means clustering algorithm was used in the study, with the use of the K-means algorithm, it helps to 
+              The k-means clustering algorithm was used in the study, with the use of the K-means algorithm, it helps to
               divide the food set. This can help the researchers in the study to deliver a food recommendation that you may like.
 
             </p>
@@ -158,9 +158,9 @@
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0">
             <p>
-              Diabetes is a chronic condition brought on by either insufficient insulin production by the pancreas or 
-              inefficient insulin use by the body. Uncontrolled diabetes has serious negative effects on one's health and 
-              well-being. In this paper, the researchers study a food recommendation for type-2 diabetic patients, an 
+              Diabetes is a chronic condition brought on by either insufficient insulin production by the pancreas or
+              inefficient insulin use by the body. Uncontrolled diabetes has serious negative effects on one's health and
+              well-being. In this paper, the researchers study a food recommendation for type-2 diabetic patients, an
               analysis using a k-means clustering algorithm.
             </p>
             <a href="#recommend" class="btn-learn-more">Learn More</a>
@@ -698,7 +698,9 @@
           <p>Try us! We are using <a href="https://muthu.co/mathematics-behind-k-mean-clustering-algorithm/">KMeans algorithm</a> for you.</p>
         </div>
         <center>
+            <!--
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
+
             <form action="{{ url_for('predict')}}" method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="form-group col-md-6">
@@ -779,6 +781,15 @@
               </div>
             </form>
           </div>
+          -->
+            <div class="text-center"><button type="submit" onclick="downloadFile()">Download now</button></div>
+
+            <script>
+                function downloadFile() {
+                  // Create an anchor element
+                  window.location.href = '/download';
+                }
+            </script>
         </center>
       </div>
     </section><!-- End Recommend Section -->
@@ -805,7 +816,7 @@
               <div class="email">
                 <i class="bi bi-envelope"></i>
                 <h4>Email:</h4>
-                <p>iamred@gmail.com</p>
+                <p>diabeates@gmail.com</p>
               </div>
 
               <div class="phone">
@@ -877,13 +888,13 @@
         <div class="row">
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Red</h3>
+            <h3>Diabeates</h3>
             <p>
               University of Makati <br>
               Metropolitan Manila<br>
               Philippines <br><br>
               <strong>Phone:</strong> +639 123456789<br>
-              <strong>Email:</strong> iamred@gmail.com<br>
+              <strong>Email:</strong> diabeates@gmail.com<br>
             </p>
           </div>
 
@@ -927,15 +938,15 @@
 
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        &copy; Copyright <strong><span>Red</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>Diabeates</span></strong>. All Rights Reserved
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
-        Designed by <a href="#hero">IAmRed</a>
+        Designed by <a href="#hero">Diabeates</a>
       </div>
 
-    
-    
+
+
     </div>
   </footer><!-- End Footer -->
 

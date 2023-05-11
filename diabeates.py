@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, redirect
 import pandas as pd
 import numpy as np
 import difflib
@@ -301,3 +301,7 @@ def recommend():
         return jsonify({'recommended_foods': recommended_foods})
     else:
         abort(404, 'No recommendations found')
+
+@app.route('/')
+def home():
+    return redirect("nutzbee.pythonanywhere.com")
