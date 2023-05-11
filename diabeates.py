@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, abort
-import requests
 import pandas as pd
 import numpy as np
 import difflib
