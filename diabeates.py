@@ -304,4 +304,4 @@ def recommend():
 
 @app.route('/')
 def home():
-    return redirect("nutzbee.pythonanywhere.com")
+    return redirect("http://nutzbee.pythonanywhere.com")
