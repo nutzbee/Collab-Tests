@@ -27,7 +27,7 @@ class FoodRecommender:
         self.diaprincipal_components = self.diapca.fit_transform(self.diadf_std)
         self.principal_diadf = pd.DataFrame(data=self.diaprincipal_components, columns=['PC1', 'PC2'])
         self.diakmeans = KMeans(n_clusters=2, random_state=42, init='k-means++', n_init=10)
-        self.diakmeans.fit(self.principal_diadf)
+        self.diakmeans.fit(self.principal_diadf.values)
 
         # Exercise
         self.exercise_df = pd.read_csv('exercise_dataset.csv')
