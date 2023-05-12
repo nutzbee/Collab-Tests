@@ -302,6 +302,10 @@ def recommend():
     else:
         abort(404, 'No recommendations found')
 
+@app.route('/health_check')
+def health_check():
+    return "Service is healthy"
+
 @app.route('/')
 def home():
     return redirect("http://nutzbee.pythonanywhere.com")
