@@ -233,6 +233,9 @@ class FoodRecommender:
         self.cluster_labels = y_kmeans
 
         return recommended_foods
+    
+food_recommender = FoodRecommender()
+food_recommender.preprocess_data()
 
 
 @app.route('/summary', methods=['POST', 'GET'])
@@ -305,8 +308,3 @@ def health_check():
 @app.route('/')
 def home():
     return redirect("http://nutzbee.pythonanywhere.com")
-
-if __name__ == '__main__':
-    food_recommender = FoodRecommender()
-    food_recommender.preprocess_data()
-    app.run()
