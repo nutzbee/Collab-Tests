@@ -67,8 +67,8 @@ class FoodRecommender:
             if self.total_calories_burned > 150:
                 health_monitor = "Excellent"
                 recommendations = "Drink more water to regain energy"
-            elif self.total_calories_burned == 0:
-                health_monitor = "You haven't done your exercise today"
+            elif self.total_calories_burned < 1:
+                health_monitor = "Invalid"
                 recommendations = "Exercise now!"
             else:
                 health_monitor = "Good"
@@ -234,6 +234,7 @@ class FoodRecommender:
 
         return recommended_foods
     
+
 food_recommender = FoodRecommender()
 food_recommender.preprocess_data()
 
