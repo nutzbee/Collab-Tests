@@ -66,16 +66,16 @@ class FoodRecommender:
         if self.total_calories_burned is not None:
             if self.total_calories_burned > 150:
                 health_monitor = "Excellent"
-                recommendations = "Drink more water to regain energy"
+                recommendations = "Drink water to regain energy"
             elif self.total_calories_burned < 1:
                 health_monitor = "Invalid"
-                recommendations = "Exercise now!"
+                recommendations = "No recommendations"
             else:
                 health_monitor = "Good"
                 recommendations = "Do better exercises tomorrow"
         else:
             health_monitor = "Unidentified"
-            recommendations = "Do your exercise to monitor your health"
+            recommendations = "Get an account monitor your health"
 
         return jsonify({'summary_report': summary_sentence,
                         'health_monitor': health_monitor,
