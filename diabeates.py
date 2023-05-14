@@ -17,6 +17,7 @@ class FoodRecommender:
         self.scaler = None
         self.pca = None
         self.kmeans = None
+        self.recommended_foods = None
 
         # Prediction
         self.scalers = StandardScaler()
@@ -66,16 +67,16 @@ class FoodRecommender:
         if self.total_calories_burned is not None:
             if self.total_calories_burned > 150:
                 health_monitor = "Excellent"
-                recommendations = "Drink water to regain energy"
-            elif self.total_calories_burned < 1:
-                health_monitor = "Invalid"
-                recommendations = "No recommendations"
+                recommendations = "Drink more water to regain energy"
+            elif self.total_calories_burned == 0:
+                health_monitor = "You haven't done your exercise today"
+                recommendations = "Exercise now!"
             else:
                 health_monitor = "Good"
                 recommendations = "Do better exercises tomorrow"
         else:
             health_monitor = "Unidentified"
-            recommendations = "Get an account monitor your health"
+            recommendations = "Do your exercise to monitor your health"
 
         return jsonify({'summary_report': summary_sentence,
                         'health_monitor': health_monitor,
@@ -228,16 +229,45 @@ class FoodRecommender:
             if len(recommended_foods) == 10:
                 break
 
+        self.recommended_foods = recommended_foods
         self.filtered_data = filtered_df
         self.nutrient_requirement = closest_column
         self.cluster_labels = y_kmeans
 
         return recommended_foods
     
+    def recommend_again(self, selected_food):
+        # Filter the dataset based on the selected food
+        selected_food_df = self.df[self.df['FoodGroup'] == selected_food]
+        
+        # Filter the dataset again based on the nutrient requirement and selected food
+        filtered_again_df = selected_food_df[selected_food_df[self.nutrient_requirement] > 0]
+        filtered_again_df = filtered_again_df.sort_values(by=[self.nutrient_requirement], ascending=False)
+        
+        # Get a list of food descriptions from the existing recommendations
+        recommended_food_descriptions = [food['descrip'] for food in self.recommended_foods]
+
+        # Get 3 random foods from the filtered dataset, excluding the ones already recommended
+        recommended_foods_again = []
+        for i in range(3):  # Update the range to include the desired number of foods
+            filtered_food = None
+            while filtered_food is None:
+                if len(filtered_again_df) == 0:
+                    break
+                row = filtered_again_df.sample(n=1).iloc[0]
+                if row['Shrt_Desc'] not in recommended_food_descriptions:
+                    filtered_food = {
+                        'descrip': row['Shrt_Desc'],
+                        'energKcal': str(row['Energ_Kcal']) + ' Kcal',
+                        'foodGroup': row['FoodGroup']
+                    }
+            if filtered_food:
+                recommended_foods_again.append(filtered_food)
+        
+        return jsonify({'recommended_foods_again': recommended_foods_again})
 
 food_recommender = FoodRecommender()
 food_recommender.preprocess_data()
-
 
 @app.route('/summary', methods=['POST', 'GET'])
 def summary():
@@ -301,6 +331,15 @@ def recommend():
         return jsonify({'recommended_foods': recommended_foods})
     else:
         abort(404, 'No recommendations found')
+
+@app.route('/recommend_again', methods=['POST'])
+def recommend_again():
+    selected_food = request.json.get('selected_food')
+    if selected_food:
+        recommended_foods_again = food_recommender.recommend_again(selected_food)
+        return recommended_foods_again
+    else:
+        return jsonify({'error': 'Invalid request'})
 
 @app.route('/health_check')
 def health_check():
