@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
+
+            <!-- Profile picture card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profile_picture_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                app:cardCornerRadius="16dp"
+                app:cardPreventCornerOverlap="false"
+                app:contentPadding="16dp">
+
+                <ImageView
+                    android:id="@+id/profile_picture"
+                    style="@style/ImageViewStyle"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_supervised_user_circle_24" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/exercise_chip"
+                style="@style/ChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:layout_toEndOf="@id/profile_picture_card"
+                android:text="Exercise"
+                app:chipIcon="@drawable/exercise_icon"
+                app:chipIconEnabled="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/preferences_chip"
+                style="@style/ChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:layout_toEndOf="@id/exercise_chip"
+                android:enabled="false"
+                android:text="Preferences"
+                app:chipIcon="@drawable/baseline_checklist_24"
+                app:chipIconEnabled="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/summary_chip"
+                style="@style/ChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/exercise_chip"
+                android:layout_marginEnd="16dp"
+                android:layout_toEndOf="@id/profile_picture_card"
+                android:text="Summary"
+                app:chipIcon="@drawable/baseline_person_24"
+                app:chipIconEnabled="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/history_chip"
+                style="@style/ChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/preferences_chip"
+                android:layout_marginEnd="16dp"
+                android:layout_toEndOf="@id/summary_chip"
+                android:enabled="false"
+                android:text="Food History"
+                app:chipIcon="@drawable/baseline_manage_history_24"
+                app:chipIconEnabled="true" />
+
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_picture_card"
+                android:layout_marginHorizontal="16dp"
+                android:text="Login"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/buttonSignup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buttonLogin"
+                android:layout_marginHorizontal="16dp"
+                android:text="Sign Up"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buttonSignup"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:itemCount="4"
+                tools:listitem="@layout/profile_item" />
+
+            <FrameLayout
+                android:id="@+id/fragment_container_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_recycler_view"
+                android:layout_marginBottom="12dp"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <fragment
+                    android:name="foodrecommender.system.fragments.SummaryFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/fragment_summary" />
+            </FrameLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
