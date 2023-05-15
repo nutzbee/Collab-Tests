@@ -3,6 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.0.41</domain>
         <domain includeSubdomains="true">nutzbee.pythonanywhere.com</domain>
-        <domain includeSubdomains="true">http://nutzbee.pythonanywhere.com</domain>
+        <domain includeSubdomains="true">uxoricidal-image.000webhostapp.com</domain>
+        <domain includeSubdomains="true">diabeates-services.onrender.com</domain>
     </domain-config>
 </network-security-config>

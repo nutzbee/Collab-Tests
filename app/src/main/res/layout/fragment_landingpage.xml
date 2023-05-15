@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LandingpageFragment">
+    android:id="@+id/landingFrameLayout"
+    tools:context=".fragments.LandingpageFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/nestedScrollLanding">
 
         <RelativeLayout
             android:id="@+id/landingRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/material_landing_cv3"
@@ -33,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Welcome"
+                    android:text="Food Feed"
                     android:textSize="24sp" />
             </androidx.cardview.widget.CardView>
 
@@ -43,35 +45,80 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/material_landing_cv3"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
                 app:cardPreventCornerOverlap="false">
 
-                <FrameLayout
-                    android:id="@+id/fragment_container_home"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
 
-                    <fragment
-                        android:name="foodrecommender.system.SampleFoodsFragment"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/sample_foods_text"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:layout="@layout/fragment_sample_foods" />
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:textStyle="bold|normal"
+                        android:text="Food Samples" />
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/fragment_container_home"
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/sample_foods_text"
+                        android:layout_height="wrap_content">
+
+                        <fragment
+                            android:name="foodrecommender.system.fragments.SampleFoodsFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:layout="@layout/fragment_sample_foods" />
+
+                    </FrameLayout>
+                </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <FrameLayout
-                android:id="@+id/fragment_container_summary"
-                android:layout_width="match_parent"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/recommendations_cv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/sample_cv">
+                android:layout_below="@id/sample_cv"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_marginTop="8dp"
+                app:cardPreventCornerOverlap="false">
 
-                <fragment
-                    android:name="foodrecommender.system.SummaryFragment"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:layout="@layout/fragment_summary" />
-            </FrameLayout>
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/recommendations_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:textStyle="bold|normal"
+                        android:text="Recommendations" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recommendations_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/recommendations_text"
+                        android:clipToPadding="false"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/recommended_food_item" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

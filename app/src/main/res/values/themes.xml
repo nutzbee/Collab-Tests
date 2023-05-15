@@ -22,7 +22,7 @@
         <item name="android:statusBarColor">@color/status_bar_light</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">arial</item>
+        <item name="fontFamily">@font/dmsans_regular</item>
         <item name="materialCardViewStyle">@style/MaterialCardView.Light</item>
         <item name="cardViewStyle">@style/CardView.Light</item>
         <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
@@ -55,6 +55,11 @@
     <style name="RoundedTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="endIconTint">@color/icon_light</item>
         <item name="startIconTint">@color/icon_light</item>
+    </style>
+
+    <style name="ChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipIconTint">@color/icon_light</item>
+        <item name="closeIconTint">@color/icon_light</item>
     </style>
 
     <!-- Define the style for RoundedButton -->

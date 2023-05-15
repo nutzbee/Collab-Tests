@@ -4,54 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExerciseFragment">
+    tools:context=".fragments.ExerciseFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
 
-            <!-- Biking option -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/profile_picture_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                app:cardCornerRadius="16dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="16dp">
-
-                <ImageView
-                    android:id="@+id/profile_picture"
-                    style="@style/ImageViewStyle"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/baseline_supervised_user_circle_24" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profile_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profile_picture_card"
-                android:paddingBottom="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/profile_item" />
-
-            <!-- TODO: Update blank fragment layout -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/exercise_constraint_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profile_recycler_view">
+                android:layout_height="wrap_content">
 
                 <!-- Biking option -->
                 <com.google.android.material.card.MaterialCardView
@@ -134,10 +102,12 @@
                 android:layout_below="@id/exercise_constraint_layout"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
                 app:cardCornerRadius="8dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="true"
-                app:contentPadding="12dp">
+                app:contentPadding="12dp"
+                app:contentPaddingBottom="24dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -148,7 +118,7 @@
                         style="@style/TextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Biking"
+                        android:text="Exercise content"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -159,8 +129,10 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/content_text"
                         android:layout_marginTop="8dp"
-                        android:text="Your weight: 120 lbs"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        tools:text="Your weight: 120 lbs"
+                        tools:visibility="visible" />
 
                     <TextView
                         android:id="@+id/content_calories"
@@ -169,23 +141,42 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/content_distance"
                         android:layout_marginTop="4dp"
-                        android:text="Total burned calories: 0 kcal"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        tools:text="Total burned calories: 0 kcal"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/weight_input_layout"
+                        style="@style/RoundedTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/content_calories"
+                        android:layout_marginTop="16dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/weight_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            tools:text="Your weight in lbs" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilActivity"
                         style="@style/TILDropdownStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/content_calories"
-                        android:layout_marginTop="16dp"
+                        android:layout_below="@id/weight_input_layout"
                         android:hint="Select Activity">
 
                         <AutoCompleteTextView
                             android:id="@+id/actvActivity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:textAlignment="center" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </RelativeLayout>
@@ -193,7 +184,6 @@
             </com.google.android.material.card.MaterialCardView>
 
         </RelativeLayout>
-
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

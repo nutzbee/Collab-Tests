@@ -10,8 +10,8 @@ android {
         applicationId "foodrecommender.system"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "5.7.2023"
+        versionCode 5152023
+        versionName "Diabeates App"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,6 +43,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.work:work-runtime:2.8.1'
 
     // SQLITE
     implementation 'androidx.sqlite:sqlite:2.2.0'

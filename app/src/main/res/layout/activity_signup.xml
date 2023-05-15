@@ -5,33 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".SignupActivity">
+    tools:context=".activities.SignupActivity">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:indeterminate="true"
-        app:indicatorDirectionLinear="startToEnd" />
+        android:visibility="gone"
+        app:indicatorDirectionLinear="startToEnd"
+        tools:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp">
 
         <FrameLayout
             android:id="@+id/signup_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:animateLayoutChanges="true">
 
             <fragment
-                android:name="foodrecommender.system.BaseSignupFragment"
+                android:name="foodrecommender.system.fragments.BaseSignupFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/fragment_base_signup" />

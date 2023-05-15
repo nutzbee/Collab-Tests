@@ -5,7 +5,7 @@
     android:id="@+id/frameLayoutDiaCheck"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PredictionFragment">
+    tools:context=".fragments.PredictionFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
@@ -16,6 +16,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:padding="16dp">
 
             <com.google.android.material.textfield.TextInputLayout

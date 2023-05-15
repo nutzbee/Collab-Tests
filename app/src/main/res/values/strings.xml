@@ -26,14 +26,16 @@
 
     <string name="sample_foods_url">http://nutzbee.pythonanywhere.com/sample</string>
     <string name="search_url">http://nutzbee.pythonanywhere.com/search</string>
-    <string name="exercise_url">http://192.168.0.41:5000/get_calories_burned</string>
-    <string name="exercise_url_get">http://nutzbee.pythonanywhere.com/get_activities</string>
-    <string name="summary_url">http://nutzbee.pythonanywhere.com/summary</string>
-    <string name="recommend_url">http://192.168.0.41:5000/recommend</string>
-    <string name="predict_url">http://192.168.0.41:5000/predict</string>
+    <string name="exercise_url">https://diabeates-services.onrender.com/get_calories_burned</string>
+    <string name="exercise_url_get">https://diabeates-services.onrender.com/get_activities</string>
+    <string name="summary_url">https://diabeates-services.onrender.com/summary</string>
+    <string name="recommend_url">https://diabeates-services.onrender.com/recommend</string>
+    <string name="recommend_again_url">https://diabeates-services.onrender.com/recommend_again</string>
+    <string name="predict_url">https://diabeates-services.onrender.com/predict</string>
 
     <string name="localHost">http://192.168.0.41:5000</string>
     <string name="domainServerHost">http://nutzbee.pythonanywhere.com</string>
+    <string name="diabeates_services_host">https://diabeates-services.onrender.com</string>
 
     <string name="signInLabel">Sign In</string>
     <string name="signUpLabel">Sign Up</string>
