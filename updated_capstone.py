@@ -19,6 +19,7 @@ class FoodRecommender:
         self.pca = None
         self.kmeans = None
         self.recommended_foods = None
+        self.selected_foods = []
 
         # Prediction
         self.scalers = StandardScaler()
@@ -266,6 +267,41 @@ class FoodRecommender:
                 recommended_foods_again.append(filtered_food)
         
         return jsonify({'recommended_foods_again': recommended_foods_again})
+    
+    def store_selected_foods(self, selected_food):
+        # Check if the selected food already exists in self.selected_foods
+        if selected_food not in self.selected_foods:
+            # Add the selected food to the list of selected foods
+            self.selected_foods.append(selected_food)
+
+    def get_selected_foods(self):
+        # Create a new endpoint to fetch the selected foods and specific values
+        selected_foods_data = []
+        for value in self.selected_foods:
+            matching_rows = self.df[self.df['Descrip'] == value]
+            if not matching_rows.empty:
+                food = matching_rows.iloc[0]  # Get the first matching row
+                selected_foods_data.append({
+                    'descrip': food['Descrip'],
+                    'energKcal': str(food['Energ_Kcal']) + ' Kcal',
+                    'foodGroup': food['FoodGroup']
+                })
+        return jsonify({'selected_foods': selected_foods_data})
+    
+    def get_food_value(self, food_name):
+        matching_row = self.df.loc[self.df['Descrip'] == food_name]
+
+        if matching_row.empty:
+            matching_row = self.df.loc[self.df['Shrt_Desc'] == food_name]
+
+        if matching_row.empty:
+            return None
+
+        selected_food = matching_row.to_dict(orient='records')[0]
+
+        # Add column names as titles to each value
+        selected_food_with_titles = {column: value for column, value in selected_food.items()}
+        return jsonify({'values': selected_food_with_titles})
 
 
 @app.route('/summary', methods=['POST', 'GET'])
@@ -322,9 +358,6 @@ def recommend():
     #food_groups = data['food_groups']
 
     recommended_foods = food_recommender.filter_recommendations(calorie_req, food_allergy, nutrient_req)
-    for food in recommended_foods:
-        if food.get('recommended') == 'Recommended':
-            print(food)
 
     if recommended_foods:
         return jsonify({'recommended_foods': recommended_foods})
@@ -334,11 +367,27 @@ def recommend():
 @app.route('/recommend_again', methods=['POST'])
 def recommend_again():
     selected_food = request.json.get('selected_food')
-    if selected_food:
+    selected_food_name = request.json.get('selected_food_name')
+    if selected_food and selected_food_name:
         recommended_foods_again = food_recommender.recommend_again(selected_food)
+        food_recommender.store_selected_foods(selected_food_name)
         return recommended_foods_again
     else:
         return jsonify({'error': 'Invalid request'})
+    
+@app.route('/get_selected_foods', methods=['GET'])
+def get_selected_foods():
+    return food_recommender.get_selected_foods()
+
+@app.route('/get_food_value', methods=['POST', 'GET'])
+def get_food_value():
+    food_name = request.json.get('selected_food_name')
+    selected_food = food_recommender.get_food_value(food_name)
+    
+    if selected_food is None:
+        return jsonify({'error': 'Food not found'})
+    
+    return selected_food
 
 if __name__ == '__main__':
     food_recommender = FoodRecommender()
