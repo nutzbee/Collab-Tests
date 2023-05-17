@@ -12,6 +12,7 @@ app = Flask(__name__)
 class FoodRecommender:
     def __init__(self):
         self.df = pd.read_csv("merged_abbrev_excel_csv.csv")
+        self.df_local = pd.read_csv("https://raw.githubusercontent.com/nutzbee/Capstone-Source-Codes/Notebook-using-Google-Colab-Branch/Food%20Dataset%20of%20the%20Philippines%20-%20Combined.csv")
         self.filtered_data = None
         self.nutrient_requirement = None
         self.cluster_labels = None
@@ -19,7 +20,11 @@ class FoodRecommender:
         self.pca = None
         self.kmeans = None
         self.recommended_foods = None
+        self.localpca = None
+        self.localkmeans = None
+        self.localscaler = None
         self.selected_foods = []
+        self.selected_local_foods = []
 
         # Prediction
         self.scalers = StandardScaler()
@@ -183,8 +188,26 @@ class FoodRecommender:
         self.kmeans = KMeans(n_clusters=3, n_init=10, init='k-means++', random_state=42)
         self.kmeans.fit(self.principal_df)
 
+        self.df_local.fillna(0, inplace=True)
+        self.localscaler = StandardScaler()
+        df_local_std = self.localscaler.fit_transform(self.df_local.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link'], axis=1))
+        self.localpca = PCA(n_components=2)
+        self.localpca.fit(df_local_std)
+        local_principal_components = self.localpca.transform(df_local_std)
+        self.local_principal_df = pd.DataFrame(data=local_principal_components, columns=['PC1', 'PC2'])
+        self.localkmeans = KMeans(n_clusters=3, n_init=10, init='k-means++', random_state=42)
+        self.localkmeans.fit(self.local_principal_df)
+
     def get_nearest_column(self, nutrient_req):
         columns = self.df.columns.tolist()[2:]
+        nearest_column = difflib.get_close_matches(nutrient_req, columns, n=1, cutoff=0.3)
+        if not nearest_column:
+            return None
+        else:
+            return nearest_column[0]
+        
+    def get_nearest_column_local(self, nutrient_req):
+        columns = self.df_local.columns.tolist()[2:]
         nearest_column = difflib.get_close_matches(nutrient_req, columns, n=1, cutoff=0.3)
         if not nearest_column:
             return None
@@ -238,6 +261,51 @@ class FoodRecommender:
 
         return recommended_foods
     
+    def filter_local_recommendations(self, calorie_req, food_allergy, nutrient_req):
+        closest_column = self.get_nearest_column_local(nutrient_req)
+        if not closest_column:
+            return []
+
+        filtered_df = self.df_local[
+            (self.df_local['Energy, calculated (kcal)'] <= float(calorie_req)) &
+            (~self.df_local['Food name and Description'].str.contains(food_allergy, na=False)) &
+            (self.df_local['Carbohydrate, total (g)'] < 55)
+        ]
+        filtered_df = filtered_df.sort_values(by=[closest_column], ascending=False)
+
+        principal_components = self.localpca.transform(self.localscaler.transform(filtered_df.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link'], axis=1)))
+        principal_df_filtered = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
+        y_kmeans = self.localkmeans.predict(principal_df_filtered)
+        principal_df_filtered['cluster'] = self.localkmeans.predict(principal_df_filtered)
+
+        principal_df_filtered['cluster'] = principal_df_filtered['cluster'].sample(20)
+        recommended_foods = []
+
+        for i in range(20):  # Update the range to include the first 20 foods
+            cluster_df = principal_df_filtered[principal_df_filtered['cluster'] == i]
+            cluster_foods = filtered_df[filtered_df.index.isin(cluster_df.index)]
+            if len(cluster_foods) > 0:
+                for j in range(len(cluster_foods)):
+                    descrip = cluster_foods.iloc[j]['Alternate/Common name(s)']
+                    shrt_desc = cluster_foods.iloc[j]['Food name and Description']
+                    energ_kcal = cluster_foods.iloc[j]['Energy, calculated (kcal)']
+                    food = {
+                        'descrip': shrt_desc if descrip == 0 else descrip,
+                        'energKcal': str(energ_kcal) + ' Kcal'
+                    }
+                    recommended_foods.append(food)
+                    if len(recommended_foods) == 10:
+                        break
+            if len(recommended_foods) == 10:
+                break
+
+        self.recommended_foods = recommended_foods
+        self.filtered_data = filtered_df
+        self.nutrient_requirement = closest_column
+        self.cluster_labels = y_kmeans
+
+        return recommended_foods
+    
     def recommend_again(self, selected_food):
         # Filter the dataset based on the selected food
         selected_food_df = self.df[self.df['FoodGroup'] == selected_food]
@@ -274,6 +342,42 @@ class FoodRecommender:
             # Add the selected food to the list of selected foods
             self.selected_foods.append(selected_food)
 
+    def recommend_local_again(self, selected_food):
+        # Filter the dataset based on the selected food
+        selected_food_df = self.df_local[self.df_local['Protein (g)'] == selected_food]
+        
+        # Filter the dataset again based on the nutrient requirement and selected food
+        filtered_again_df = selected_food_df[selected_food_df[self.nutrient_requirement] > 0]
+        filtered_again_df = filtered_again_df.sort_values(by=[self.nutrient_requirement], ascending=False)
+        
+        # Get a list of food descriptions from the existing recommendations
+        recommended_food_descriptions = [food['descrip'] for food in self.recommended_foods]
+
+        # Get 3 random foods from the filtered dataset, excluding the ones already recommended
+        recommended_foods_again = []
+        for i in range(3):  # Update the range to include the desired number of foods
+            filtered_food = None
+            while filtered_food is None:
+                if len(filtered_again_df) == 0:
+                    break
+                row = filtered_again_df.sample(n=1).iloc[0]
+                if row['Shrt_Desc'] not in recommended_food_descriptions:
+                    filtered_food = {
+                        'descrip': row['Shrt_Desc'],
+                        'energKcal': str(row['Energ_Kcal']) + ' Kcal',
+                        'foodGroup': row['FoodGroup']
+                    }
+            if filtered_food:
+                recommended_foods_again.append(filtered_food)
+        
+        return jsonify({'recommended_foods_again': recommended_foods_again})
+    
+    def store_selected_local_foods(self, selected_food):
+        # Check if the selected food already exists in self.selected_foods
+        if selected_food not in self.selected_local_foods:
+            # Add the selected food to the list of selected foods
+            self.selected_foods.append(selected_food)
+
     def get_selected_foods(self):
         # Create a new endpoint to fetch the selected foods and specific values
         selected_foods_data = []
@@ -293,6 +397,21 @@ class FoodRecommender:
 
         if matching_row.empty:
             matching_row = self.df.loc[self.df['Shrt_Desc'] == food_name]
+
+        if matching_row.empty:
+            return None
+
+        selected_food = matching_row.to_dict(orient='records')[0]
+
+        # Add column names as titles to each value
+        selected_food_with_titles = {column: value for column, value in selected_food.items()}
+        return jsonify({'values': selected_food_with_titles})
+    
+    def get_local_food_value(self, food_name):
+        matching_row = self.df_local.loc[self.df_local['Alternate/Common name(s)'] == food_name]
+
+        if matching_row.empty:
+            matching_row = self.df_local.loc[self.df_local['Food name and Description'] == food_name]
 
         if matching_row.empty:
             return None
@@ -375,6 +494,33 @@ def recommend_again():
     else:
         return jsonify({'error': 'Invalid request'})
     
+@app.route('/recommend_local_again', methods=['POST'])
+def recommend_local_again():
+    selected_food = request.json.get('selected_food')
+    selected_food_name = request.json.get('selected_food_name')
+    if selected_food and selected_food_name:
+        recommended_foods_again = food_recommender.recommend_local_again(selected_food)
+        food_recommender.store_selected_local_foods(selected_food_name)
+        return recommended_foods_again
+    else:
+        return jsonify({'error': 'Invalid request'})
+    
+    
+@app.route('/recommend_local', methods=['POST', 'GET'])
+def recommend_local():
+    data = request.json
+    calorie_req = data['calorie_req']
+    food_allergy = data['food_allergy']
+    nutrient_req = data['nutrient_req']
+    #food_groups = data['food_groups']
+
+    recommended_foods = food_recommender.filter_local_recommendations(calorie_req, food_allergy, nutrient_req)
+
+    if recommended_foods:
+        return jsonify({'recommended_foods': recommended_foods})
+    else:
+        abort(404, 'No recommendations found')
+    
 @app.route('/get_selected_foods', methods=['GET'])
 def get_selected_foods():
     return food_recommender.get_selected_foods()
@@ -383,6 +529,16 @@ def get_selected_foods():
 def get_food_value():
     food_name = request.json.get('selected_food_name')
     selected_food = food_recommender.get_food_value(food_name)
+    
+    if selected_food is None:
+        return jsonify({'error': 'Food not found'})
+    
+    return selected_food
+
+@app.route('/get_local_food_value', methods=['POST', 'GET'])
+def get_local_food_value():
+    food_name = request.json.get('selected_food_name')
+    selected_food = food_recommender.get_local_food_value(food_name)
     
     if selected_food is None:
         return jsonify({'error': 'Food not found'})
