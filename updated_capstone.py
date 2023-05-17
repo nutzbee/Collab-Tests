@@ -264,7 +264,7 @@ class FoodRecommender:
     def filter_local_recommendations(self, calorie_req, food_allergy, nutrient_req):
         closest_column = self.get_nearest_column_local(nutrient_req)
         if not closest_column:
-            return []
+            closest_column = 'Protein (g)'
 
         filtered_df = self.df_local[
             (self.df_local['Energy, calculated (kcal)'] <= float(calorie_req)) &
@@ -344,7 +344,7 @@ class FoodRecommender:
 
     def recommend_local_again(self, selected_food):
         # Filter the dataset based on the selected food
-        selected_food_df = self.df_local[self.df_local['Protein (g)'] == selected_food]
+        selected_food_df = self.df_local[selected_food]
         
         # Filter the dataset again based on the nutrient requirement and selected food
         filtered_again_df = selected_food_df[selected_food_df[self.nutrient_requirement] > 0]

@@ -263,7 +263,7 @@ class FoodRecommender:
     def filter_local_recommendations(self, calorie_req, food_allergy, nutrient_req):
         closest_column = self.get_nearest_column_local(nutrient_req)
         if not closest_column:
-            return []
+            closest_column = 'Protein (g)'
 
         filtered_df = self.df_local[
             (self.df_local['Energy, calculated (kcal)'] <= float(calorie_req)) &
