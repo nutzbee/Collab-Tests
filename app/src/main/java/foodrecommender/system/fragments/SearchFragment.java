@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -30,6 +33,7 @@ public class SearchFragment extends Fragment {
     private View view;
     private RecyclerView foodRecyclerView;
     private TextInputEditText searchFoodEditText;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -47,12 +51,14 @@ public class SearchFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_search, container, false);
         foodRecyclerView = view.findViewById(R.id.search_results_recycler_view);
         searchFoodEditText = view.findViewById(R.id.food_search_bar_edit_text);
+        linearProgressIndicator = view.findViewById(R.id.searchF_progress_indicator);
 
         getTextInputs();
         return view;
     }
 
     private void getTextInputs(){
+        linearProgressIndicator.show();
         foodSearch();
         searchFoodEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,31 +90,39 @@ public class SearchFragment extends Fragment {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
-            try {
-                // Parse the JSON response
-                JSONArray searchFoodsArray = response.getJSONArray("search_food_result");
-                ArrayList<SearchFood> searchFoods = new ArrayList<>();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    linearProgressIndicator.hide();
+                    // Parse the JSON response
+                    JSONArray searchFoodsArray = response.getJSONArray("search_food_result");
+                    ArrayList<SearchFood> searchFoods = new ArrayList<>();
 
-                // Iterate through the JSON array and create SearchFood objects
-                for (int i = 0; i < searchFoodsArray.length(); i++) {
-                    JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
-                    String shortDesc = searchFoodObject.getString("Shrt_Desc");
-                    String kcal = searchFoodObject.getString("Energ_Kcal");
-                    String foodGroup = searchFoodObject.getString("FoodGroup");
-                    SearchFood searchFood = new SearchFood(shortDesc, foodGroup, kcal);
-                    searchFoods.add(searchFood);
+                    // Iterate through the JSON array and create SearchFood objects
+                    for (int i = 0; i < searchFoodsArray.length(); i++) {
+                        JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
+                        String shortDesc = searchFoodObject.getString("Shrt_Desc");
+                        String kcal = searchFoodObject.getString("Energ_Kcal");
+                        String foodGroup = searchFoodObject.getString("FoodGroup");
+                        SearchFood searchFood = new SearchFood(shortDesc, foodGroup, kcal);
+                        searchFoods.add(searchFood);
+                    }
+
+                    // Pass the searchFoods ArrayList to your RecyclerView adapter
+                    SearchFoodAdapter adapter = new SearchFoodAdapter(searchFoods);
+                    foodRecyclerView.setAdapter(adapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-                // Pass the searchFoods ArrayList to your RecyclerView adapter
-                SearchFoodAdapter adapter = new SearchFoodAdapter(searchFoods);
-                foodRecyclerView.setAdapter(adapter);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }, error -> {
-            error.printStackTrace();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                foodSearch();
+            }
         });
 
         Volley.newRequestQueue(getActivity()).add(jsonObjectRequest);

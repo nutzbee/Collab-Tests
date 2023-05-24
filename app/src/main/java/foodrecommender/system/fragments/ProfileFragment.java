@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class ProfileFragment extends Fragment {
     private Button loginButton, signupButton;
     private FrameLayout parentView;
     private boolean isLoggedIn;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -64,6 +66,7 @@ public class ProfileFragment extends Fragment {
         signupButton = view.findViewById(R.id.buttonSignup);
         preferencesChip = view.findViewById(R.id.preferences_chip);
         historyChip = view.findViewById(R.id.history_chip);
+        linearProgressIndicator = view.findViewById(R.id.profile_progress_indicator);
     }
 
     private void handleButtonActions() {
@@ -127,6 +130,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void changeFragment() {
+        linearProgressIndicator.show();
+
         if (profileRecyclerView.isShown() && isLoggedIn) {
             profileRecyclerView.setVisibility(View.GONE);
         }
@@ -152,6 +157,7 @@ public class ProfileFragment extends Fragment {
             if (!profileRecyclerView.isShown() && isLoggedIn) {
                 profileRecyclerView.setVisibility(View.VISIBLE);
             }
+            linearProgressIndicator.hide();
         }
     }
 

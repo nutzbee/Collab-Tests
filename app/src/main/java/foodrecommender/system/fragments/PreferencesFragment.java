@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
 import java.util.ArrayList;
 
 import foodrecommender.system.R;
@@ -22,6 +24,7 @@ import foodrecommender.system.classes.Profile;
 public class PreferencesFragment extends Fragment {
     private View view;
     private RecyclerView preferencesRecyclerView;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public PreferencesFragment() {
         // Required empty public constructor
@@ -70,9 +73,11 @@ public class PreferencesFragment extends Fragment {
 
         PreferencesAdapter preferencesAdapter = new PreferencesAdapter(requireContext(), preferences);
         preferencesRecyclerView.setAdapter(preferencesAdapter);
+        linearProgressIndicator.hide();
     }
 
     private void initializeViews() {
         preferencesRecyclerView = view.findViewById(R.id.preferences_recycler_view);
+        linearProgressIndicator = requireActivity().findViewById(R.id.profile_progress_indicator);
     }
 }

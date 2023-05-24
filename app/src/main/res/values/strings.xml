@@ -41,8 +41,6 @@
     <string name="get_updates_url">http://nutzbee.pythonanywhere.com/update_app_check</string>
     <string name="send_download_request_url">http://nutzbee.pythonanywhere.com/download</string>
 
-
-
     <string name="localHost">http://192.168.0.41:5000</string>
     <string name="domainServerHost">http://nutzbee.pythonanywhere.com</string>
     <string name="diabeates_services_host">https://diabeates-services.onrender.com</string>

@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ public class SampleFoodsFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView moreTextView;
     private View view;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public SampleFoodsFragment() {
         // Required empty public constructor
@@ -56,6 +58,8 @@ public class SampleFoodsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_sample_foods, container, false);
         recyclerView = view.findViewById(R.id.suggestion_list);
         moreTextView = view.findViewById(R.id.more_ticker_textview);
+        linearProgressIndicator = view.findViewById(R.id.sampleF_progress_indicator);
+
         if (isAdded()) {
             sample_foods();
         }
@@ -66,12 +70,14 @@ public class SampleFoodsFragment extends Fragment {
     private void sample_foods(){
         // Make a POST request to the API endpoint
         // String url = "http://192.168.0.41:5000/sample";
+        linearProgressIndicator.show();
         String url = getString(R.string.sample_foods_url);
         RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    linearProgressIndicator.hide();
                     // Parse the JSON response
                     JSONArray sampleFoodsArray = response.getJSONArray("sample_foods");
                     ArrayList<SampleFood> sampleFoods = new ArrayList<>();
@@ -133,6 +139,7 @@ public class SampleFoodsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                sample_foods();
             }
         });
         requestQueue.add(jsonObjectRequest);

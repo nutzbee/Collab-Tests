@@ -101,6 +101,16 @@
                         android:layout_marginHorizontal="24dp"
                         android:text="Localized/Global Recommendations" />
 
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/recommendF_progress_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:layout_below="@id/switchLocalGlobal"
+                        android:visibility="gone"
+                        app:indicatorDirectionLinear="startToEnd"
+                        tools:visibility="visible" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recommendations_recycler_view"
                         android:layout_width="match_parent"

@@ -19,10 +19,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -54,6 +57,7 @@ public class LandingpageFragment extends Fragment {
     private RecommendedFoodsAdapater adapter;
     private MaterialSwitch foodPreference;
     private boolean isLoggedIn;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public LandingpageFragment() {
         // Required empty public constructor
@@ -76,6 +80,7 @@ public class LandingpageFragment extends Fragment {
         recoRecyclerView = view.findViewById(R.id.recommendations_recycler_view);
         recoCardview = view.findViewById(R.id.recommendations_cv);
         foodPreference = view.findViewById(R.id.switchLocalGlobal);
+        linearProgressIndicator = view.findViewById(R.id.recommendF_progress_indicator);
 
         switchActions();
         return view;
@@ -83,6 +88,7 @@ public class LandingpageFragment extends Fragment {
 
     private void switchActions() {
         if (isAdded()) {
+            linearProgressIndicator.show();
             SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
             SharedPreferences.Editor ed = sp.edit();
             boolean isLocal = sp.getBoolean("isLocal", false);
@@ -103,6 +109,7 @@ public class LandingpageFragment extends Fragment {
                     }
                     ed.putBoolean("isLocal", b);
                     ed.apply();
+                    linearProgressIndicator.show();
                 }
             });
             if (isLoggedIn){
@@ -141,49 +148,57 @@ public class LandingpageFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
-                    try {
-                        JSONArray recommendedFoodsArray = response.getJSONArray("recommended_foods");
-                        ArrayList<RecommendedFoods> recommendedFoods1 = new ArrayList<>();
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            linearProgressIndicator.hide();
+                            JSONArray recommendedFoodsArray = response.getJSONArray("recommended_foods");
+                            ArrayList<RecommendedFoods> recommendedFoods1 = new ArrayList<>();
 
-                        String energKcal;
+                            String energKcal;
 
-                        // Iterate through the JSON array and create RecommendedFoods objects
-                        for (int i = 0; i < recommendedFoodsArray.length(); i++) {
-                            JSONObject foodObject = recommendedFoodsArray.getJSONObject(i);
-                            String descrip = foodObject.getString("descrip");
-                            energKcal = foodObject.getString("energKcal");
-                            //String shortDesc = recommendedFoodsArray.getString(i);
-                            RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, "", energKcal, false);
-                            recommendedFoods1.add(recommendedFoods);
+                            // Iterate through the JSON array and create RecommendedFoods objects
+                            for (int i = 0; i < recommendedFoodsArray.length(); i++) {
+                                JSONObject foodObject = recommendedFoodsArray.getJSONObject(i);
+                                String descrip = foodObject.getString("descrip");
+                                energKcal = foodObject.getString("energKcal");
+                                //String shortDesc = recommendedFoodsArray.getString(i);
+                                RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, "", energKcal, false);
+                                recommendedFoods1.add(recommendedFoods);
+                            }
+
+                            // Pass the recommendedFoods ArrayList to your RecyclerView adapter
+                            if (isAdded()) {
+                                adapter = new RecommendedFoodsAdapater(recommendedFoods1, requireContext());
+                                recoRecyclerView.setAdapter(adapter);
+                                adapter.setOnImageClickListener(new RecommendedFoodsAdapater.OnImageClickListener() {
+                                    @Override
+                                    public void onImageClick(String position, String foodName, int position2, String url) {
+                                        url = getString(R.string.recommend_local_again_url);
+                                        foodName = "Protein (g)";
+                                        fetchRecommendedFoodsAgain(position, foodName, position2, url);
+                                    }
+                                });
+
+                                adapter.setOnItemClickListener(new RecommendedFoodsAdapater.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(String foodName, int position, String url) {
+                                        url = getString(R.string.get_local_values_url);
+                                        fetchFoodValues(foodName, position, url);
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        // Pass the recommendedFoods ArrayList to your RecyclerView adapter
-                        if (isAdded()) {
-                            adapter = new RecommendedFoodsAdapater(recommendedFoods1, requireContext());
-                            recoRecyclerView.setAdapter(adapter);
-                            adapter.setOnImageClickListener(new RecommendedFoodsAdapater.OnImageClickListener() {
-                                @Override
-                                public void onImageClick(String position, String foodName, int position2, String url) {
-                                    url = getString(R.string.recommend_local_again_url);
-                                    foodName = "Protein (g)";
-                                    fetchRecommendedFoodsAgain(position, foodName, position2, url);
-                                }
-                            });
-
-                            adapter.setOnItemClickListener(new RecommendedFoodsAdapater.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(String foodName, int position, String url) {
-                                    url = getString(R.string.get_local_values_url);
-                                    fetchFoodValues(foodName, position, url);
-                                }
-                            });
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }, error -> {
-                    error.printStackTrace();
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        recommendLocal();
+                    }
                 });
 
                 Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
@@ -223,47 +238,55 @@ public class LandingpageFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
-                    try {
-                        JSONArray recommendedFoodsArray = response.getJSONArray("recommended_foods");
-                        ArrayList<RecommendedFoods> recommendedFoods1 = new ArrayList<>();
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            linearProgressIndicator.hide();
+                            JSONArray recommendedFoodsArray = response.getJSONArray("recommended_foods");
+                            ArrayList<RecommendedFoods> recommendedFoods1 = new ArrayList<>();
 
-                        // Iterate through the JSON array and create RecommendedFoods objects
-                        for (int i = 0; i < recommendedFoodsArray.length(); i++) {
-                            JSONObject foodObject = recommendedFoodsArray.getJSONObject(i);
-                            String descrip = foodObject.getString("descrip");
-                            String energKcal = foodObject.getString("energKcal");
-                            String foodGroup = foodObject.getString("foodGroup");
-                            //String shortDesc = recommendedFoodsArray.getString(i);
-                            RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, foodGroup, energKcal, false);
-                            recommendedFoods1.add(recommendedFoods);
+                            // Iterate through the JSON array and create RecommendedFoods objects
+                            for (int i = 0; i < recommendedFoodsArray.length(); i++) {
+                                JSONObject foodObject = recommendedFoodsArray.getJSONObject(i);
+                                String descrip = foodObject.getString("descrip");
+                                String energKcal = foodObject.getString("energKcal");
+                                String foodGroup = foodObject.getString("foodGroup");
+                                //String shortDesc = recommendedFoodsArray.getString(i);
+                                RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, foodGroup, energKcal, false);
+                                recommendedFoods1.add(recommendedFoods);
+                            }
+
+                            // Pass the recommendedFoods ArrayList to your RecyclerView adapter
+                            if (isAdded()) {
+                                adapter = new RecommendedFoodsAdapater(recommendedFoods1, requireContext());
+                                recoRecyclerView.setAdapter(adapter);
+                                adapter.setOnImageClickListener(new RecommendedFoodsAdapater.OnImageClickListener() {
+                                    @Override
+                                    public void onImageClick(String position, String foodName, int position2, String url) {
+                                        url = getString(R.string.recommend_again_url);
+                                        fetchRecommendedFoodsAgain(position, foodName, position2, url);
+                                    }
+                                });
+
+                                adapter.setOnItemClickListener(new RecommendedFoodsAdapater.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(String foodName, int position, String url) {
+                                        url = getString(R.string.get_values_url);
+                                        fetchFoodValues(foodName, position, url);
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        // Pass the recommendedFoods ArrayList to your RecyclerView adapter
-                        if (isAdded()) {
-                            adapter = new RecommendedFoodsAdapater(recommendedFoods1, requireContext());
-                            recoRecyclerView.setAdapter(adapter);
-                            adapter.setOnImageClickListener(new RecommendedFoodsAdapater.OnImageClickListener() {
-                                @Override
-                                public void onImageClick(String position, String foodName, int position2, String url) {
-                                    url = getString(R.string.recommend_again_url);
-                                    fetchRecommendedFoodsAgain(position, foodName, position2, url);
-                                }
-                            });
-
-                            adapter.setOnItemClickListener(new RecommendedFoodsAdapater.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(String foodName, int position, String url) {
-                                    url = getString(R.string.get_values_url);
-                                    fetchFoodValues(foodName, position, url);
-                                }
-                            });
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }, error -> {
-                    error.printStackTrace();
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        recommend();
+                    }
                 });
 
                 Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);

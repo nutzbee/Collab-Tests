@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -34,7 +35,7 @@ public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private View view;
-
+    private LinearProgressIndicator linearProgressIndicator;
     public HistoryFragment() {
         // Required empty public constructor
     }
@@ -50,6 +51,7 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_history, container, false);
         recyclerView = view.findViewById(R.id.history_list);
+        linearProgressIndicator = requireActivity().findViewById(R.id.profile_progress_indicator);
 
         if (isAdded()) {
             getHistory();
@@ -67,6 +69,7 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        linearProgressIndicator.hide();
                         // Parse the JSON response
                         JSONArray selected_foods = response.getJSONArray("selected_foods");
                         ArrayList<History> histories = new ArrayList<>();
@@ -101,6 +104,7 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
+                    getHistory();
                 }
             });
             requestQueue.add(jsonObjectRequest);

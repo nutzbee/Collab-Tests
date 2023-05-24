@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ import foodrecommender.system.R;
 public class SummaryFragment extends Fragment {
     private View view;
     private TextView summaryContent, healthReport, recommendations;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -45,6 +47,7 @@ public class SummaryFragment extends Fragment {
         summaryContent = view.findViewById(R.id.summary_content);
         healthReport = view.findViewById(R.id.health_card_value);
         recommendations = view.findViewById(R.id.recommendations_card_value);
+        linearProgressIndicator = requireActivity().findViewById(R.id.profile_progress_indicator);
 
         summary_report();
         return view;
@@ -58,6 +61,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    linearProgressIndicator.hide();
                     String summary_report = response.getString("summary_report");
                     String health_report = response.getString("health_monitor");
                     String recommendation = response.getString("recommendations");
@@ -65,9 +69,7 @@ public class SummaryFragment extends Fragment {
                     healthReport.setText(health_report);
                     recommendations.setText(recommendation);
                     if (isAdded()) {
-                        if (health_report.equals("Excellent") || health_report.equals("Good")) {
-                            healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.primary_text_default_material_light, requireContext().getTheme()));
-                        } else {
+                        if (health_report.equals("Unidentified")) {
                             healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, requireContext().getTheme()));
                         }
                     }
@@ -79,6 +81,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                summary_report();
             }
         });
         Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);

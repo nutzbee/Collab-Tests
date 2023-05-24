@@ -24,6 +24,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +38,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,50 +56,78 @@ public class SignupActivity extends AppCompatActivity {
 
     LinearProgressIndicator progressIndicator;
     private String fragmentTag = "Sign Up";
+    private RelativeLayout relativeLayout;
+    private boolean isSnackbarShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         progressIndicator = findViewById(R.id.progress_indicator);
+        relativeLayout = findViewById(R.id.signup_rel);
 
+        updateCheck();
         getTheFragment();
         setupNotification();
-        updateCheck();
+        themeCheck();
     }
 
     private void updateCheck() {
+        progressIndicator.show();
+        relativeLayout.setVisibility(View.GONE);
+        getSupportActionBar().setTitle("Checking for update..");
+
         String url = getString(R.string.get_updates_url);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-            try {
-                String message = response.getString("message");
-                String ver_code = response.getString("ver_code");
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (isSnackbarShown) {
+                        Snackbar.make(relativeLayout, "Connection restored", Snackbar.LENGTH_SHORT).show();
+                    }
+                    String message = response.getString("message");
+                    String ver_code = response.getString("ver_code");
 
-                if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
-                    Log.d("TAG", "updateCheck: " + message);
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                    builder.setTitle(message);
-                    builder.setMessage("Your version is " + BuildConfig.VERSION_CODE + " and the new version is " + ver_code);
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            sendDownloadRequest();
-                            finish();
-                        }
-                    });
-                    builder.create();
-                    builder.show();
-                } else {
-                    Log.d("TAG", "updateCheck: App up to date");
-                    userCheck();
+                    if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
+                        Log.d("TAG", "updateCheck: " + message);
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getApplicationContext());
+                        builder.setTitle(message);
+                        builder.setMessage("Your version is " + BuildConfig.VERSION_CODE + " and the new version is " + ver_code);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sendDownloadRequest();
+                                finish();
+                            }
+                        });
+                        builder.create();
+                        builder.show();
+                    } else {
+                        Log.d("TAG", "updateCheck: App up to date");
+                        getSupportActionBar().setTitle("Signing you in..");
+                        userCheck();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error here
+                error.printStackTrace();
+
+                if (!isSnackbarShown) {
+                    Snackbar.make(relativeLayout, "Connection error", Snackbar.LENGTH_INDEFINITE).show();
+                    isSnackbarShown = true;
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                // Call updateCheck again when error occurs
+                updateCheck();
             }
-        }, Throwable::printStackTrace);
+        });
 
         Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
@@ -162,10 +195,7 @@ public class SignupActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(channel);
     }
 
-    private void userCheck(){
-        progressIndicator.show();
-        // Check the login status when the app launches or when navigating to a specific page
-        boolean isLoggedIn = checkLoginStatus();
+    private void themeCheck(){
         boolean isDarkMode = checkTheme();
 
         if (isDarkMode){
@@ -173,6 +203,11 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+    }
+
+    private void userCheck(){
+        // Check the login status when the app launches or when navigating to a specific page
+        boolean isLoggedIn = checkLoginStatus();
 
         if (isLoggedIn) {
             // User is already logged in, redirect to the landing page
@@ -184,6 +219,8 @@ public class SignupActivity extends AppCompatActivity {
             // User is not logged in, allow them to proceed to the current page
             // Continue with the normal flow of the current page
             progressIndicator.hide();
+            relativeLayout.setVisibility(View.VISIBLE);
+            getSupportActionBar().setTitle(R.string.signUpLabel);
         }
     }
 

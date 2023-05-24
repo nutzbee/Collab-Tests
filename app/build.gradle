@@ -10,8 +10,8 @@ android {
         applicationId "foodrecommender.system"
         minSdk 26
         targetSdk 33
-        versionCode 5202023
-        versionName "Beat-Cream"
+        versionCode 5252023
+        versionName "HarmonyDiet"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

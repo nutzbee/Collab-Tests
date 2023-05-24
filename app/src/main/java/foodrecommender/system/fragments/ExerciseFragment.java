@@ -16,9 +16,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -36,6 +39,7 @@ public class ExerciseFragment extends Fragment {
     private AutoCompleteTextView actvActivity;
     private TextInputEditText weightInput;
     private MaterialCardView runningCard, walkingCard, bikingCard;
+    private LinearProgressIndicator linearProgressIndicator;
 
     public ExerciseFragment() {
         // Required empty public constructor
@@ -55,6 +59,7 @@ public class ExerciseFragment extends Fragment {
         walkingCard = view.findViewById(R.id.walking_card);
         bikingCard = view.findViewById(R.id.biking_card);
         runningCard = view.findViewById(R.id.running_card);
+        linearProgressIndicator = requireActivity().findViewById(R.id.profile_progress_indicator);
 
         addCardActions();
         fetchTheActivites();
@@ -87,30 +92,38 @@ public class ExerciseFragment extends Fragment {
         String url = getString(R.string.exercise_url_get);
         //String url = "http://nutzbee.pythonanywhere.com/get_activities";
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-            try {
-                JSONArray activitiesArray = response.getJSONArray("activities");
-                List<String> activitiesList = new ArrayList<>();
-                for (int i = 0; i < activitiesArray.length(); i++) {
-                    activitiesList.add(activitiesArray.getString(i));
-                }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    linearProgressIndicator.hide();
+                    JSONArray activitiesArray = response.getJSONArray("activities");
+                    List<String> activitiesList = new ArrayList<>();
+                    for (int i = 0; i < activitiesArray.length(); i++) {
+                        activitiesList.add(activitiesArray.getString(i));
+                    }
 
-                if (isAdded()){
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, activitiesList);
-                    actvActivity.setAdapter(adapter);
-                    actvActivity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            predictReferences();
-                            Snackbar.make(requireView(), "You selected "+actvActivity.getText().toString(), Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (isAdded()){
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, activitiesList);
+                        actvActivity.setAdapter(adapter);
+                        actvActivity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                predictReferences();
+                                Snackbar.make(requireView(), "You selected "+actvActivity.getText().toString(), Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }, error -> {
-            error.printStackTrace();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                fetchTheActivites();
+            }
         });
 
         Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
