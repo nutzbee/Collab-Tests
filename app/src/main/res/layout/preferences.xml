@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Search Card -->
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profile_material_cardview"
+    android:id="@+id/preferences_material_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="6dp"
@@ -15,40 +15,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <!-- Search Card Title -->
+
+        <!-- Preferences Card Title -->
         <TextView
-            android:id="@+id/profile_card_title"
+            android:id="@+id/preferences_card_title"
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/profile_card_value"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Profile Title" />
 
-        <!-- Search Card Value -->
+        <!-- Preferences Card Value -->
         <TextView
-            android:id="@+id/profile_card_value"
+            android:id="@+id/preferences_card_value"
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_card_title"
-            tools:text="Profile Value" />
-
-        <!-- Search Card Icon -->
-        <ImageView
-            android:id="@+id/profile_card_icon"
-            style="@style/ImageViewStyle"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@drawable/baseline_edit_24"
-            app:layout_constraintBottom_toBottomOf="@id/profile_card_value"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/profile_card_title" />
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Profile Value" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

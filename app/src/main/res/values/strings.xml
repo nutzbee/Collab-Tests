@@ -17,6 +17,7 @@
     <string name="menu_search">Browse</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_settings">Settings</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="summary_sentence_sample">You had a good day today! You met your daily calorie intake and stayed within your macro goals. Keep up the good work!</string>
@@ -32,6 +33,15 @@
     <string name="recommend_url">https://diabeates-services.onrender.com/recommend</string>
     <string name="recommend_again_url">https://diabeates-services.onrender.com/recommend_again</string>
     <string name="predict_url">https://diabeates-services.onrender.com/predict</string>
+    <string name="history_url">https://diabeates-services.onrender.com/get_selected_foods</string>
+    <string name="get_values_url">https://diabeates-services.onrender.com/get_food_value</string>
+    <string name="recommend_local_url">https://diabeates-services.onrender.com/recommend_local</string>
+    <string name="get_local_values_url">https://diabeates-services.onrender.com/get_local_food_value</string>
+    <string name="recommend_local_again_url">https://diabeates-services.onrender.com/recommend_local_again</string>
+    <string name="get_updates_url">http://nutzbee.pythonanywhere.com/update_app_check</string>
+    <string name="send_download_request_url">http://nutzbee.pythonanywhere.com/download</string>
+
+
 
     <string name="localHost">http://192.168.0.41:5000</string>
     <string name="domainServerHost">http://nutzbee.pythonanywhere.com</string>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,144 +11,152 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Food Preferences -->
-            <TextView
-                android:id="@+id/textViewFoodPreferences"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/settingsMaterialCV"
                 android:layout_width="match_parent"
-                android:textAlignment="center"
-                android:layout_height="wrap_content"
-                android:text="Food Preferences" />
+                android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/checkBoxVegetarian"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Vegetarian" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-            <CheckBox
-                android:id="@+id/checkBoxVegan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Vegan" />
+                    <!-- Reminder Notifications -->
+                    <TextView
+                        android:id="@+id/textViewNotifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reminder Notifications"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
 
-            <!-- Nutritional Goals -->
-            <TextView
-                android:id="@+id/textViewNutritionalGoals"
-                android:layout_width="match_parent"
-                android:textAlignment="center"
-                android:layout_height="wrap_content"
-                android:text="Nutritional Goals" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchExerciseReminders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Exercise Reminders" />
 
-            <EditText
-                android:id="@+id/editTextCalorieIntake"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="Calorie Intake Goal" />
+                    <!-- Dark Mode/Light Mode -->
+                    <TextView
+                        android:id="@+id/textViewTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="App Theme"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editTextProteinIntake"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="Protein Intake Goal" />
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Light Mode/Dark Mode" />
 
-            <!-- Allergies or Food Restrictions -->
-            <TextView
-                android:id="@+id/textViewAllergies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Allergies or Food Restrictions" />
 
-            <CheckBox
-                android:id="@+id/checkBoxNuts"
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <RelativeLayout
+                android:id="@+id/deviceInformationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nuts" />
+                android:layout_below="@id/settingsMaterialCV"
+                android:layout_marginTop="12dp">
 
-            <CheckBox
-                android:id="@+id/checkBoxShellfish"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/settingsMaterialCV2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:contentPadding="12dp">
+
+                    <TextView
+                        android:id="@+id/deviceInformationTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Device Information" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Shellfish" />
+                android:layout_below="@id/deviceInformationLayout"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
 
-            <!-- Reminder Notifications -->
-            <TextView
-                android:id="@+id/textViewNotifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Reminder Notifications" />
+                <!-- Navigations -->
+                <TextView
+                    android:id="@+id/textViewNavigations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Navigations"
+                    android:textAlignment="center" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchMealReminders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Exercise Reminders" />
+                <Button
+                    android:id="@+id/buttonHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Home" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchMedicationReminders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Medication Reminders" />
+                <Button
+                    android:id="@+id/buttonSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search" />
 
-            <!-- Dark Mode/Light Mode -->
-            <TextView
-                android:id="@+id/textViewTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="App Theme" />
+                <Button
+                    android:id="@+id/buttonViewProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="View Profile" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="Dark Mode/Light Mode" />
+                <Button
+                    android:id="@+id/buttonUpdatePreferences"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Update Preferences" />
 
-            <!-- Account Management -->
-            <TextView
-                android:id="@+id/textViewAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Account Management" />
+                <!-- Tools -->
+                <TextView
+                    android:id="@+id/textViewTools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tools"
+                    android:textAlignment="center" />
 
-            <Button
-                android:id="@+id/buttonChangePassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Change Password" />
+                <Button
+                    android:id="@+id/buttonBMICalculator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BMI Calculator" />
 
-            <Button
-                android:id="@+id/buttonUpdateInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Update Information" />
+                <!-- Data Privacy and Consent -->
+                <TextView
+                    android:id="@+id/textViewFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="For feedback and suggestions"
+                    android:textAlignment="center" />
 
-            <!-- Data Privacy and Consent -->
-            <TextView
-                android:id="@+id/textViewPrivacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Data Privacy and Consent" />
+                <Button
+                    android:id="@+id/buttonContactUs"
+                    style="@style/RoundedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contact us" />
 
-            <Button
-                android:id="@+id/buttonPrivacySettings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Privacy Settings" />
+            </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

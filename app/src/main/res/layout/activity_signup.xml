@@ -32,8 +32,7 @@
             android:layout_centerVertical="true"
             android:animateLayoutChanges="true">
 
-            <fragment
-                android:name="foodrecommender.system.fragments.BaseSignupFragment"
+            <androidx.fragment.app.FragmentContainerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/fragment_base_signup" />

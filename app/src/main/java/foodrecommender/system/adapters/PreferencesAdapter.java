@@ -7,14 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -23,7 +18,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,50 +29,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import foodrecommender.system.R;
+import foodrecommender.system.classes.Preferences;
 import foodrecommender.system.classes.Profile;
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder> {
-    private ArrayList<Profile> profiles;
+public class PreferencesAdapter extends RecyclerView.Adapter<PreferencesAdapter.PreferencesViewHolder> {
+    private ArrayList<Preferences> preferences;
     private Context context;
-    private OnItemClickListener listener;
 
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener = listener;
-    }
-
-    public ProfileAdapter(Context context, ArrayList<Profile> profiles) {
-        this.profiles = profiles;
+    public PreferencesAdapter(Context context, ArrayList<Preferences> preferences) {
+        this.preferences = preferences;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public ProfileAdapter.ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_item, parent, false);
-        return new ProfileAdapter.ProfileViewHolder(view);
+    public PreferencesAdapter.PreferencesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preferences, parent, false);
+        return new PreferencesAdapter.PreferencesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter.ProfileViewHolder holder, int position) {
-        Profile profile = profiles.get(position);
-        holder.profileTitle.setText(profile.getProfileTitle());
-        holder.profileValue.setText(profile.getProfileValue());
-        if (holder.profileTitle.getText().toString().equals("Status")) {
-            holder.imageView.setVisibility(View.GONE);
-            holder.materialCardView.setClickable(false);
-        }
+    public void onBindViewHolder(@NonNull PreferencesAdapter.PreferencesViewHolder holder, int position) {
+        Preferences preferences1 = preferences.get(position);
+        holder.preferenceTitle.setText(preferences1.getPreferencesTitle());
+        holder.preferenceValue.setText(preferences1.getPreferencesValue());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null) {
-                    listener.onItemClick(holder.profileTitle.getText().toString(),
-                            holder.profileValue.getText().toString(),
-                            holder.getAdapterPosition());
-                }
-            }
-        });
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Show the dialog
@@ -89,8 +65,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
 
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
 
-                String profileTitle = holder.profileTitle.getText().toString();
-                String profileValue = profile.getProfileValue();
+                String profileTitle = holder.preferenceTitle.getText().toString();
+                String profileValue = preferences1.getPreferencesValue();
 
                 builder.setTitle(profileTitle);
                 builder.setMessage("Current: " + profileValue);
@@ -148,12 +124,39 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
                                                 case "bmi":
                                                     ed.putFloat("bmi", Float.parseFloat(value));
                                                     break;
+                                                case "required_calories":
+                                                    ed.putInt("calorie_req", Integer.parseInt(value));
+                                                    break;
+                                                case "dpf":
+                                                    ed.putFloat("dpf", Float.parseFloat(value));
+                                                    break;
+                                                case "allergies":
+                                                    ed.putString("fod_allergy", value);
+                                                    break;
+                                                case "glucose_count":
+                                                    ed.putInt("glucose", Integer.parseInt(value));
+                                                    break;
+                                                case "insulin_level":
+                                                    ed.putInt("insulin", Integer.parseInt(value));
+                                                    break;
+                                                case "pregnancy_count":
+                                                    ed.putInt("pregnancies", Integer.parseInt(value));
+                                                    break;
+                                                case "skin_thickness":
+                                                    ed.putInt("skinThickness", Integer.parseInt(value));
+                                                    break;
+                                                case "diastolic_bp":
+                                                    ed.putInt("bloodPressure", Integer.parseInt(value));
+                                                    break;
+                                                case "required_nutrient":
+                                                    ed.putString("nutrient_req", value);
+                                                    break;
                                             }
                                             ed.apply();
 
                                             // Update the UI with the new value
-                                            profile.setProfileValue(updatedValue);
-                                            holder.profileValue.setText(updatedValue);
+                                            preferences1.setPreferencesValue(updatedValue);
+                                            holder.preferenceValue.setText(updatedValue);
                                             notifyItemChanged(holder.getAdapterPosition());
                                         } else {
                                             // Login failed
@@ -175,7 +178,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
                                 Map<String, String> params = new HashMap<>();
                                 SharedPreferences sp = context.getSharedPreferences("user_data", Context.MODE_PRIVATE);
                                 String newValue = inputEditText.getText().toString();
-                                params.put("column_name", holder.profileTitle.getText().toString());
+                                params.put("column_name", holder.preferenceTitle.getText().toString());
                                 params.put("new_data", newValue);
                                 params.put("user_id", String.valueOf(sp.getInt("id", 0)));
                                 return params;
@@ -203,27 +206,21 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
         });
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(String title, String value, int position);
-    }
-
     @Override
     public int getItemCount() {
-        return profiles.size();
+        return preferences.size();
     }
 
-    static class ProfileViewHolder extends RecyclerView.ViewHolder {
-        TextView profileTitle, profileValue;
-        ImageView imageView;
+    static class PreferencesViewHolder extends RecyclerView.ViewHolder{
+
         MaterialCardView materialCardView;
+        TextView preferenceTitle, preferenceValue;
 
-        ProfileViewHolder(@NonNull View itemView) {
+        PreferencesViewHolder(@NonNull View itemView) {
             super(itemView);
-            profileTitle = itemView.findViewById(R.id.profile_card_title);
-            profileValue = itemView.findViewById(R.id.profile_card_value);
-            imageView = itemView.findViewById(R.id.profile_card_icon);
-            materialCardView = itemView.findViewById(R.id.profile_material_cardview);
-
+            materialCardView = itemView.findViewById(R.id.preferences_material_cardview);
+            preferenceTitle = itemView.findViewById(R.id.preferences_card_title);
+            preferenceValue = itemView.findViewById(R.id.preferences_card_value);
         }
     }
 }

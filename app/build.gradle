@@ -10,8 +10,8 @@ android {
         applicationId "foodrecommender.system"
         minSdk 26
         targetSdk 33
-        versionCode 5152023
-        versionName "Diabeates App"
+        versionCode 5202023
+        versionName "Beat-Cream"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

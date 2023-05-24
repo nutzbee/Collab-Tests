@@ -8,10 +8,9 @@
     tools:context=".fragments.LandingpageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/nestedScrollLanding">
 
         <RelativeLayout
@@ -95,20 +94,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp">
 
-                    <TextView
-                        android:id="@+id/recommendations_text"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchLocalGlobal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="24dp"
-                        android:textStyle="bold|normal"
-                        android:text="Recommendations" />
+                        android:layout_marginHorizontal="24dp"
+                        android:text="Localized/Global Recommendations" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recommendations_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/recommendations_text"
+                        android:layout_below="@id/switchLocalGlobal"
                         android:clipToPadding="false"
                         android:paddingStart="12dp"
                         android:paddingEnd="12dp"

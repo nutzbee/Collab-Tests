@@ -3,6 +3,7 @@ package foodrecommender.system.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -35,15 +36,9 @@ import foodrecommender.system.adapters.SampleFoodAdapter;
 
 public class SampleFoodsFragment extends Fragment {
 
-    private View view;
-    private Button recommendationButton,predictionButton;
     private RecyclerView recyclerView;
-    private LinearLayout linearLayout;
-    private ImageView headerImage;
-    private TextView welcomeText, suggestionsText, moreTextView;
-    private int prevScrollPosition = 0;
-    private MaterialCardView welcomeCardView;
-    private BottomSheetDialog bottomSheetDialog;
+    private TextView moreTextView;
+    private View view;
 
     public SampleFoodsFragment() {
         // Required empty public constructor
@@ -61,7 +56,6 @@ public class SampleFoodsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_sample_foods, container, false);
         recyclerView = view.findViewById(R.id.suggestion_list);
         moreTextView = view.findViewById(R.id.more_ticker_textview);
-
         if (isAdded()) {
             sample_foods();
         }
@@ -73,7 +67,7 @@ public class SampleFoodsFragment extends Fragment {
         // Make a POST request to the API endpoint
         // String url = "http://192.168.0.41:5000/sample";
         String url = getString(R.string.sample_foods_url);
-        RequestQueue requestQueue = Volley.newRequestQueue(requireActivity().getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -97,6 +91,14 @@ public class SampleFoodsFragment extends Fragment {
                     adapter.setMaxItemsToShow(3);
                     recyclerView.setAdapter(adapter);
 
+                    adapter.setOnItemClickListener(new SampleFoodAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(String value) {
+                            Snackbar.make(view, value, Snackbar.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+
                     moreTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -113,8 +115,8 @@ public class SampleFoodsFragment extends Fragment {
                             // Call setMaxItemsToShow and notifyDataSetChanged on the adapter to update the data
                             bottomSheetAdapter.setOnItemClickListener(new SampleFoodAdapter.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(int position) {
-                                    Snackbar.make(bottomSheetView, "You clicked on the "+ position,
+                                public void onItemClick(String value) {
+                                    Snackbar.make(bottomSheetView, value,
                                             Snackbar.LENGTH_SHORT).show();
                                 }
                             });

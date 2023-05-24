@@ -1,22 +1,19 @@
 package foodrecommender.system.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import foodrecommender.system.R;
 import foodrecommender.system.fragments.ProfileFragment;
@@ -42,9 +39,8 @@ public class LandingpageActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkCallback = new NetworkConnectivityCallback(rootView);
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
-
-        // Set up the bottom navigation bar
         bottomNavigationView =  findViewById(R.id.bottom_navigation);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.botmenu_home) {
@@ -80,32 +76,43 @@ public class LandingpageActivity extends AppCompatActivity {
             }
         });
 
+        showHome();
+    }
+
+    private void showHome(){
+        // Navigate to the LandingpageFragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (currentFragment instanceof SettingsFragment){
+            bottomNavigationView.setSelectedItemId(R.id.botmenu_settings);
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.botmenu_home);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         // Find the menu items by their IDs
-        MenuItem logoutMenuItem = menu.findItem(R.id.action_logout);
+        MenuItem iconMenuItem = menu.findItem(R.id.action_logout);
         SharedPreferences sp = getSharedPreferences("user_data", MODE_PRIVATE);
         if (!sp.getBoolean("is_logged_in", false)){
-            logoutMenuItem.setIcon(R.drawable.baseline_login_24);
-            logoutMenuItem.setTitle("Login");
+            iconMenuItem.setIcon(R.drawable.baseline_login_24);
+            iconMenuItem.setTitle("Login");
         } else {
-            logoutMenuItem.setIcon(R.drawable.baseline_logout_24);
-            logoutMenuItem.setTitle("Logout");
+            iconMenuItem.setIcon(R.drawable.baseline_logout_24);
+            iconMenuItem.setTitle("Logout");
         }
         invalidateOptionsMenu();
-        logoutMenuItem.setOnMenuItemClickListener(item -> {
+        iconMenuItem.setOnMenuItemClickListener(item -> {
             // Handle settings menu item click
-            logoutIconAction();
+            iconItemAction();
             return true;
         });
 
         return true;
     }
 
-    private void logoutIconAction(){
+    private void iconItemAction(){
         SharedPreferences sp = getSharedPreferences("user_data", MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
 

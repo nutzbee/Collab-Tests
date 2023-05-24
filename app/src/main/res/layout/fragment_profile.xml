@@ -2,12 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentProfileFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -61,7 +63,6 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:layout_toEndOf="@id/exercise_chip"
-                android:enabled="false"
                 android:text="Preferences"
                 app:chipIcon="@drawable/baseline_checklist_24"
                 app:chipIconEnabled="true" />
@@ -86,7 +87,6 @@
                 android:layout_below="@id/preferences_chip"
                 android:layout_marginEnd="16dp"
                 android:layout_toEndOf="@id/summary_chip"
-                android:enabled="false"
                 android:text="Food History"
                 app:chipIcon="@drawable/baseline_manage_history_24"
                 app:chipIconEnabled="true" />
@@ -116,8 +116,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/buttonSignup"
-                android:paddingEnd="8dp"
                 android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
                 tools:itemCount="4"
@@ -133,8 +133,7 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <fragment
-                    android:name="foodrecommender.system.fragments.SummaryFragment"
+                <androidx.fragment.app.FragmentContainerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:layout="@layout/fragment_summary" />

@@ -22,7 +22,8 @@
         <item name="android:statusBarColor">@color/status_bar_dark</item>
         <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">arial</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="fontFamily">@font/dmsans_regular</item>
         <item name="materialCardViewStyle">@style/MaterialCardView.Dark</item>
         <item name="cardViewStyle">@style/CardView.Dark</item>
         <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>

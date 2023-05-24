@@ -44,7 +44,11 @@
                         android:textStyle="bold"
                         tools:text="BMI Result" />
 
-                    <!-- Confirm Password input -->
+                    <NumberPicker
+                        android:id="@+id/height_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/height_input_textview"
                         android:layout_width="wrap_content"
@@ -52,21 +56,15 @@
                         android:text="Height (cm)" />
 
                     <NumberPicker
-                        android:id="@+id/height_picker"
+                        android:id="@+id/weight_picker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <!-- Confirm Password input -->
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/weight_input_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Weight (kg)" />
-
-                    <NumberPicker
-                        android:id="@+id/weight_picker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

@@ -8,35 +8,35 @@
     android:clickable="true"
     app:cardCornerRadius="8dp"
     app:cardPreventCornerOverlap="false"
+    app:contentPadding="16dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             style="@style/ImageViewStyle"
-            android:id="@+id/food_image"
+            android:id="@+id/history_food_image"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:contentDescription="@string/food_image"
             android:scaleType="centerCrop"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/diabeates_food_icon" />
+            android:src="@drawable/baseline_manage_history_24" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@id/food_image"
+            android:layout_toStartOf="@id/history_food_image"
             android:orientation="vertical">
 
             <TextView
                 style="@style/TextViewStyle"
-                android:id="@+id/food_name"
+                android:id="@+id/history_food_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -47,7 +47,7 @@
 
             <TextView
                 style="@style/TextViewStyle"
-                android:id="@+id/food_calories"
+                android:id="@+id/history_food_calories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -55,7 +55,7 @@
 
             <TextView
                 style="@style/TextViewStyle"
-                android:id="@+id/food_group"
+                android:id="@+id/history_food_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"

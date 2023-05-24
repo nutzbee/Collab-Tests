@@ -44,7 +44,7 @@ public class SampleFoodAdapter extends RecyclerView.Adapter<SampleFoodAdapter.Sa
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemClick(holder.getAdapterPosition());
+                    listener.onItemClick(holder.shortDescTextView.getText().toString());
                 }
             }
         });
@@ -61,7 +61,7 @@ public class SampleFoodAdapter extends RecyclerView.Adapter<SampleFoodAdapter.Sa
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(String value);
     }
 
     public SampleFood getSampleFood(int position) {

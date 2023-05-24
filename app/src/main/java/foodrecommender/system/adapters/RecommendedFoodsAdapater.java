@@ -4,13 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -18,14 +18,17 @@ import java.util.List;
 
 import foodrecommender.system.R;
 import foodrecommender.system.classes.RecommendedFoods;
-import foodrecommender.system.fragments.LandingpageFragment;
 
 public class RecommendedFoodsAdapater extends RecyclerView.Adapter<RecommendedFoodsAdapater.RecommendedFoodsViewHolder> {
     private ArrayList<RecommendedFoods> recommendedFoods;
     private Context context;
-    private RecommendedFoodsAdapater.OnItemClickListener listener;
+    private OnImageClickListener listener;
+    private OnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(RecommendedFoodsAdapater.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+    public void setOnImageClickListener(OnImageClickListener listener) {
         this.listener = listener;
     }
 
@@ -57,12 +60,26 @@ public class RecommendedFoodsAdapater extends RecyclerView.Adapter<RecommendedFo
         holder.energyKcalTextView.setText(recommendedFood.getEnergKcal());
 
         holder.cardView.setChecked(recommendedFood.isPart2());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(
+                            holder.shortDescTextView.getText().toString(),
+                            holder.getAdapterPosition(), "");
+                }
+            }
+        });
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean isItemChecked = holder.cardView.isChecked();
                 if (listener != null) {
-                    listener.onItemClick(holder.foodGroupTextView.getText().toString(), holder.getAdapterPosition());
+                    listener.onImageClick(holder.foodGroupTextView.getText().toString(),
+                            holder.shortDescTextView.getText().toString(),
+                            holder.getAdapterPosition(), "");
+
 
                     if (!isItemChecked) {
                         removeAddedItems(holder.getAdapterPosition());
@@ -87,7 +104,11 @@ public class RecommendedFoodsAdapater extends RecyclerView.Adapter<RecommendedFo
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String position, int position2);
+        void onItemClick(String foodName, int position, String url);
+    }
+
+    public interface OnImageClickListener {
+        void onImageClick(String position, String foodName, int position2, String url);
     }
 
     @Override

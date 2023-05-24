@@ -241,12 +241,12 @@ public class RecommendationFragment extends Fragment {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             message = jsonResponse.getString("message");
-                            int id = jsonResponse.getInt("user_id");
 
                             snackBar();
                             if (success) {
                                 // Registration successful
                                 // Handle success scenario (e.g., navigate to the login screen)
+                                int id = jsonResponse.getInt("user_id");
                                 ed.putInt("id", id);
                                 ed.apply();
                                 progressIndicator.hide();
