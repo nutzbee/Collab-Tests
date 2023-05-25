@@ -66,12 +66,23 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/signin_progress_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/password_input_layout"
+                android:visibility="gone"
+                app:indicatorDirectionCircular="clockwise"
+                tools:visibility="visible" />
+
             <Button
                 android:id="@+id/sign_in_button"
                 style="@style/RoundedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/password_input_layout"
+                android:layout_below="@id/signin_progress_indicator"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
                 android:text="Sign in" />

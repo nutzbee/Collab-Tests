@@ -61,7 +61,6 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    linearProgressIndicator.hide();
                     String summary_report = response.getString("summary_report");
                     String health_report = response.getString("health_monitor");
                     String recommendation = response.getString("recommendations");
@@ -73,6 +72,7 @@ public class SummaryFragment extends Fragment {
                             healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, requireContext().getTheme()));
                         }
                     }
+                    linearProgressIndicator.hide();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

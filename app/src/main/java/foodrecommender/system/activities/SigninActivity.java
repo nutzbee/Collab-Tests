@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -34,6 +35,7 @@ public class SigninActivity extends AppCompatActivity {
     private Button mSignInButton;
     private SharedPreferences sp;
     private RelativeLayout relativeLayout;
+    private CircularProgressIndicator circularProgressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class SigninActivity extends AppCompatActivity {
         mPasswordInput = findViewById(R.id.password_input);
         mSignInButton = findViewById(R.id.sign_in_button);
         relativeLayout = findViewById(R.id.signin_RL);
+        circularProgressIndicator = findViewById(R.id.signin_progress_indicator);
 
         sp = getSharedPreferences("user_data", MODE_PRIVATE);
 
@@ -51,6 +54,7 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void sendLoginRequest() {
+        circularProgressIndicator.show();
         // Login example
         String loginUrl = "https://uxoricidal-image.000webhostapp.com/login.php";
 
@@ -100,6 +104,8 @@ public class SigninActivity extends AppCompatActivity {
                             // Login failed
                             // Show an error message to the user
                             Snackbar.make(relativeLayout, message, Snackbar.LENGTH_SHORT).show();
+                            circularProgressIndicator.hide();
+                            circularProgressIndicator.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

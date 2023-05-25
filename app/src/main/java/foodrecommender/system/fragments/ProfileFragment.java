@@ -15,10 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -197,6 +203,7 @@ public class ProfileFragment extends Fragment {
         float weight = sp.getFloat("weight", 0.0f);
         float bmi = sp.getFloat("bmi", 0.0f);
         String status = sp.getString("status", "");
+        linearProgressIndicator.show();
 
         // Create a list of data items
         ArrayList<Profile> profiles = new ArrayList<>();
@@ -207,11 +214,65 @@ public class ProfileFragment extends Fragment {
         profiles.add(new Profile("Password", password));
         profiles.add(new Profile("Weight", String.valueOf(weight)));
         profiles.add(new Profile("Body Mass Index", String.valueOf(bmi)));
-        profiles.add(new Profile("Status", status));
+        if (status.isEmpty()){
+            profiles.add(new Profile("Status", "Loading status.."));
+            calculateStatus();
+        } else {
+            profiles.add(new Profile("Status", status));
+            linearProgressIndicator.hide();
+        }
 
         ProfileAdapter profileAdapter = new ProfileAdapter(requireContext(), profiles);
         recyclerView.setAdapter(profileAdapter);
         profileAdapter.setOnItemClickListener((title, value, position) -> showSnackbar(title, value));
+    }
+
+    private void calculateStatus(){
+        // String url = "http://192.168.0.41:5000/predict";
+        String url = getString(R.string.predict_url);
+        JSONObject data = new JSONObject();
+
+        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        // Get input values from TextInputEditTexts
+        int pregnancies = sp.getInt("pregnancies", 0);
+        int glucose = sp.getInt("glucose", 0);
+        int bloodPressure = sp.getInt("bloodPressure", 0);
+        int skinThickness = sp.getInt("skinThickness", 0);
+        int insulin = sp.getInt("insulin", 0);
+        float bmi = sp.getFloat("bmi", 0.0f);
+        float dpf = sp.getFloat("dpf", 0.0f);
+        int age = sp.getInt("age", 0);
+
+        try {
+            data.put("pregnancies", pregnancies);
+            data.put("glucose", glucose);
+            data.put("blood_pressure", bloodPressure);
+            data.put("skin_thickness", skinThickness);
+            data.put("insulin", insulin);
+            data.put("bmi", bmi);
+            data.put("diabetes_pedigree_function", dpf);
+            data.put("age", age);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
+            try {
+                String message = response.getString("diabetes_result");
+                SharedPreferences.Editor ed = sp.edit();
+                ed.putString("status", message);
+                ed.apply();
+
+                showProfileInformation();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            error.printStackTrace();
+            calculateStatus();
+        });
+
+        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
     }
 
     private void showSnackbar(String profileTitle, String profileValue) {

@@ -93,7 +93,7 @@ public class SignupActivity extends AppCompatActivity {
                         Log.d("TAG", "updateCheck: " + message);
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getApplicationContext());
                         builder.setTitle(message);
-                        builder.setMessage("Your version is " + BuildConfig.VERSION_CODE + " and the new version is " + ver_code);
+                        builder.setMessage("Update available. Your version " + BuildConfig.VERSION_CODE + " is out of date. Update to the newer version " + ver_code);
                         builder.setCancelable(false);
                         builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
                             @Override
@@ -138,7 +138,7 @@ public class SignupActivity extends AppCompatActivity {
         File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
 
         // Create a file to save the APK
-        File file = new File(directory, "Diabeates - Beat-Cream.apk");
+        File file = new File(directory, "Diabeates HarmonyDiet.apk");
 
         // Initialize a new DownloadManager instance
         DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);

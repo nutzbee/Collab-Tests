@@ -84,19 +84,6 @@
                 android:layout_alignParentEnd="true"
                 android:text="Submit" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/food_recommendations_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/submitReco"
-                android:clipToPadding="false"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/recommended_food_item" />
-
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
