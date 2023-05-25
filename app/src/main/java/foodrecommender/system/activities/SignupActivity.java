@@ -91,9 +91,10 @@ public class SignupActivity extends AppCompatActivity {
 
                     if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
                         Log.d("TAG", "updateCheck: " + message);
-                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getApplicationContext());
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
                         builder.setTitle(message);
-                        builder.setMessage("Update available. Your version " + BuildConfig.VERSION_CODE + " is out of date. Update to the newer version " + ver_code);
+                        builder.setMessage("Update available. Your version " + BuildConfig.VERSION_CODE
+                                + " is out of date. Update to the newer version " + ver_code);
                         builder.setCancelable(false);
                         builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
                             @Override

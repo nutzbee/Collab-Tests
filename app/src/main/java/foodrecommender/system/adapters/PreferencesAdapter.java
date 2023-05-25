@@ -130,7 +130,7 @@ public class PreferencesAdapter extends RecyclerView.Adapter<PreferencesAdapter.
                                                 case "dpf":
                                                     ed.putFloat("dpf", Float.parseFloat(value));
                                                     break;
-                                                case "allergies":
+                                                case "food_allergies":
                                                     ed.putString("fod_allergy", value);
                                                     break;
                                                 case "glucose_count":
