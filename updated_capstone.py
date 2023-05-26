@@ -26,6 +26,7 @@ class FoodRecommender:
         self.localscaler = None
         self.selected_foods = []
         self.selected_local_foods = []
+        self.is_local_foods = None
 
         # Prediction
         self.scalers = StandardScaler()
@@ -341,6 +342,7 @@ class FoodRecommender:
     
     def store_selected_foods(self, selected_food):
         # Check if the selected food already exists in self.selected_foods
+        self.is_local_foods = False
         if selected_food not in self.selected_foods:
             # Add the selected food to the list of selected foods
             self.selected_foods.append(selected_food)
@@ -377,22 +379,45 @@ class FoodRecommender:
     
     def store_selected_local_foods(self, selected_food):
         # Check if the selected food already exists in self.selected_foods
+        self.is_local_foods = True
         if selected_food not in self.selected_local_foods:
             # Add the selected food to the list of selected foods
-            self.selected_foods.append(selected_food)
+            self.selected_local_foods.append(selected_food)
 
     def get_selected_foods(self):
         # Create a new endpoint to fetch the selected foods and specific values
         selected_foods_data = []
-        for value in self.selected_foods:
-            matching_rows = self.df[self.df['Descrip'] == value]
-            if not matching_rows.empty:
+        if self.is_local_foods:
+            selected_food = self.selected_local_foods
+            df = self.df_local
+
+            for value in selected_food:
+                matching_rows = df[df['Alternate/Common name(s)'] == value]
+                if matching_rows.empty:
+                    matching_rows = df[df['Food name and Description'] == value]
+
                 food = matching_rows.iloc[0]  # Get the first matching row
                 selected_foods_data.append({
-                    'descrip': food['Descrip'],
+                    'descrip': food['Food name and Description'] if food['Alternate/Common name(s)'] == 0 else food['Alternate/Common name(s)'],
+                    'energKcal': str(food['Energy, calculated (kcal)']) + ' Kcal',
+                    'foodGroup': food['Category']
+                })
+        else:
+            selected_food = self.selected_foods
+            df = self.df
+
+            for value in selected_food:
+                matching_rows = df[df['Shrt_Desc'] == value]
+                if matching_rows.empty:
+                    matching_rows = df[df['Descrip'] == value]
+
+                food = matching_rows.iloc[0]  # Get the first matching row
+                selected_foods_data.append({
+                    'descrip': food['Shrt_Desc'] if food['Descrip'] == 'No name' else food['Descrip'],
                     'energKcal': str(food['Energ_Kcal']) + ' Kcal',
                     'foodGroup': food['FoodGroup']
                 })
+
         return jsonify({'selected_foods': selected_foods_data})
     
     def get_food_value(self, food_name):
