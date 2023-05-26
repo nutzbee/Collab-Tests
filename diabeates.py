@@ -91,38 +91,73 @@ class FoodRecommender:
                         'recommendations': recommendations})
 
     def replace_no_name(self, row):
-        if row['Descrip'] == 'No name':
-            return row['Shrt_Desc']
+        if self.is_local_foods:
+            if row['Alternate/Common name(s)'] == 0:
+                return row['Food name and Description']
+            else:
+                return row['Alternate/Common name(s)']
         else:
-            return row['Descrip']
+            if row['Descrip'] == 'No name':
+                return row['Shrt_Desc']
+            else:
+                return row['Descrip']
         
     def get_sample_foods(self):
-        sample_df = self.df[['Descrip', 'Shrt_Desc', 'Energ_Kcal', 'FoodGroup']].sample(10)
-        sample_df['Descrip'] = sample_df.apply(self.replace_no_name, axis=1)
-        sample_df['Energ_Kcal'] = sample_df['Energ_Kcal'].apply(lambda x: str(x) + ' KCal')
-        sample_foods = sample_df.to_dict(orient='records')
+        if self.is_local_foods:
+            sample_df = self.df_local[['Food name and Description', 'Alternate/Common name(s)', 'Energy, calculated (kcal)', 'Category']].sample(10)
+            sample_df['Alternate/Common name(s)'] = sample_df.apply(self.replace_no_name, axis=1)
+            sample_df['Energy, calculated (kcal)'] = sample_df['Energy, calculated (kcal)'].apply(lambda x: str(x) + ' KCal')
+            sample_foods = sample_df.rename(columns={
+                'Alternate/Common name(s)': 'Descrip',
+                'Energy, calculated (kcal)': 'Energ_Kcal',
+                'Category': 'FoodGroup'
+            }).to_dict(orient='records')
+        else:
+            sample_df = self.df[['Descrip', 'Shrt_Desc', 'Energ_Kcal', 'FoodGroup']].sample(10)
+            sample_df['Descrip'] = sample_df.apply(self.replace_no_name, axis=1)
+            sample_df['Energ_Kcal'] = sample_df['Energ_Kcal'].apply(lambda x: str(x) + ' KCal')
+            sample_foods = sample_df.to_dict(orient='records')
+
         return jsonify({'sample_foods': sample_foods})
 
     def search_food(self, food_search_input):
-        # Replace 'No name' values in 'Descrip' column with corresponding values from 'Shrt_Desc' column
-        self.df['Descrip'] = self.df.apply(self.replace_no_name, axis=1)
-
-        # Perform case-insensitive search using str.contains method
-        searched_df = self.df[self.df['Descrip'].str.contains(food_search_input, case=False)]
-
         searched_foods = []
-        num_results = 0
 
-        for index, row in searched_df.iterrows():
-            if num_results == 10:
-                break  # Exit the loop if 10 results are reached
+        if self.is_local_foods:
+            # Replace NaN values in 'Alternate/Common name(s)' column with corresponding values from 'Food name and Description' column
+            self.df_local['Alternate/Common name(s)'] = self.df_local['Alternate/Common name(s)'].fillna(self.df_local['Food name and Description'])
 
-            searched_foods.append({
-            'Shrt_Desc': row['Descrip'],
-            'Energ_Kcal': str(row['Energ_Kcal']) + " KCal",
-            'FoodGroup': row['FoodGroup']
-            })
-            num_results += 1
+            # Exclude NaN values before performing the search
+            mask = self.df_local['Alternate/Common name(s)'].notnull()
+
+            # Perform case-insensitive search using str.contains method
+            searched_df = self.df_local[mask & self.df_local['Alternate/Common name(s)'].str.contains(food_search_input, case=False)]
+
+            for index, row in searched_df.iterrows():
+                searched_foods.append({
+                    'Shrt_Desc': row['Alternate/Common name(s)'],
+                    'Energ_Kcal': f"{row['Energy, calculated (kcal)']} KCal",
+                    'FoodGroup': row['Category']
+                })
+
+                if len(searched_foods) == 10:
+                    break  # Exit the loop if 10 results are reached
+        else:
+            # Replace 'No name' values in 'Descrip' column with corresponding values from 'Shrt_Desc' column
+            self.df['Descrip'] = self.df['Descrip'].fillna(self.df['Shrt_Desc'])
+
+            # Perform case-insensitive search using str.contains method
+            searched_df = self.df[self.df['Descrip'].str.contains(food_search_input, case=False)]
+
+            for index, row in searched_df.iterrows():
+                searched_foods.append({
+                    'Shrt_Desc': row['Descrip'],
+                    'Energ_Kcal': f"{row['Energ_Kcal']} KCal",
+                    'FoodGroup': row['FoodGroup']
+                })
+
+                if len(searched_foods) == 10:
+                    break  # Exit the loop if 10 results are reached
 
         return searched_foods
 
@@ -216,6 +251,7 @@ class FoodRecommender:
             return nearest_column[0]
 
     def filter_recommendations(self, calorie_req, food_allergy, nutrient_req):
+        self.is_local_foods = False
         closest_column = self.get_nearest_column(nutrient_req)
         if not closest_column:
             return []
@@ -263,6 +299,7 @@ class FoodRecommender:
         return recommended_foods
     
     def filter_local_recommendations(self, calorie_req, food_allergy, nutrient_req):
+        self.is_local_foods = True
         closest_column = self.get_nearest_column_local(nutrient_req)
         if not closest_column:
             closest_column = 'Protein (g)'
@@ -341,7 +378,6 @@ class FoodRecommender:
     
     def store_selected_foods(self, selected_food):
         # Check if the selected food already exists in self.selected_foods
-        self.is_local_foods = False
         if selected_food not in self.selected_foods:
             # Add the selected food to the list of selected foods
             self.selected_foods.append(selected_food)
@@ -378,7 +414,6 @@ class FoodRecommender:
     
     def store_selected_local_foods(self, selected_food):
         # Check if the selected food already exists in self.selected_foods
-        self.is_local_foods = True
         if selected_food not in self.selected_local_foods:
             # Add the selected food to the list of selected foods
             self.selected_local_foods.append(selected_food)
