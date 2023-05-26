@@ -79,52 +79,54 @@ public class SearchFragment extends Fragment {
     }
 
     private void foodSearch(){
-        // Make a POST request to the API endpoint
-        // String url = "http://192.168.0.41:5000/search";
-        String url = getString(R.string.search_url);
-        JSONObject data = new JSONObject();
+        if (isAdded()) {
+            // Make a POST request to the API endpoint
+            // String url = "http://192.168.0.41:5000/search";
+            String url = getString(R.string.search_url);
+            JSONObject data = new JSONObject();
 
-        try {
-            data.put("food_search_input", searchFoodEditText.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            try {
+                data.put("food_search_input", searchFoodEditText.getText().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    linearProgressIndicator.hide();
-                    // Parse the JSON response
-                    JSONArray searchFoodsArray = response.getJSONArray("search_food_result");
-                    ArrayList<SearchFood> searchFoods = new ArrayList<>();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        linearProgressIndicator.hide();
+                        // Parse the JSON response
+                        JSONArray searchFoodsArray = response.getJSONArray("search_food_result");
+                        ArrayList<SearchFood> searchFoods = new ArrayList<>();
 
-                    // Iterate through the JSON array and create SearchFood objects
-                    for (int i = 0; i < searchFoodsArray.length(); i++) {
-                        JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
-                        String shortDesc = searchFoodObject.getString("Shrt_Desc");
-                        String kcal = searchFoodObject.getString("Energ_Kcal");
-                        String foodGroup = searchFoodObject.getString("FoodGroup");
-                        SearchFood searchFood = new SearchFood(shortDesc, foodGroup, kcal);
-                        searchFoods.add(searchFood);
+                        // Iterate through the JSON array and create SearchFood objects
+                        for (int i = 0; i < searchFoodsArray.length(); i++) {
+                            JSONObject searchFoodObject = searchFoodsArray.getJSONObject(i);
+                            String shortDesc = searchFoodObject.getString("Shrt_Desc");
+                            String kcal = searchFoodObject.getString("Energ_Kcal");
+                            String foodGroup = searchFoodObject.getString("FoodGroup");
+                            SearchFood searchFood = new SearchFood(shortDesc, foodGroup, kcal);
+                            searchFoods.add(searchFood);
+                        }
+
+                        // Pass the searchFoods ArrayList to your RecyclerView adapter
+                        SearchFoodAdapter adapter = new SearchFoodAdapter(searchFoods);
+                        foodRecyclerView.setAdapter(adapter);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                    // Pass the searchFoods ArrayList to your RecyclerView adapter
-                    SearchFoodAdapter adapter = new SearchFoodAdapter(searchFoods);
-                    foodRecyclerView.setAdapter(adapter);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                foodSearch();
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    foodSearch();
+                }
+            });
 
-        Volley.newRequestQueue(getActivity()).add(jsonObjectRequest);
+            Volley.newRequestQueue(getActivity()).add(jsonObjectRequest);
+        }
     }
 }

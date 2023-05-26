@@ -53,9 +53,7 @@ public class HistoryFragment extends Fragment {
         recyclerView = view.findViewById(R.id.history_list);
         linearProgressIndicator = requireActivity().findViewById(R.id.profile_progress_indicator);
 
-        if (isAdded()) {
-            getHistory();
-        }
+        getHistory();
         return view;
     }
 

@@ -139,7 +139,7 @@ public class SignupActivity extends AppCompatActivity {
         File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
 
         // Create a file to save the APK
-        File file = new File(directory, "Diabeates HarmonyDiet.apk");
+        File file = new File(directory, String.valueOf(R.string.downloaded_file_name));
 
         // Initialize a new DownloadManager instance
         DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);

@@ -84,6 +84,10 @@ public class LandingpageActivity extends AppCompatActivity {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (currentFragment instanceof SettingsFragment){
             bottomNavigationView.setSelectedItemId(R.id.botmenu_settings);
+        } else if (currentFragment instanceof ProfileFragment){
+            bottomNavigationView.setSelectedItemId(R.id.botmenu_profile);
+        } else if (currentFragment instanceof SearchFragment){
+            bottomNavigationView.setSelectedItemId(R.id.botmenu_search);
         } else {
             bottomNavigationView.setSelectedItemId(R.id.botmenu_home);
         }

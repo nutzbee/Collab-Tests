@@ -135,30 +135,32 @@ public class SettingsFragment extends Fragment {
     }
 
     private void numberPicker(){
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        float weight = sp.getFloat("weight", 0.0f);
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+            float weight = sp.getFloat("weight", 0.0f);
 
-        heightPicker.setMinValue(100);
-        heightPicker.setMaxValue(250);
-        heightPicker.setValue(130);
+            heightPicker.setMinValue(100);
+            heightPicker.setMaxValue(250);
+            heightPicker.setValue(130);
 
-        weightPicker.setMinValue(20);
-        weightPicker.setMaxValue(200);
-        weightPicker.setValue((int) weight);
+            weightPicker.setMinValue(20);
+            weightPicker.setMaxValue(200);
+            weightPicker.setValue((int) weight);
 
-        heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                calculateBMI();
-            }
-        });
+            heightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                    calculateBMI();
+                }
+            });
 
-        weightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                calculateBMI();
-            }
-        });
+            weightPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                    calculateBMI();
+                }
+            });
+        }
     }
 
     private void calculateBMI(){
@@ -185,12 +187,14 @@ public class SettingsFragment extends Fragment {
     }
 
     private void navigateToPreferences(){
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        ed.putBoolean("isPreferences", true);
-        ed.apply();
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor ed = sp.edit();
+            ed.putBoolean("isPreferences", true);
+            ed.apply();
 
-        bottomNavigationView.setSelectedItemId(R.id.botmenu_profile);
+            bottomNavigationView.setSelectedItemId(R.id.botmenu_profile);
+        }
     }
 
     private void composeEmail(String emailAddress, String emailSubject) {
@@ -202,34 +206,36 @@ public class SettingsFragment extends Fragment {
     }
 
     private void switchActions(){
-        SharedPreferences sp = requireActivity().getSharedPreferences("theme_mode", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        boolean enabled = sp.getBoolean("isDarkMode", false);
-        boolean exerciseReminderEnabled = sp.getBoolean("isExerciseReminderEnabled", false);
-        themeSwitch.setChecked(enabled);
-        exerciseSwitch.setChecked(exerciseReminderEnabled);
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("theme_mode", Context.MODE_PRIVATE);
+            SharedPreferences.Editor ed = sp.edit();
+            boolean enabled = sp.getBoolean("isDarkMode", false);
+            boolean exerciseReminderEnabled = sp.getBoolean("isExerciseReminderEnabled", false);
+            themeSwitch.setChecked(enabled);
+            exerciseSwitch.setChecked(exerciseReminderEnabled);
 
-        exerciseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ed.putBoolean("isExerciseReminderEnabled", b);
-                ed.apply();
-            }
-        });
-        themeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                // Handle switch state change
-                if (b) {
-                    // Enable dark mode
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                } else {
-                    // Enable light mode
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            exerciseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    ed.putBoolean("isExerciseReminderEnabled", b);
+                    ed.apply();
                 }
-                ed.putBoolean("isDarkMode", b);
-                ed.apply();
-            }
-        });
+            });
+            themeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    // Handle switch state change
+                    if (b) {
+                        // Enable dark mode
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else {
+                        // Enable light mode
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                    ed.putBoolean("isDarkMode", b);
+                    ed.apply();
+                }
+            });
+        }
     }
 }

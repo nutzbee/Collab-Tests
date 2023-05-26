@@ -163,8 +163,9 @@ public class LandingpageFragment extends Fragment {
                                 JSONObject foodObject = recommendedFoodsArray.getJSONObject(i);
                                 String descrip = foodObject.getString("descrip");
                                 energKcal = foodObject.getString("energKcal");
+                                String foodGroup = foodObject.getString("foodGroup");
                                 //String shortDesc = recommendedFoodsArray.getString(i);
-                                RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, "", energKcal, false);
+                                RecommendedFoods recommendedFoods = new RecommendedFoods(descrip, foodGroup, energKcal, false);
                                 recommendedFoods1.add(recommendedFoods);
                             }
 
@@ -176,7 +177,6 @@ public class LandingpageFragment extends Fragment {
                                     @Override
                                     public void onImageClick(String position, String foodName, int position2, String url) {
                                         url = getString(R.string.recommend_local_again_url);
-                                        foodName = "Protein (g)";
                                         fetchRecommendedFoodsAgain(position, foodName, position2, url);
                                     }
                                 });
@@ -296,71 +296,76 @@ public class LandingpageFragment extends Fragment {
     }
 
     private void fetchFoodValues(String foodName, int position, String url) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_values, null);
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-        JSONObject data = new JSONObject();
+        if (isAdded()) {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
+            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_values, null);
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+            JSONObject data = new JSONObject();
 
-        try {
-            data.put("selected_food_name", foodName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
             try {
-                JSONObject values = response.getJSONObject("values");
-                ArrayList<Values> mainValues = new ArrayList<>();
-                ArrayList<Values> valueValues = new ArrayList<>();
-                Iterator<String> keys = values.keys();
-
-                if (url.equals(getString(R.string.get_values_url))) {
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        String value = values.getString(key);
-                        String newMainKey = key.replace("_", " ");
-
-                        if (key.equals("Shrt_Desc") || key.equals("Descrip") ||
-                                key.equals("FoodGroup") || key.equals("NDB_No") ||
-                                key.equals("Energ_Kcal")) {
-                            Values mainValues1 = new Values(newMainKey, value);
-                            mainValues.add(mainValues1);
-                        } else {
-                            Values valueValues1 = new Values(newMainKey, value);
-                            valueValues.add(valueValues1);
-                        }
-                    }
-                } else {
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        String value = values.getString(key);
-
-                        if (key.equals("Alternate/Common name(s)") || key.equals("Food name and Description") ||
-                                key.equals("Energy, calculated (kcal)") || key.equals("Food_ID")) {
-                            Values mainValues1 = new Values(key, value);
-                            mainValues.add(mainValues1);
-                        } else {
-                            Values valueValues1 = new Values(key, value);
-                            valueValues.add(valueValues1);
-                        }
-                    }
-                }
-
-                ValuesAdapter valuesAdapter = new ValuesAdapter(mainValues);
-                ValuesAdapter nutriAdapter = new ValuesAdapter(valueValues);
-                RecyclerView valuesRecyclerView = bottomSheetView.findViewById(R.id.values_list);
-                RecyclerView nutvaluesRecyclerView = bottomSheetView.findViewById(R.id.nutritional_list);
-                valuesRecyclerView.setAdapter(valuesAdapter);
-                nutvaluesRecyclerView.setAdapter(nutriAdapter);
+                data.put("selected_food_name", foodName);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }, error -> {
-            error.printStackTrace();
-        });
 
-        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
+                try {
+                    JSONObject values = response.getJSONObject("values");
+                    ArrayList<Values> mainValues = new ArrayList<>();
+                    ArrayList<Values> valueValues = new ArrayList<>();
+                    Iterator<String> keys = values.keys();
+
+                    if (url.equals(getString(R.string.get_values_url))) {
+                        while (keys.hasNext()) {
+                            String key = keys.next();
+                            String value = values.getString(key);
+                            String newMainKey = key.replace("_", " ");
+
+                            if (key.equals("Shrt_Desc") || key.equals("Descrip") ||
+                                    key.equals("FoodGroup") || key.equals("NDB_No") ||
+                                    key.equals("Energ_Kcal")) {
+                                Values mainValues1 = new Values(newMainKey, value);
+                                mainValues.add(mainValues1);
+                            } else {
+                                Values valueValues1 = new Values(newMainKey, value);
+                                valueValues.add(valueValues1);
+                            }
+                        }
+                    } else {
+                        while (keys.hasNext()) {
+                            String key = keys.next();
+                            String value = values.getString(key);
+
+                            if (key.equals("Alternate/Common name(s)") || key.equals("Food name and Description") ||
+                                    key.equals("Energy, calculated (kcal)") || key.equals("Food_ID") ||
+                                    key.equals("Category")) {
+                                if (!value.equals("0")){
+                                    Values mainValues1 = new Values(key, value);
+                                    mainValues.add(mainValues1);
+                                }
+                            } else {
+                                Values valueValues1 = new Values(key, value);
+                                valueValues.add(valueValues1);
+                            }
+                        }
+                    }
+
+                    ValuesAdapter valuesAdapter = new ValuesAdapter(mainValues);
+                    ValuesAdapter nutriAdapter = new ValuesAdapter(valueValues);
+                    RecyclerView valuesRecyclerView = bottomSheetView.findViewById(R.id.values_list);
+                    RecyclerView nutvaluesRecyclerView = bottomSheetView.findViewById(R.id.nutritional_list);
+                    valuesRecyclerView.setAdapter(valuesAdapter);
+                    nutvaluesRecyclerView.setAdapter(nutriAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }, error -> {
+                error.printStackTrace();
+            });
+
+            Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
+        }
     }
 
     private void fetchRecommendedFoodsAgain(String foodId, String foodName, int foodId2, String url) {

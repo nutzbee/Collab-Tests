@@ -45,6 +45,7 @@ public class ProfileFragment extends Fragment {
     private FrameLayout parentView;
     private boolean isLoggedIn;
     private LinearProgressIndicator linearProgressIndicator;
+    private JsonObjectRequest jsonObjectRequest;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment {
         handleButtonActions();
         handleChipActions();
         showProfileInformation();
+        updateStatus();
         return view;
     }
 
@@ -76,24 +78,26 @@ public class ProfileFragment extends Fragment {
     }
 
     private void handleButtonActions() {
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        boolean isLoggedIn = sp.getBoolean("is_logged_in", false);
-        loginButton.setOnClickListener(view -> {
-            Intent intent = new Intent(requireActivity(), SigninActivity.class);
-            startActivity(intent);
-            requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        });
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+            boolean isLoggedIn = sp.getBoolean("is_logged_in", false);
+            loginButton.setOnClickListener(view -> {
+                Intent intent = new Intent(requireActivity(), SigninActivity.class);
+                startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
 
-        signupButton.setOnClickListener(view -> {
-            Intent intent = new Intent(requireActivity(), SignupActivity.class);
-            startActivity(intent);
-            requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        });
+            signupButton.setOnClickListener(view -> {
+                Intent intent = new Intent(requireActivity(), SignupActivity.class);
+                startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
 
-        if (!isLoggedIn) {
-            loginButton.setVisibility(View.VISIBLE);
-            signupButton.setVisibility(View.VISIBLE);
-            profileRecyclerView.setVisibility(View.GONE);
+            if (!isLoggedIn) {
+                loginButton.setVisibility(View.VISIBLE);
+                signupButton.setVisibility(View.VISIBLE);
+                profileRecyclerView.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -168,111 +172,116 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showProfileInformation() {
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        isLoggedIn = sp.getBoolean("is_logged_in", false);
-        boolean isPreferences = sp.getBoolean("isPreferences", false);
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor ed = sp.edit();
+            isLoggedIn = sp.getBoolean("is_logged_in", false);
+            boolean isPreferences = sp.getBoolean("isPreferences", false);
 
-        if (isPreferences){
-            profileRecyclerView.setVisibility(View.GONE);
-            preferencesChip.setChecked(true);
-            ed.putBoolean("isPreferences", false);
-            ed.apply();
+            if (isPreferences) {
+                profileRecyclerView.setVisibility(View.GONE);
+                preferencesChip.setChecked(true);
+                ed.putBoolean("isPreferences", false);
+                ed.apply();
+            }
+
+            if (!isLoggedIn) {
+                exerciseChip.setEnabled(false);
+                historyChip.setEnabled(false);
+                summaryChip.setEnabled(false);
+                preferencesChip.setEnabled(false);
+            } else {
+                exerciseChip.setEnabled(true);
+                historyChip.setEnabled(true);
+                summaryChip.setEnabled(true);
+                preferencesChip.setEnabled(true);
+            }
+
+            RecyclerView recyclerView = view.findViewById(R.id.profile_recycler_view);
+
+            // Retrieve the necessary data from SharedPreferences
+            String name = sp.getString("name", "");
+            String email = sp.getString("email", "");
+            int age = sp.getInt("age", 0);
+            String username = sp.getString("username", "");
+            String password = sp.getString("password", "");
+            float weight = sp.getFloat("weight", 0.0f);
+            float bmi = sp.getFloat("bmi", 0.0f);
+            String status = sp.getString("status", "");
+
+            // Create a list of data items
+            ArrayList<Profile> profiles = new ArrayList<>();
+            profiles.add(new Profile("Full Name", name));
+            profiles.add(new Profile("Email", email));
+            profiles.add(new Profile("Age", String.valueOf(age)));
+            profiles.add(new Profile("Username", username));
+            profiles.add(new Profile("Password", password));
+            profiles.add(new Profile("Weight", String.valueOf(weight)));
+            profiles.add(new Profile("Body Mass Index", String.valueOf(bmi)));
+            if (status.isEmpty()) {
+                profiles.add(new Profile("Status", "Loading status.."));
+            } else {
+                profiles.add(new Profile("Status", status));
+            }
+
+            ProfileAdapter profileAdapter = new ProfileAdapter(requireContext(), profiles);
+            recyclerView.setAdapter(profileAdapter);
+            profileAdapter.setOnItemClickListener((title, value, position) -> showSnackbar(title, value));
         }
-
-        if (!isLoggedIn){
-            exerciseChip.setEnabled(false);
-            historyChip.setEnabled(false);
-            summaryChip.setEnabled(false);
-            preferencesChip.setEnabled(false);
-        } else {
-            exerciseChip.setEnabled(true);
-            historyChip.setEnabled(true);
-            summaryChip.setEnabled(true);
-            preferencesChip.setEnabled(true);
-        }
-
-        RecyclerView recyclerView = view.findViewById(R.id.profile_recycler_view);
-
-        // Retrieve the necessary data from SharedPreferences
-        String name = sp.getString("name", "");
-        String email = sp.getString("email", "");
-        int age = sp.getInt("age", 0);
-        String username = sp.getString("username", "");
-        String password = sp.getString("password", "");
-        float weight = sp.getFloat("weight", 0.0f);
-        float bmi = sp.getFloat("bmi", 0.0f);
-        String status = sp.getString("status", "");
-        linearProgressIndicator.show();
-
-        // Create a list of data items
-        ArrayList<Profile> profiles = new ArrayList<>();
-        profiles.add(new Profile("Full Name", name));
-        profiles.add(new Profile("Email", email));
-        profiles.add(new Profile("Age", String.valueOf(age)));
-        profiles.add(new Profile("Username", username));
-        profiles.add(new Profile("Password", password));
-        profiles.add(new Profile("Weight", String.valueOf(weight)));
-        profiles.add(new Profile("Body Mass Index", String.valueOf(bmi)));
-        if (status.isEmpty()){
-            profiles.add(new Profile("Status", "Loading status.."));
-            calculateStatus();
-        } else {
-            profiles.add(new Profile("Status", status));
-            linearProgressIndicator.hide();
-        }
-
-        ProfileAdapter profileAdapter = new ProfileAdapter(requireContext(), profiles);
-        recyclerView.setAdapter(profileAdapter);
-        profileAdapter.setOnItemClickListener((title, value, position) -> showSnackbar(title, value));
     }
 
-    private void calculateStatus(){
-        // String url = "http://192.168.0.41:5000/predict";
-        String url = getString(R.string.predict_url);
-        JSONObject data = new JSONObject();
+    private void updateStatus() {
+        if (isAdded()) {
+            if (isLoggedIn) {
+                linearProgressIndicator.show();
+                // String url = "http://192.168.0.41:5000/predict";
+                String url = getString(R.string.predict_url);
+                JSONObject data = new JSONObject();
 
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        // Get input values from TextInputEditTexts
-        int pregnancies = sp.getInt("pregnancies", 0);
-        int glucose = sp.getInt("glucose", 0);
-        int bloodPressure = sp.getInt("bloodPressure", 0);
-        int skinThickness = sp.getInt("skinThickness", 0);
-        int insulin = sp.getInt("insulin", 0);
-        float bmi = sp.getFloat("bmi", 0.0f);
-        float dpf = sp.getFloat("dpf", 0.0f);
-        int age = sp.getInt("age", 0);
+                SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                // Get input values from TextInputEditTexts
+                int pregnancies = sp.getInt("pregnancies", 0);
+                int glucose = sp.getInt("glucose", 0);
+                int bloodPressure = sp.getInt("bloodPressure", 0);
+                int skinThickness = sp.getInt("skinThickness", 0);
+                int insulin = sp.getInt("insulin", 0);
+                float bmi = sp.getFloat("bmi", 0.0f);
+                float dpf = sp.getFloat("dpf", 0.0f);
+                int age = sp.getInt("age", 0);
 
-        try {
-            data.put("pregnancies", pregnancies);
-            data.put("glucose", glucose);
-            data.put("blood_pressure", bloodPressure);
-            data.put("skin_thickness", skinThickness);
-            data.put("insulin", insulin);
-            data.put("bmi", bmi);
-            data.put("diabetes_pedigree_function", dpf);
-            data.put("age", age);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                try {
+                    data.put("pregnancies", pregnancies);
+                    data.put("glucose", glucose);
+                    data.put("blood_pressure", bloodPressure);
+                    data.put("skin_thickness", skinThickness);
+                    data.put("insulin", insulin);
+                    data.put("bmi", bmi);
+                    data.put("diabetes_pedigree_function", dpf);
+                    data.put("age", age);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
-            try {
-                String message = response.getString("diabetes_result");
-                SharedPreferences.Editor ed = sp.edit();
-                ed.putString("status", message);
-                ed.apply();
+                jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, data, response -> {
+                    try {
+                        String message = response.getString("diabetes_result");
+                        SharedPreferences.Editor ed = sp.edit();
+                        ed.putString("status", message);
+                        ed.apply();
 
-                showProfileInformation();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                        showProfileInformation();
+                        linearProgressIndicator.hide();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    error.printStackTrace();
+                    updateStatus();
+                });
+
+                Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
             }
-        }, error -> {
-            error.printStackTrace();
-            calculateStatus();
-        });
-
-        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
+        }
     }
 
     private void showSnackbar(String profileTitle, String profileValue) {

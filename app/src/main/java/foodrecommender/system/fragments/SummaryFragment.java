@@ -54,36 +54,38 @@ public class SummaryFragment extends Fragment {
     }
 
     private void summary_report(){
-        // Make a POST request to the API endpoint
-        // String url = "http://192.168.0.41:5000/summary";
-        String url = getString(R.string.summary_url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String summary_report = response.getString("summary_report");
-                    String health_report = response.getString("health_monitor");
-                    String recommendation = response.getString("recommendations");
-                    summaryContent.setText(summary_report);
-                    healthReport.setText(health_report);
-                    recommendations.setText(recommendation);
-                    if (isAdded()) {
-                        if (health_report.equals("Unidentified")) {
-                            healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, requireContext().getTheme()));
+        if (isAdded()) {
+            // Make a POST request to the API endpoint
+            // String url = "http://192.168.0.41:5000/summary";
+            String url = getString(R.string.summary_url);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String summary_report = response.getString("summary_report");
+                        String health_report = response.getString("health_monitor");
+                        String recommendation = response.getString("recommendations");
+                        summaryContent.setText(summary_report);
+                        healthReport.setText(health_report);
+                        recommendations.setText(recommendation);
+                        if (isAdded()) {
+                            if (health_report.equals("Unidentified")) {
+                                healthReport.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_error, requireContext().getTheme()));
+                            }
                         }
+                        linearProgressIndicator.hide();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    linearProgressIndicator.hide();
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                summary_report();
-            }
-        });
-        Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    summary_report();
+                }
+            });
+            Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
+        }
     }
 }

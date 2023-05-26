@@ -126,7 +126,7 @@ public class ExerciseFragment extends Fragment {
             }
         });
 
-        Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
+        if (isAdded()) Volley.newRequestQueue(requireContext()).add(jsonObjectRequest);
     }
 
     private void predictReferences(){
@@ -161,15 +161,17 @@ public class ExerciseFragment extends Fragment {
             error.printStackTrace();
         });
 
-        Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
+        if (isAdded()) Volley.newRequestQueue(requireActivity()).add(jsonObjectRequest);
     }
 
     private void setReadMode(){
-        SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        weightInput.setFocusable(false);
-        weightInput.setClickable(false);
-        weightInput.setLongClickable(false);
-        weightInput.setInputType(InputType.TYPE_NULL);
-        weightInput.setText(String.format("%s is your weight in lbs", sp.getFloat("weight", 0.0f)));
+        if (isAdded()) {
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+            weightInput.setFocusable(false);
+            weightInput.setClickable(false);
+            weightInput.setLongClickable(false);
+            weightInput.setInputType(InputType.TYPE_NULL);
+            weightInput.setText(String.format("%s is your weight in lbs", sp.getFloat("weight", 0.0f)));
+        }
     }
 }

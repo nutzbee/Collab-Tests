@@ -25,8 +25,8 @@
     <string name="supporting_text">Supporting Text</string>
     <string name="action">Action</string>
 
-    <string name="sample_foods_url">http://nutzbee.pythonanywhere.com/sample</string>
-    <string name="search_url">http://nutzbee.pythonanywhere.com/search</string>
+    <string name="sample_foods_url">https://diabeates-services.onrender.com/sample</string>
+    <string name="search_url">https://diabeates-services.onrender.com/search</string>
     <string name="exercise_url">https://diabeates-services.onrender.com/get_calories_burned</string>
     <string name="exercise_url_get">https://diabeates-services.onrender.com/get_activities</string>
     <string name="summary_url">https://diabeates-services.onrender.com/summary</string>
@@ -47,4 +47,6 @@
 
     <string name="signInLabel">Sign In</string>
     <string name="signUpLabel">Sign Up</string>
+
+    <string name="downloaded_file_name">Diabeates HarmonyDiet 5.26.apk</string>
 </resources>
