@@ -506,7 +506,6 @@ def recommend_local_again():
     if selected_food and selected_food_name:
         recommended_foods_again = food_recommender.recommend_local_again(selected_food)
         food_recommender.store_selected_local_foods(selected_food_name)
-        print(recommended_foods_again)
         return recommended_foods_again
     else:
         print('Error')
