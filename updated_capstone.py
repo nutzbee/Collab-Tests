@@ -191,7 +191,7 @@ class FoodRecommender:
 
         self.df_local.fillna(0, inplace=True)
         self.localscaler = StandardScaler()
-        df_local_std = self.localscaler.fit_transform(self.df_local.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link'], axis=1))
+        df_local_std = self.localscaler.fit_transform(self.df_local.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link', 'Category'], axis=1))
         self.localpca = PCA(n_components=2)
         self.localpca.fit(df_local_std)
         local_principal_components = self.localpca.transform(df_local_std)
