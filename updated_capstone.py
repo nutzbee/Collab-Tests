@@ -274,7 +274,7 @@ class FoodRecommender:
         ]
         filtered_df = filtered_df.sort_values(by=[closest_column], ascending=False)
 
-        principal_components = self.localpca.transform(self.localscaler.transform(filtered_df.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link'], axis=1)))
+        principal_components = self.localpca.transform(self.localscaler.transform(filtered_df.drop(['Food_ID', 'Food name and Description', 'Alternate/Common name(s)', 'Image Link', 'Category'], axis=1)))
         principal_df_filtered = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
         y_kmeans = self.localkmeans.predict(principal_df_filtered)
         principal_df_filtered['cluster'] = self.localkmeans.predict(principal_df_filtered)
