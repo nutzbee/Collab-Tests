@@ -11,7 +11,7 @@ app = Flask(__name__)
 class FoodRecommender:
     def __init__(self):
         self.df = pd.read_csv("merged_abbrev_excel_csv.csv")
-        self.df_local = pd.read_csv("https://raw.githubusercontent.com/nutzbee/Capstone-Source-Codes/Notebook-using-Google-Colab-Branch/Food%20Dataset%20of%20the%20Philippines%20-%20Combined.csv")
+        self.df_local = pd.read_csv("https://raw.githubusercontent.com/nutzbee/Capstone-Source-Codes/Notebook-using-Google-Colab-Branch/transformed_local_foods.csv")
         self.filtered_data = None
         self.nutrient_requirement = None
         self.cluster_labels = None
@@ -289,11 +289,11 @@ class FoodRecommender:
                     descrip = cluster_foods.iloc[j]['Alternate/Common name(s)']
                     shrt_desc = cluster_foods.iloc[j]['Food name and Description']
                     energ_kcal = cluster_foods.iloc[j]['Energy, calculated (kcal)']
-                    food_id = cluster_foods.iloc[j]['Food_ID']
+                    food_category = cluster_foods.iloc[j]['Category']
                     food = {
                         'descrip': shrt_desc if descrip == 0 else descrip,
                         'energKcal': str(energ_kcal) + ' Kcal',
-                        'foodGroup': 'Food ID: ' + food_id
+                        'foodGroup': food_category
                     }
                     recommended_foods.append(food)
                     if len(recommended_foods) == 10:
@@ -346,8 +346,7 @@ class FoodRecommender:
 
     def recommend_local_again(self, selected_food):
         # Filter the dataset based on the selected food
-        letter = selected_food[9]
-        selected_food_df = self.df_local[self.df_local['Food_ID'].str.contains(letter)]
+        selected_food_df = self.df_local[self.df_local['Category'] == selected_food]
         
         # Filter the dataset again based on the nutrient requirement and selected food
         filtered_again_df = selected_food_df[selected_food_df[self.nutrient_requirement] > 0]
@@ -368,7 +367,7 @@ class FoodRecommender:
                     filtered_food = {
                         'descrip': row['Food name and Description'] if row['Alternate/Common name(s)'] == 0 else row['Alternate/Common name(s)'],
                         'energKcal': str(row['Energy, calculated (kcal)']) + ' Kcal',
-                        'foodGroup': 'Food ID: ' + row['Food_ID']
+                        'foodGroup': row['Category']
                     }
             if filtered_food:
                 recommended_foods_again.append(filtered_food)
