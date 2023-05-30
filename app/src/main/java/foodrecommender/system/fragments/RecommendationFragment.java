@@ -203,7 +203,6 @@ public class RecommendationFragment extends Fragment {
                 ed.putInt("calorie_req", Integer.parseInt(calorie_req.getText().toString()));
                 ed.putString("fod_allergy", fod_allergy.getText().toString());
                 ed.putString("nutrient_req", nutrient_req.getText().toString());
-                ed.putBoolean("is_logged_in", true);
                 ed.apply();
 
                 name = sp.getString("name", "");
@@ -248,6 +247,7 @@ public class RecommendationFragment extends Fragment {
                                 // Handle success scenario (e.g., navigate to the login screen)
                                 int id = jsonResponse.getInt("user_id");
                                 ed.putInt("id", id);
+                                ed.putBoolean("is_logged_in", true);
                                 ed.apply();
                                 progressIndicator.hide();
                                 showNext();

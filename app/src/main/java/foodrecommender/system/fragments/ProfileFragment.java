@@ -150,16 +150,16 @@ public class ProfileFragment extends Fragment {
         exerciseFragmentTransaction = getChildFragmentManager().beginTransaction();
         if (exerciseChip.isChecked()) {
             exerciseFragmentTransaction.replace(R.id.fragment_container_summary, new ExerciseFragment());
-            exerciseFragmentTransaction.commitNow();
+            exerciseFragmentTransaction.commit();
         } else if (summaryChip.isChecked()) {
             exerciseFragmentTransaction.replace(R.id.fragment_container_summary, new SummaryFragment());
-            exerciseFragmentTransaction.commitNow();
+            exerciseFragmentTransaction.commit();
         } else if (preferencesChip.isChecked()) {
             exerciseFragmentTransaction.replace(R.id.fragment_container_summary, new PreferencesFragment());
-            exerciseFragmentTransaction.commitNow();
+            exerciseFragmentTransaction.commit();
         } else if (historyChip.isChecked()) {
             exerciseFragmentTransaction.replace(R.id.fragment_container_summary, new HistoryFragment());
-            exerciseFragmentTransaction.commitNow();
+            exerciseFragmentTransaction.commit();
         } else {
             if (frameLayout.isShown()) {
                 frameLayout.setVisibility(View.GONE);
@@ -286,7 +286,14 @@ public class ProfileFragment extends Fragment {
 
     private void showSnackbar(String profileTitle, String profileValue) {
         if (profileTitle.equals("Status")) {
-            Snackbar.make(parentView, profileValue, Snackbar.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(parentView, "Your are " + profileValue, Snackbar.LENGTH_SHORT);
+            snackbar.setAction("Hide", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    snackbar.dismiss();
+                }
+            });
+            snackbar.show();
         }
     }
 }

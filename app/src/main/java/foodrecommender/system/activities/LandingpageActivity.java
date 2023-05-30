@@ -29,13 +29,14 @@ public class LandingpageActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private ConnectivityManager.NetworkCallback networkCallback;
+    private FrameLayout rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landingpage);
 
-        FrameLayout rootView = findViewById(R.id.fragment_container);
+        rootView = findViewById(R.id.fragment_container);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkCallback = new NetworkConnectivityCallback(rootView);
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
@@ -47,7 +48,7 @@ public class LandingpageActivity extends AppCompatActivity {
                 // Navigate to the LandingpageFragment
                 homeFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 homeFragmentTransaction.replace(R.id.fragment_container, new LandingpageFragment());
-                homeFragmentTransaction.commitNow();
+                homeFragmentTransaction.commit();
                 // Handle home action
                 return true;
             } else if (itemId == R.id.botmenu_search) {
@@ -55,21 +56,21 @@ public class LandingpageActivity extends AppCompatActivity {
                 // Navigate to the SearchFragment
                 searchFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 searchFragmentTransaction.replace(R.id.fragment_container, new SearchFragment());
-                searchFragmentTransaction.commitNow();
+                searchFragmentTransaction.commit();
                 return true;
             } else if (itemId == R.id.botmenu_profile) {
                 // Handle profile action
                 // Navigate to the ExerciseFragment
                 profileFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 profileFragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
-                profileFragmentTransaction.commitNow();
+                profileFragmentTransaction.commit();
                 return true;
             } else if (itemId == R.id.botmenu_settings) {
                 // Handle profile action
                 // Navigate to the SummaryFragment
                 settingsFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 settingsFragmentTransaction.replace(R.id.fragment_container, new SettingsFragment());
-                settingsFragmentTransaction.commitNow();
+                settingsFragmentTransaction.commit();
                 return true;
             } else {
                 return false;

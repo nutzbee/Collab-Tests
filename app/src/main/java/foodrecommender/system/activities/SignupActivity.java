@@ -67,7 +67,6 @@ public class SignupActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.signup_rel);
 
         updateCheck();
-        getTheFragment();
         setupNotification();
         themeCheck();
     }
@@ -84,12 +83,20 @@ public class SignupActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     if (isSnackbarShown) {
-                        Snackbar.make(relativeLayout, "Connection restored", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(relativeLayout, "Connected", Snackbar.LENGTH_SHORT).show();
                     }
                     String message = response.getString("message");
                     String ver_code = response.getString("ver_code");
 
-                    if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
+                    if (response.has("maintenance")){
+                        Log.d("TAG", "updateCheck: " + message);
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
+                        builder.setTitle(message);
+                        builder.setMessage("We will be right back.. ");
+                        builder.setCancelable(false);
+                        builder.create();
+                        builder.show();
+                    } else if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
                         Log.d("TAG", "updateCheck: " + message);
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
                         builder.setTitle(message);
@@ -120,17 +127,22 @@ public class SignupActivity extends AppCompatActivity {
                 // Handle error here
                 error.printStackTrace();
 
-                if (!isSnackbarShown) {
-                    Snackbar.make(relativeLayout, "Connection error", Snackbar.LENGTH_INDEFINITE).show();
-                    isSnackbarShown = true;
-                }
+                Snackbar snackbar = Snackbar.make(relativeLayout, "Disconnected", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Refresh", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateCheck();
+                    }
+                });
+                snackbar.show();
+                isSnackbarShown = true;
 
                 // Call updateCheck again when error occurs
-                updateCheck();
+                //updateCheck();
             }
         });
 
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
+        Volley.newRequestQueue(SignupActivity.this).add(jsonObjectRequest);
     }
 
     private void sendDownloadRequest() {
@@ -156,7 +168,7 @@ public class SignupActivity extends AppCompatActivity {
         // Enqueue the download request
         long downloadId = downloadManager.enqueue(request);
 
-        Toast.makeText(this, "Download started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SignupActivity.this, "Download started", Toast.LENGTH_SHORT).show();
     }
 
     private void setupNotification() {
@@ -165,13 +177,13 @@ public class SignupActivity extends AppCompatActivity {
         createNotificationChannel();
 
         // Build the notification
-        NotificationCompat.Builder exercise = new NotificationCompat.Builder(this, "channel_id")
+        NotificationCompat.Builder exercise = new NotificationCompat.Builder(SignupActivity.this, "channel_id")
                 .setSmallIcon(R.drawable.red_app_icon_main) // Replace with your own notification icon
                 .setContentTitle("Exercise Reminder")
                 .setContentText("Exercise helps us to maintain our healthiness so don't forget to stretch your body and be active today.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationCompat.Builder medicine = new NotificationCompat.Builder(this, "channel_id")
+        NotificationCompat.Builder medicine = new NotificationCompat.Builder(SignupActivity.this, "channel_id")
                 .setSmallIcon(R.drawable.red_app_icon_main) // Replace with your own notification icon
                 .setContentTitle("Medicine Reminder")
                 .setContentText("A friendly reminder to take your medicines today.")
@@ -212,7 +224,7 @@ public class SignupActivity extends AppCompatActivity {
 
         if (isLoggedIn) {
             // User is already logged in, redirect to the landing page
-            Intent intent = new Intent(this, LandingpageActivity.class);
+            Intent intent = new Intent(SignupActivity.this, LandingpageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -222,6 +234,7 @@ public class SignupActivity extends AppCompatActivity {
             progressIndicator.hide();
             relativeLayout.setVisibility(View.VISIBLE);
             getSupportActionBar().setTitle(R.string.signUpLabel);
+            getTheFragment();
         }
     }
 

@@ -36,6 +36,7 @@ public class SigninActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private RelativeLayout relativeLayout;
     private CircularProgressIndicator circularProgressIndicator;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,9 @@ public class SigninActivity extends AppCompatActivity {
                 response -> {
                     // Handle the login response
                     try {
+                        if (snackbar != null && snackbar.isShown()) {
+                            snackbar.dismiss();
+                        }
                         JSONObject jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
                         String message = jsonResponse.getString("message");
@@ -114,6 +118,15 @@ public class SigninActivity extends AppCompatActivity {
                 error -> {
                     // Handle the login error
                     error.printStackTrace();
+
+                    snackbar = Snackbar.make(relativeLayout, "No connection", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("Refresh", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            sendLoginRequest();
+                        }
+                    });
+                    snackbar.show();
                 }
         ) {
             @Override
@@ -186,7 +199,6 @@ public class SigninActivity extends AppCompatActivity {
         if (!email.isEmpty()) {
             mEmailInput.setText(email);
             mPasswordInput.setText(password);
-            Snackbar.make(relativeLayout, "Restored", Snackbar.LENGTH_SHORT).show();
         }
     }
 

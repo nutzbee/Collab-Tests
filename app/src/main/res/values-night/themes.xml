@@ -56,6 +56,11 @@
         <item name="startIconTint">@color/icon_dark</item>
     </style>
 
+    <style name="ChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipIconTint">@color/icon_dark</item>
+        <item name="closeIconTint">@color/icon_dark</item>
+    </style>
+
     <!-- Define the style for RoundedButton -->
     <style name="RoundedButton" parent="Widget.Material3.Button.TonalButton">
     </style>

@@ -2,6 +2,7 @@ package foodrecommender.system.fragments;
 
 import android.os.Bundle;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -41,6 +44,7 @@ public class SampleFoodsFragment extends Fragment {
     private TextView moreTextView;
     private View view;
     private LinearProgressIndicator linearProgressIndicator;
+    private FrameLayout parentView;
 
     public SampleFoodsFragment() {
         // Required empty public constructor
@@ -56,6 +60,7 @@ public class SampleFoodsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sample_foods, container, false);
+        //parentView = requireActivity().findViewById(R.id.landingFrameLayout);
         recyclerView = view.findViewById(R.id.suggestion_list);
         moreTextView = view.findViewById(R.id.more_ticker_textview);
         linearProgressIndicator = view.findViewById(R.id.sampleF_progress_indicator);
@@ -98,8 +103,14 @@ public class SampleFoodsFragment extends Fragment {
                         adapter.setOnItemClickListener(new SampleFoodAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(String value) {
-                                Snackbar.make(view, value, Snackbar.LENGTH_SHORT)
-                                        .show();
+                                Snackbar snackbar = Snackbar.make(view, value, Snackbar.LENGTH_SHORT);
+                                snackbar.setAction("Hide", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snackbar.dismiss();
+                                    }
+                                });
+                                snackbar.show();
                             }
                         });
 
@@ -120,8 +131,15 @@ public class SampleFoodsFragment extends Fragment {
                                 bottomSheetAdapter.setOnItemClickListener(new SampleFoodAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(String value) {
-                                        Snackbar.make(bottomSheetView, value,
-                                                Snackbar.LENGTH_SHORT).show();
+                                        Snackbar snackbar = Snackbar.make(bottomSheetView, value,
+                                                Snackbar.LENGTH_SHORT);
+                                        snackbar.setAction("Hide", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                snackbar.dismiss();
+                                            }
+                                        });
+                                        snackbar.show();
                                     }
                                 });
 
