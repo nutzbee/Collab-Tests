@@ -57,7 +57,7 @@
 
     <!-- Card background colors -->
     <color name="card_background_light">#27B68D40</color>
-    <color name="card_background_night">#79208874</color>
+    <color name="card_background_night">#1D7A581F</color>
 
     <!-- Box background colors -->
     <color name="box_color_light">#FFF8DC</color>

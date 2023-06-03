@@ -102,24 +102,28 @@
                     android:textAlignment="center" />
 
                 <Button
+                    style="@style/RoundedButton"
                     android:id="@+id/buttonHome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Home" />
 
                 <Button
+                    style="@style/RoundedButton"
                     android:id="@+id/buttonSearch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Search" />
 
                 <Button
+                    style="@style/RoundedButton"
                     android:id="@+id/buttonViewProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="View Profile" />
 
                 <Button
+                    style="@style/RoundedButton"
                     android:id="@+id/buttonUpdatePreferences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -134,6 +138,7 @@
                     android:textAlignment="center" />
 
                 <Button
+                    style="@style/RoundedButton"
                     android:id="@+id/buttonBMICalculator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -101,6 +101,7 @@
                 app:chipIconEnabled="true" />
 
             <Button
+                style="@style/RoundedButton"
                 android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,6 +112,7 @@
                 tools:visibility="visible" />
 
             <Button
+                style="@style/RoundedButton"
                 android:id="@+id/buttonSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

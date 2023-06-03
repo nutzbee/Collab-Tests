@@ -64,10 +64,10 @@
     </style>
 
     <!-- Define the style for RoundedButton -->
-    <style name="RoundedButton" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="RoundedButton" parent="Widget.Material3.Button.TonalButton">
     </style>
 
-    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.ElevatedButton">
+    <style name="DeclineRoundedButton" parent="Widget.Material3.Button.TonalButton">
     </style>
 
 </resources>

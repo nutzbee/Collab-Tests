@@ -67,8 +67,8 @@ public class SignupActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.signup_rel);
 
         updateCheck();
+        //getTheFragment();
         setupNotification();
-        themeCheck();
     }
 
     private void updateCheck() {
@@ -89,11 +89,15 @@ public class SignupActivity extends AppCompatActivity {
                     String ver_code = response.getString("ver_code");
 
                     if (response.has("maintenance")){
-                        Log.d("TAG", "updateCheck: " + message);
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
-                        builder.setTitle(message);
-                        builder.setMessage("We will be right back.. ");
-                        builder.setCancelable(false);
+                        builder.setTitle("Maintenance Advisory");
+                        builder.setMessage(message);
+                        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                finish();
+                            }
+                        });
                         builder.create();
                         builder.show();
                     } else if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
@@ -116,7 +120,9 @@ public class SignupActivity extends AppCompatActivity {
                         Log.d("TAG", "updateCheck: App up to date");
                         getSupportActionBar().setTitle("Signing you in..");
                         userCheck();
+                        themeCheck();
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -136,13 +142,10 @@ public class SignupActivity extends AppCompatActivity {
                 });
                 snackbar.show();
                 isSnackbarShown = true;
-
-                // Call updateCheck again when error occurs
-                //updateCheck();
             }
         });
 
-        Volley.newRequestQueue(SignupActivity.this).add(jsonObjectRequest);
+        Volley.newRequestQueue(getApplicationContext()).add(jsonObjectRequest);
     }
 
     private void sendDownloadRequest() {
@@ -151,7 +154,7 @@ public class SignupActivity extends AppCompatActivity {
         File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
 
         // Create a file to save the APK
-        File file = new File(directory, String.valueOf(R.string.downloaded_file_name));
+        File file = new File(directory, getString(R.string.downloaded_file_name));
 
         // Initialize a new DownloadManager instance
         DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
@@ -168,7 +171,7 @@ public class SignupActivity extends AppCompatActivity {
         // Enqueue the download request
         long downloadId = downloadManager.enqueue(request);
 
-        Toast.makeText(SignupActivity.this, "Download started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Download started", Toast.LENGTH_SHORT).show();
     }
 
     private void setupNotification() {

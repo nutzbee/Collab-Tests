@@ -102,7 +102,37 @@ public class PredictionFragment extends Fragment {
 
         handleProgressIndicator();
         editTextsActionListener();
+        checkSavedData();
         return view;
+    }
+
+    private void checkSavedData(){
+        if (isAdded()){
+            SharedPreferences sp = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+
+            int pregnancies = sp.getInt("pregnancies", 0),
+                    glucose = sp.getInt("glucose", 0),
+                    bloodPressure = sp.getInt("bloodPressure", 0),
+                    skinThickness = sp.getInt("skinThickness", 0),
+                    insulin = sp.getInt("insulin", 0),
+                    age = sp.getInt("age", 0);
+            float bmi = sp.getFloat("bmi", 0.0f),
+                    dpf = sp.getFloat("dpf", 0.0f);
+
+            if (pregnancies!=0 || glucose!=0
+                    || bloodPressure!=0 || skinThickness!=0
+                    || insulin!=0 || age!=0
+                    || bmi!=0.0f || dpf!=0.0f){
+                pregnanciesEditText.setText(String.valueOf(pregnancies));
+                glucoseEditText.setText(String.valueOf(glucose));
+                bloodPressureEditText.setText(String.valueOf(bloodPressure));
+                skinThicknessEditText.setText(String.valueOf(skinThickness));
+                insulinEditText.setText(String.valueOf(insulin));
+                ageEditText.setText(String.valueOf(age));
+                bmiEditText.setText(String.valueOf(bmi));
+                dpfEditText.setText(String.valueOf(dpf));
+            }
+        }
     }
 
     private void handleProgressIndicator(){
@@ -174,7 +204,7 @@ public class PredictionFragment extends Fragment {
                                         if (editable.length() > 0) {
                                             try {
                                                 int age = Integer.parseInt(editable.toString());
-                                                if (age > 90 || age < 0) {
+                                                if (age > 90 || age < 3) {
                                                     predictButton.setEnabled(false);
                                                     ageEditText.setError("Invalid age");
                                                 } else {

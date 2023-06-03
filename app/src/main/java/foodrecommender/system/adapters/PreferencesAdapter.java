@@ -3,6 +3,7 @@ package foodrecommender.system.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,8 @@ public class PreferencesAdapter extends RecyclerView.Adapter<PreferencesAdapter.
                 builder.setView(alertDialogView);
 
                 inputEditText.setText(profileValue);
+                if (!(profileTitle.equals("Allergies")
+                        || profileTitle.equals("Nutrient requirement"))) inputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 inputLayout.setHint("Enter new value");
 
                 // Set the positive button

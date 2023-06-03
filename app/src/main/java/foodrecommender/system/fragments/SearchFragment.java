@@ -73,7 +73,11 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                foodSearch();
+                String input = editable.toString().trim();
+                if (!input.isEmpty()) {
+                    // Input consists only of spaces
+                    foodSearch();
+                }
             }
         });
     }

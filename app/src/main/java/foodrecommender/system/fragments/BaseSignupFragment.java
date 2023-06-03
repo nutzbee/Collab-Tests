@@ -111,7 +111,7 @@ public class BaseSignupFragment extends Fragment {
                     emailInput = sp.getString("email", ""),
                     usernameInput = sp.getString("username", ""),
                     passwordInput = sp.getString("password", "");
-            float weightInput = sp.getFloat("weight", 0);
+            float weightInput = sp.getFloat("weight", 0.0f);
 
             if (!nameInput.isEmpty() || !emailInput.isEmpty() ||
                     weightInput>0 || !usernameInput.isEmpty() || !passwordInput.isEmpty()) {

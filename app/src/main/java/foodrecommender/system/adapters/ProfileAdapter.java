@@ -3,6 +3,7 @@ package foodrecommender.system.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +99,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileV
                 builder.setView(alertDialogView);
 
                 inputEditText.setText(profileValue);
+                if (profileTitle.equals("Age") || profileTitle.equals("Body Mass Index")
+                        || profileTitle.equals("Weight")) {
+                    inputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                } else if (profileTitle.equals("Email")){
+                    inputEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                }
                 inputLayout.setHint("Enter new value");
 
                 // Set the positive button
