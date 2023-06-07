@@ -1,20 +1,35 @@
 package foodrecommender.system.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import foodrecommender.system.BuildConfig;
 import foodrecommender.system.R;
 import foodrecommender.system.fragments.ProfileFragment;
 import foodrecommender.system.fragments.LandingpageFragment;
@@ -33,6 +48,7 @@ public class LandingpageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themeCheck();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landingpage);
 
@@ -78,6 +94,21 @@ public class LandingpageActivity extends AppCompatActivity {
         });
 
         showHome();
+    }
+
+    private void themeCheck(){
+        boolean isDarkMode = checkTheme();
+
+        if (isDarkMode){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    private boolean checkTheme(){
+        SharedPreferences sp = getSharedPreferences("theme_mode", MODE_PRIVATE);
+        return sp.getBoolean("isDarkMode", false);
     }
 
     private void showHome(){

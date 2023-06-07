@@ -1,52 +1,37 @@
 package foodrecommender.system.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.Manifest;
 import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import foodrecommender.system.BuildConfig;
 import foodrecommender.system.R;
@@ -54,98 +39,80 @@ import foodrecommender.system.fragments.BaseSignupFragment;
 
 public class SignupActivity extends AppCompatActivity {
 
-    LinearProgressIndicator progressIndicator;
+    private LinearProgressIndicator progressIndicator;
     private String fragmentTag = "Sign Up";
     private RelativeLayout relativeLayout;
     private boolean isSnackbarShown = false;
+    private FragmentManager fragmentManager;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themeCheck();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
         progressIndicator = findViewById(R.id.progress_indicator);
         relativeLayout = findViewById(R.id.signup_rel);
+        fragmentManager = getSupportFragmentManager();
+        currentFragment = fragmentManager.findFragmentById(R.id.signup_fragment_container);
 
-        updateCheck();
-        //getTheFragment();
         setupNotification();
+        updateCheck();
     }
 
     private void updateCheck() {
         progressIndicator.show();
-        relativeLayout.setVisibility(View.GONE);
-        getSupportActionBar().setTitle("Checking for update..");
+        updateActionBarTitle("Checking for updates..");
 
         String url = getString(R.string.get_updates_url);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (isSnackbarShown) {
-                        Snackbar.make(relativeLayout, "Connected", Snackbar.LENGTH_SHORT).show();
-                    }
-                    String message = response.getString("message");
-                    String ver_code = response.getString("ver_code");
-
-                    if (response.has("maintenance")){
-                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
-                        builder.setTitle("Maintenance Advisory");
-                        builder.setMessage(message);
-                        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                finish();
-                            }
-                        });
-                        builder.create();
-                        builder.show();
-                    } else if (BuildConfig.VERSION_CODE != Integer.parseInt(ver_code)) {
-                        Log.d("TAG", "updateCheck: " + message);
-                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
-                        builder.setTitle(message);
-                        builder.setMessage("Update available. Your version " + BuildConfig.VERSION_CODE
-                                + " is out of date. Update to the newer version " + ver_code);
-                        builder.setCancelable(false);
-                        builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                sendDownloadRequest();
-                                finish();
-                            }
-                        });
-                        builder.create();
-                        builder.show();
-                    } else {
-                        Log.d("TAG", "updateCheck: App up to date");
-                        getSupportActionBar().setTitle("Signing you in..");
-                        userCheck();
-                        themeCheck();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            try {
+                if (isSnackbarShown) {
+                    Snackbar.make(relativeLayout, "Connected", Snackbar.LENGTH_SHORT).show();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Handle error here
-                error.printStackTrace();
+                String title = response.getString("title");
+                String message = response.getString("message");
+                String verCode = response.getString("ver_code");
+                String verName = response.getString("ver_name");
 
-                Snackbar snackbar = Snackbar.make(relativeLayout, "Disconnected", Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction("Refresh", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        updateCheck();
-                    }
-                });
-                snackbar.show();
-                isSnackbarShown = true;
+                if (response.has("maintenance")) {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
+                    builder.setTitle(title);
+                    builder.setMessage(message);
+                    builder.setOnCancelListener(dialogInterface -> finish());
+                    builder.create().show();
+                } else if (!String.valueOf(BuildConfig.VERSION_CODE).equals(verCode)) {
+                    Log.d("TAG", "updateCheck: " + message);
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(SignupActivity.this);
+                    builder.setTitle(title);
+                    builder.setMessage("Current: " + BuildConfig.VERSION_NAME
+                            + "\nNew: " + verName + "\n\n" + message);
+                    builder.setOnCancelListener(dialogInterface -> finish());
+                    builder.setPositiveButton("Download", (dialogInterface, i) -> {
+                        sendDownloadRequest();
+                        finish();
+                    });
+                    builder.create().show();
+                } else {
+                    Log.d("TAG", "updateCheck: " + message);
+                    updateActionBarTitle("Signing you in..");
+                    userCheck();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        }, error -> {
+            // Handle error here
+            error.printStackTrace();
+
+            Snackbar snackbar = Snackbar.make(relativeLayout, "Disconnected", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("Refresh", view -> updateCheck());
+            snackbar.show();
+            isSnackbarShown = true;
         });
 
-        Volley.newRequestQueue(getApplicationContext()).add(jsonObjectRequest);
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
 
     private void sendDownloadRequest() {
@@ -162,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
         // Create a download request
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url))
                 .setDestinationUri(Uri.fromFile(file))
-                .setTitle("Diabeates")
+                .setTitle("Diabetes")
                 .setDescription("Downloading")
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setAllowedOverMetered(true)
@@ -180,19 +147,19 @@ public class SignupActivity extends AppCompatActivity {
         createNotificationChannel();
 
         // Build the notification
-        NotificationCompat.Builder exercise = new NotificationCompat.Builder(SignupActivity.this, "channel_id")
+        NotificationCompat.Builder exercise = new NotificationCompat.Builder(this, "channel_id")
                 .setSmallIcon(R.drawable.red_app_icon_main) // Replace with your own notification icon
                 .setContentTitle("Exercise Reminder")
                 .setContentText("Exercise helps us to maintain our healthiness so don't forget to stretch your body and be active today.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationCompat.Builder medicine = new NotificationCompat.Builder(SignupActivity.this, "channel_id")
+        NotificationCompat.Builder medicine = new NotificationCompat.Builder(this, "channel_id")
                 .setSmallIcon(R.drawable.red_app_icon_main) // Replace with your own notification icon
                 .setContentTitle("Medicine Reminder")
                 .setContentText("A friendly reminder to take your medicines today.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        if (enabledNotifs){
+        if (enabledNotifs) {
             // Display the notification
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(1, exercise.build());
@@ -211,17 +178,17 @@ public class SignupActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(channel);
     }
 
-    private void themeCheck(){
+    private void themeCheck() {
         boolean isDarkMode = checkTheme();
 
-        if (isDarkMode){
+        if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
-    private void userCheck(){
+    private void userCheck() {
         // Check the login status when the app launches or when navigating to a specific page
         boolean isLoggedIn = checkLoginStatus();
 
@@ -236,7 +203,7 @@ public class SignupActivity extends AppCompatActivity {
             // Continue with the normal flow of the current page
             progressIndicator.hide();
             relativeLayout.setVisibility(View.VISIBLE);
-            getSupportActionBar().setTitle(R.string.signUpLabel);
+            updateActionBarTitle(getString(R.string.signUpLabel));
             getTheFragment();
         }
     }
@@ -248,17 +215,17 @@ public class SignupActivity extends AppCompatActivity {
         return sp.getBoolean("is_logged_in", false);
     }
 
-    private boolean checkTheme(){
+    private boolean checkTheme() {
         SharedPreferences sp = getSharedPreferences("theme_mode", MODE_PRIVATE);
         return sp.getBoolean("isDarkMode", false);
     }
 
-    private boolean checkReminders(){
+    private boolean checkReminders() {
         SharedPreferences sp = getSharedPreferences("theme_mode", MODE_PRIVATE);
         return sp.getBoolean("isExerciseReminderEnabled", false);
     }
 
-    private void getTheFragment(){
+    private void getTheFragment() {
         FragmentTransaction signUpFragmentTransaction = getSupportFragmentManager().beginTransaction();
         signUpFragmentTransaction.replace(R.id.signup_fragment_container, new BaseSignupFragment());
         signUpFragmentTransaction.addToBackStack(fragmentTag);
@@ -266,13 +233,14 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void updateActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment currentFragment = fragmentManager.findFragmentById(R.id.signup_fragment_container);
         if (currentFragment instanceof BaseSignupFragment) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
@@ -285,11 +253,31 @@ public class SignupActivity extends AppCompatActivity {
                 // Update the ActionBar title with the previous fragment's title
                 updateActionBarTitle(previousFragmentTag);
             }
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
-        if (progressIndicator.isShown() || progressIndicator.getProgress() > 0){
+
+        if (progressIndicator.isShown() || progressIndicator.getProgress() > 0) {
             progressIndicator.setProgress(0);
             progressIndicator.hide();
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+
+                // Get the previous fragment from the back stack
+                FragmentManager.BackStackEntry backStackEntry = getSupportFragmentManager().getBackStackEntryAt(
+                        getSupportFragmentManager().getBackStackEntryCount() - 1);
+                String previousFragmentTag = backStackEntry.getName();
+
+                // Update the ActionBar title with the previous fragment's title
+                updateActionBarTitle(previousFragmentTag);
+            } else {
+                super.onBackPressed();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
         }
+
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

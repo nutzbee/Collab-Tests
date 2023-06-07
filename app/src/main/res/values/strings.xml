@@ -40,6 +40,7 @@
     <string name="recommend_local_again_url">https://diabeates-services.onrender.com/recommend_local_again</string>
     <string name="get_updates_url">http://nutzbee.pythonanywhere.com/update_app_check</string>
     <string name="send_download_request_url">http://nutzbee.pythonanywhere.com/download</string>
+    <string name="check_server_url">http://nutzbee.pythonanywhere.com/server_check</string>
 
     <string name="localHost">http://192.168.0.41:5000</string>
     <string name="domainServerHost">http://nutzbee.pythonanywhere.com</string>
@@ -48,5 +49,5 @@
     <string name="signInLabel">Sign In</string>
     <string name="signUpLabel">Sign Up</string>
 
-    <string name="downloaded_file_name">Diabeates HarmonyDiet 6.3.0.apk</string>
+    <string name="downloaded_file_name">Diabeates HarmonyDiet 6.7.01.apk</string>
 </resources>

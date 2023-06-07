@@ -10,8 +10,8 @@ android {
         applicationId "foodrecommender.system"
         minSdk 26
         targetSdk 33
-        versionCode 60302023
-        versionName "HarmonyDiet 6.3.0"
+        versionCode 607012023
+        versionName "HarmonyDiet 6.7.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

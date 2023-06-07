@@ -24,7 +24,9 @@
         android:id="@+id/signup_rel"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:paddingBottom="24dp">
+        android:paddingBottom="24dp"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <FrameLayout
             android:id="@+id/signup_fragment_container"
