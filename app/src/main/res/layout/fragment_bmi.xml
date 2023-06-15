@@ -12,11 +12,9 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true">
+            android:layout_height="wrap_content">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -99,7 +97,7 @@
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
 </FrameLayout>
