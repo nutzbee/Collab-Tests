@@ -87,7 +87,7 @@ public class PreferencesAdapter extends RecyclerView.Adapter<PreferencesAdapter.
 
                         // Send Volley request to update.php with the updated value
                         // Use Volley library or your preferred method to make the HTTP request
-                        String loginUrl = "https://uxoricidal-image.000webhostapp.com/update.php";
+                        String loginUrl = "https://diabeates.000webhostapp.com/update.php";
 
                         StringRequest loginRequest = new StringRequest(Request.Method.POST, loginUrl,
                                 response -> {

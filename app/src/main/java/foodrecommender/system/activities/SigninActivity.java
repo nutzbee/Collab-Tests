@@ -57,7 +57,7 @@ public class SigninActivity extends AppCompatActivity {
     private void sendLoginRequest() {
         circularProgressIndicator.show();
         // Login example
-        String loginUrl = "https://uxoricidal-image.000webhostapp.com/login.php";
+        String loginUrl = "https://diabeates.000webhostapp.com/login.php";
 
         StringRequest loginRequest = new StringRequest(Request.Method.POST, loginUrl,
                 response -> {
@@ -66,6 +66,7 @@ public class SigninActivity extends AppCompatActivity {
                         if (snackbar != null && snackbar.isShown()) {
                             snackbar.dismiss();
                         }
+                        Log.d("TAG", "sendLoginRequest: " + response);
                         JSONObject jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
                         String message = jsonResponse.getString("message");
