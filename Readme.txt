@@ -1,5 +1,13 @@
-Welcome to raw source code files of Thesis Group 4 with a thesis title of
-Food Recommendation for Type 2 Diabetic Patients
+# Food Recommender Application
+- Using Java Android Studio for Application integration
+- Python for Machine Learning algorithm
+- Bootstrap framework for promotional website and model
+- PHP for API and mySQL for storage services
 
---------- TO DO HERE -------------
-See updated_capstone.py file for the Flask application and disregard other resources here
+## Branches
+- [Notebook-using-Google-Colab-Branch](https://github.com/nutzbee/Food-Recommender-Mobile-Application/tree/Notebook-using-Google-Colab-Branch) - Jupyter notebook in google colab
+- [Flask-App-using-VS-Code](https://github.com/nutzbee/Food-Recommender-Mobile-Application/tree/Flask-App-using-VS-Code) - Python project together with ML algorithm
+- [Diabeates-App](https://github.com/nutzbee/Food-Recommender-Mobile-Application/tree/Diabeates-App) - Android project in android studio
+
+## Tech Stack
+- Java, Python, REST API, Machine Learning, PHP, MySQL, Bootstrap, HTML, CSS
